@@ -31,8 +31,8 @@
 <template>
 
 
-<div id="login">
-<paper-material hidden?="{{loggedIn}}">
+<div id="login" hidden?="{{loggedIn}}">
+<paper-material >
     <paper-header-panel class="">
          <paper-toolbar>
               <div><h2>Bitte einloggen</h2></div>
@@ -58,29 +58,19 @@
 </dom-module>
 
 <script>
-
-
-
+  (function() {
 	Polymer({
 		is: "login-element",
 
 		properties: {
-      loggedIn: true;
+        loggedIn: false,
         username: {
           type: String
         },
         password:{
           type: String
         }},
-        ready: function(){
-            var currentUser = Parse.User.current();
-              if (currentUser) {
-                  alert("currentUser");
-                  this.loggedIn = !this.loggedIn;
-              } else {
-                  alert('Error!');
-              }
-            },
+
         handleClick: function() {
 
       console.log('click',this);
@@ -99,7 +89,7 @@
             if (currentUser) {
                 (function(){
                   alert('success'+currentUser);
-
+                  this.loggedIn = !this.loggedIn;
               })();
           } else {
 
@@ -113,7 +103,7 @@
     });
 
          }
-
+       });
 	})();
 
 </script>
