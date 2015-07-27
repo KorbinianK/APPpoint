@@ -21,6 +21,7 @@ var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
 var historyApiFallback = require('connect-history-api-fallback');
+var jsdoc = require("gulp-jsdoc");
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -241,6 +242,15 @@ gulp.task('default', ['clean'], function (cb) {
     'vulcanize',
     cb);
     // Note: add , 'precache' , after 'vulcanize', if your are going to use Service Worker
+});
+
+
+gulp.task('jsdoc', function () {
+ return gulp.src([
+ 'app/scripts/**/*.js',
+ 'app/elements/**/*.js'
+ ])
+ .pipe(jsdoc('dist/jsdoc'));
 });
 
 // Load tasks for web-component-tester

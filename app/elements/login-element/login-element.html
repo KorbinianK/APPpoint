@@ -1,0 +1,119 @@
+<dom-module id="login-element">
+
+
+<style type="text/css">
+
+
+    paper-material {
+
+     width: 70%;
+    margin: 0 auto;
+        padding: 0 0 20px;
+
+    }
+	paper-input-container {
+     padding: 0 20px 0 20px !important;
+    }
+
+    paper-button{
+    width:30%;
+    display: block;
+        margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+
+    }
+
+    #center{
+
+    }
+</style>
+<template>
+
+
+<div id="login">
+<paper-material hidden?="{{loggedIn}}">
+    <paper-header-panel class="">
+         <paper-toolbar>
+              <div><h2>Bitte einloggen</h2></div>
+        </paper-toolbar>
+    </paper-header-panel>
+    <paper-input-container>
+      <label>Benutzername</label>
+      <input is="iron-input" name="name" type="username" required>
+    </paper-input-container>
+    <paper-input-container>
+      <label>Password</label>
+      <input is="iron-input" name="password" name="name" type="password" required>
+    </paper-input-container>
+
+
+
+   <div id="center"><paper-button class="submitButton" raised on-click="handleClick" >Anmelden</paper-button></div>
+</paper-material>
+
+
+</template>
+
+</dom-module>
+
+<script>
+
+
+
+	Polymer({
+		is: "login-element",
+
+		properties: {
+      loggedIn: true;
+        username: {
+          type: String
+        },
+        password:{
+          type: String
+        }},
+        ready: function(){
+            var currentUser = Parse.User.current();
+              if (currentUser) {
+                  alert("currentUser");
+                  this.loggedIn = !this.loggedIn;
+              } else {
+                  alert('Error!');
+              }
+            },
+        handleClick: function() {
+
+      console.log('click',this);
+      var
+      username = $('[name="name"]').val(),
+      password = $('[name="password"]').val();
+
+    // Call Parse Login function with those variables
+    Parse.User.logIn(username, password, {
+        // If the username and password matches
+        success: function(user) {
+
+            var currentUser = Parse.User.current();
+
+
+            if (currentUser) {
+                (function(){
+                  alert('success'+currentUser);
+
+              })();
+          } else {
+
+            }
+            },
+        // If there is an error
+        error: function(user, error) {
+            console.log(error);
+            alert('Error!');
+        }
+    });
+
+         }
+
+	})();
+
+</script>
