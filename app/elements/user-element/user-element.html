@@ -51,6 +51,8 @@ iron-image {
 
 
 <template>
+	<button id="userList" on-click="{{onClick}}"></button>
+
 	<template is="dom-repeat" items="{{userList}}">
 
 			<paper-item >
@@ -66,7 +68,6 @@ iron-image {
 
 		</template>
   </template>
-
 
 <script>
 
@@ -106,6 +107,7 @@ iron-image {
 		});
 
 		}
+
 
 	});
 </script>
