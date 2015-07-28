@@ -62,7 +62,7 @@
     var currentUser = Parse.User.current();
         if (currentUser) {
             (function(){
-              $("#login").innerHtml("");
+            
               })();
           } else {
 
@@ -97,8 +97,17 @@
 
             if (currentUser) {
                 (function(){
-                  alert('success');
+
+                  var inputs, index;
+
+                  inputs = document.getElementsByTagName('input');
+                  for (index = 0; index < inputs.length; ++index) {
+                      inputs[index].val = '';
+                  }
+
                   console.log(currentUser.get("isTeacher"));
+                  location.reload();
+
               })();
           } else {
 

@@ -23,12 +23,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+
+    var currentUser = Parse.User.current();
+        if (currentUser) {
+            (function(){
+              if(currentUser.get("isTeacher")){
+                  alert("hurray");
+              }
+              else{
+                  $(".teacherRole").hide();
+              }
+              })();
+          } else {
+            
+              $(".teacherRole").hide();
+            }
+
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
   });
+
+
+
 
   // Main area's paper-scroll-header-panel custom condensing transformation of
   // the appName in the middle-container and the bottom title in the bottom-container.
