@@ -89,17 +89,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-
-            <section data-route="home">
-              <paper-material elevation="1">
-
-                <login-element></login-element>
 
 
-              </paper-material>
+            <section>
 
-          </iron-pages>
+
+            <login-element id="login-element"></login-element>
+
+          <div id="signup" class="hidden">
+            <signup-element></signup-element>
+          </div>
+            <paper-button id="registerButton" flat>
+              Register
+            </paper-button>
+
         </div>
       </paper-scroll-header-panel>
 
@@ -125,7 +128,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <!-- endbuild-->
+  <script>
+  $("#registerButton").click(function(e){
+    alert("ALERT!");
+      $('#login-element').hide();
+      $('#signup').removeClass('hidden').slideDown();
+  });
+
+  </script>
+
 </body>
 
 </html>

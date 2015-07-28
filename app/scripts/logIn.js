@@ -3,7 +3,7 @@ var currentUser = Parse.User.current();
             (function(){
              if(currentUser.get("isAdmin")){
                  document.location.href = "/admin.html";
-             
+
              }
                 if(currentUser.get("isTeacher")){
                   document.location.href = "/dozent.html#!/dozent.html";
@@ -13,6 +13,6 @@ var currentUser = Parse.User.current();
               }
               })();
           } else {
-            
+
               $(".teacherRole").hide();
             }

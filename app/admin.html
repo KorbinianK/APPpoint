@@ -72,20 +72,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="home" href="/">
+          <a data-route="a-home" href="/">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="/users">
+          <a data-route="a-overview-docent" href="/aoverviewd">
             <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
+            <span>Dozenten Übersicht</span>
           </a>
 
-          <a data-route="contact" href="/contact">
+          <a data-route="a-add-docent" href="/aaddd">
             <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
+            <span>Dozenten erstellen</span>
           </a>
+
+          <a data-route="a-manage-docent" href="/amanaged">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Dozenten verwalten</span>
+          </a>
+        </hr>
+          <a data-route="a-overview-appointments" href="/aoverviewa">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Sprechzeiten Übersicht</span>
+          </a>
+
+          <a data-route="a-manage-appointments" href="/amanagea">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Sprechzeiten verwalten<span>
+          </a>
+
+</hr>
+        </hr>
+        <a data-route="a-manage-profil" href="/amanagep">
+          <iron-icon icon="mail"></iron-icon>
+          <span>Profil verwalten<span>
+        </a>
+        <a data-route="a-logout"  onClick="javascript:Parse.User.logOut();">
+          <iron-icon icon="exit-to-app"></iron-icon>
+          <span>Logout<span>
+        </a>
 
         </paper-menu>
       </paper-scroll-header-panel>
@@ -100,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Toolbar icons -->
           <paper-icon-button icon="refresh" onclick="javascript:location.reload();"></paper-icon-button>
-          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/index.html';" ></paper-icon-button>
+          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/';" ></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -118,10 +144,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-            <section data-route="home">
+            <section data-route="a-home">
               <paper-material elevation="1">
 
-                <login-element></login-element>
 
 
               </paper-material>
@@ -151,14 +176,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             </section>
 
-            <section data-route="users">
+            <section data-route="a-overview-docent">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Registrierte Benutzer</h2>
                 <user-element></user-element>
               </paper-material>
             </section>
 
-            <section data-route="user-info">
+            <section data-route="a-add-docent">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">
                 User:<span>{{params.name}}</span>
@@ -167,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="contact">
+            <section data-route="a-manage-docent">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Contact</h2>
                 <p>This is the contact section</p>

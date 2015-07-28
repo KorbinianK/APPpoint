@@ -72,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="home" href="/">
+          <a data-route="d-home" href="/">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
@@ -100,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Toolbar icons -->
           <paper-icon-button icon="refresh" onclick="javascript:location.reload();"></paper-icon-button>
-          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/index.html';" ></paper-icon-button>
+          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/';" ></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
