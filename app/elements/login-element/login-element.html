@@ -106,8 +106,11 @@
                   }
 
                   if(currentUser.get("isTeacher")){
-                   document.location.href = "/dozent.html#!/dozent.html";
+                   document.location.href = "/dozent.html";
                   }
+                     if(currentUser.get("isAdmin")){
+                   document.location.href = "/admin.html";
+                  } 
               })();
           } else {
 

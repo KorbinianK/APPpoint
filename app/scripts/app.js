@@ -27,8 +27,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var currentUser = Parse.User.current();
         if (currentUser) {
             (function(){
-              if(currentUser.get("isTeacher")){
-                  alert("hurray");
+             if(currentUser.get("isAdmin")){
+                 document.location.href = "/dozent.html#!/dozent.html";
+             
+             }
+                if(currentUser.get("isTeacher")){
+                  document.location.href = "/dozent.html#!/dozent.html";
               }
               else{
                   $(".teacherRole").hide();
