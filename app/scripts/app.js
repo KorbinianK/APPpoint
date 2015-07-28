@@ -24,25 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
 
-    var currentUser = Parse.User.current();
-        if (currentUser) {
-            (function(){
-             if(currentUser.get("isAdmin")){
-                 document.location.href = "/dozent.html#!/dozent.html";
-             
-             }
-                if(currentUser.get("isTeacher")){
-                  document.location.href = "/dozent.html#!/dozent.html";
-              }
-              else{
-                  $(".teacherRole").hide();
-              }
-              })();
-          } else {
-            
-              $(".teacherRole").hide();
-            }
-
+    
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
