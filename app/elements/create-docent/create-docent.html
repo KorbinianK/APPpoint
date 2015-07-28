@@ -1,0 +1,250 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="create-docent">
+<style type="text/css">
+	paper-item-body.paper-item-body-0 {
+		display:-ms-flexbox;
+		display:-webkit-flex;
+      display:flex;
+
+      -ms-flex-direction:column;
+      -webkit-flex-direction:column;
+      flex-direction:column;-ms-flex-pack:center;
+      -webkit-justify-content:center;
+      justify-content:center;-ms-flex:1 1 0.000000001px;
+      -webkit-flex:1;
+      flex:1;
+      -webkit-flex-basis:0.000000001px;
+      flex-basis:0.000000001px;
+}
+
+paper-item-body.paper-item-body-0[two-line] {
+  min-height:72px;
+}
+
+paper-item-body.paper-item-body-0[three-line] {
+  min-height:108px;
+}
+
+paper-item-body.paper-item-body-0  [secondary] {
+  color:#757575;font-family:'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing:antialiased;
+
+      font-size:14px;
+      font-weight:400;
+      line-height:20px;;
+}
+
+.spacer{
+	padding-top:10px;
+	border-bottom: 1px solid gray;
+
+}
+
+label.prev{
+	padding-left: 20px;
+	color: #727272;
+	position: relative;
+	top: 10px;
+}
+paper-button{
+width:30%;
+display: block;
+margin-top: 30px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#button-create {
+	padding: 10px;
+}
+
+</style>
+  <template>
+  <paper-toolbar id="createDocentToolbar">
+		<h2>Create a new Docent</h2>
+	</paper-toolbar>
+
+  </paper-toolbar>
+    <paper-material class="50percent">
+			<label class="prev">Preview</label>
+			<div class="spacer"></div>
+	<paper-item>
+	  <paper-item-body three-line class="paper-item-body-0">
+      <div><span>{{computeFullName(first, last)}}</span></div>
+	    <div secondary>{{room}}</div>
+      <div secondary>{{computeSubjects(subject1,subject2,subject3)}}</div>
+    </paper-item-body>
+  </paper-item>
+<div class="spacer"></div>
+	<paper-item>
+		<paper-item-body  three-line class="paper-item-body-0">
+
+		  <paper-input-container>
+		    <label>First Name</label>
+		    <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
+		  </paper-input-container>
+
+	  	<paper-input-container>
+	      <label>Last Name</label>
+	      <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
+	  	</paper-input-container>
+
+			<paper-input-container>
+				<label>Room</label>
+				<input is="iron-input" name="room" type="text" value="{{room::input}}" required>
+			</paper-input-container>
+
+		</paper-item-body>
+	</paper-item>
+
+	<paper-item>
+	  <paper-item-body three-line class="paper-item-body-0">
+
+    <paper-input-container>
+      <label>Subject 1</label>
+      <input is="iron-input" name="subject1" type="text" required value="{{subject1::input}}">
+    </paper-input-container>
+
+    <paper-input-container>
+      <label>Subject 2</label>
+      <input is="iron-input" name="subject2" type="text"  value="{{subject2::input}}">
+    </paper-input-container>
+
+
+				<paper-input-container>
+					<label>Subject 3</label>
+					<input is="iron-input" name="subject3" type="text"  value="{{subject3::input}}">
+				</paper-input-container>
+
+
+				<paper-input-container>
+					<label>Password</label>
+					<input is="iron-input" name="create-password" type="password" required>
+				</paper-input-container>
+
+				<paper-input-container>
+					<label>E-Mail</label>
+					<input is="iron-input" name="email" type="email" >
+				</paper-input-container>
+
+		</paper-item-body>
+  </paper-item>
+<div id="button-create">
+		<paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" >Create</paper-button>
+</div>
+</paper-material>
+
+	</template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'create-docent',
+
+    properties: {
+      first: {
+				 type: String,
+					value: ''
+			},
+      last: {
+				 type: String,
+					value: ''
+			},
+			room:{
+				type: String,
+				value: ''
+			},
+			subject1:{
+				 type: String,
+					value: ''
+			},
+			subject2:{
+				 type: String,
+					value: ''
+			},
+			subject3:{
+				 type: String,
+					value: ''
+			}
+  },
+      computeFullName: function(first, last) {
+        return first + ' ' + last;
+      },
+      computeSubjects: function(subject1, subject2, subject3) {
+
+        return subject1 + ' ' + subject2 + ' ' + subject3;
+			},
+			  handleClick: function() {
+					var
+					email = $('[name="email"]').val(),
+					password = $('[name="create-password"]').val(),
+					firstName = $('[name="first"]').val(),
+					lastName = $('[name="last"]').val(),
+					room = $('[name="room"]').val(),
+					subject1 = $('[name="subject1"]').val(),
+					subject2 = $('[name="subject2"]').val(),
+					subject3 = $('[name="subject3"]').val();
+
+					if(
+						email === '' ||
+						password === '' ||
+						firstName === '' ||
+						lastName === '' ||
+						room === '' ||
+						subject1 === ''
+					 ){
+
+					alert("Error: Alle Felder müssen ausgefüllt werden");
+
+					}else{
+						var userRandom = Math.floor((Math.random() * 1000) + 1);
+
+						username = firstName.toLowerCase()
+											+ userRandom
+											+ lastName.toLowerCase();
+						var user = new Parse.User();
+
+							user.set("username", username);
+							user.set("password", password);
+							user.set("email", email);
+							user.set("isTeacher", true);
+							user.set("firstName", firstName);
+							user.set("lastName", lastName);
+							user.set("subject1", subject1);
+							user.set("subject2", subject2);
+							user.set("subject3", subject3);
+							user.signUp(null, {
+							success: function(user) {
+									alert("Success", +user);
+									var inputs, index;
+
+									inputs = document.getElementsByTagName('input');
+									for (index = 0; index < inputs.length; ++index) {
+									    inputs[index].val = '';
+									}
+
+							},
+							error: function(user, error) {
+								// Show the error message somewhere and let the user try again.
+								alert("Error: " + error.code + " " + error.message);
+							}
+							});
+
+					}
+
+
+				}
+  });
+})();
+</script>
