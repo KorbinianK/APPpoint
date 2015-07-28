@@ -56,9 +56,17 @@
 </template>
 
 </dom-module>
-location.reload();
+
 <script>
   (function() {
+    var currentUser = Parse.User.current();
+        if (currentUser) {
+            (function(){
+              $("#login").innerHtml("");
+              })();
+          } else {
+
+            }
 
 	Polymer({
 		is: "login-element",
@@ -90,7 +98,7 @@ location.reload();
             if (currentUser) {
                 (function(){
                   alert('success');
-                  this.loggedIn = !this.loggedIn;
+                  console.log(currentUser.get("isTeacher"));
               })();
           } else {
 
