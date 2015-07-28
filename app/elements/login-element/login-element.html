@@ -105,9 +105,9 @@
                       inputs[index].val = '';
                   }
 
-                  console.log(currentUser.get("isTeacher"));
-                  location.reload();
-
+                  if(currentUser.get("isTeacher")){
+                   document.location.href = "/dozent.html#!/dozent.html";
+                  }
               })();
           } else {
 
