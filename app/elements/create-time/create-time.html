@@ -15,22 +15,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+    paper-item-body.paper-item-body-0 {
+  		display:-ms-flexbox;
+  		display:-webkit-flex;
+        display:flex;
+
+        -ms-flex-direction:column;
+        -webkit-flex-direction:column;
+        flex-direction:column;-ms-flex-pack:center;
+        -webkit-justify-content:center;
+        justify-content:center;-ms-flex:1 1 0.000000001px;
+        -webkit-flex:1;
+        flex:1;
+        -webkit-flex-basis:0.000000001px;
+        flex-basis:0.000000001px;
+  }
+
+  paper-item-body.paper-item-body-0[two-line] {
+    min-height:72px;
+  }
+
+  paper-item-body.paper-item-body-0[three-line] {
+    min-height:108px;
+  }
+
+  paper-item-body.paper-item-body-0  [secondary] {
+    color:#757575;font-family:'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing:antialiased;
+
+        font-size:14px;
+        font-weight:400;
+        line-height:20px;;
+  }
+
+  .spacer{
+  	padding-top:10px;
+  	border-bottom: 1px solid gray;
+
+  }
+
+  label.prev{
+  	padding-left: 20px;
+  	color: #727272;
+  	position: relative;
+  	top: 10px;
+  }
   </style>
   <template>
+    <paper-material elevation="1">
     <paper-item>
-      <h1>Begin:
-        <span id="ds"></span>
-        <span id="ms"></span>
-        <span id="ys"></span>
-
+      <h1>Begin:</h1>
+        <p>
+          <span id="ds"></span>
+          <span id="ms"></span>
+          <span id="ys"></span>
+        </p>
   </paper-item>
   <paper-item>
     <h1>End:</h1>
+      <p>
       <span id="de"></span>
       <span id="me"></span>
       <span id="ye"></span>
-    
+    </p>
 </paper-item>
+<paper-button id='setStartDate'  on-click='handleStartClick'>Set Start Date</paper-button>
+<paper-button id='setEndDate'  on-click='handleEndClick'>Set End Date</paper-button>
+</paper-material>
+<paper-material elevation="1">
+  <paper-input-container>
+    <label>Slot Duration</label>
+    <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
+  </paper-input-container>
+
+  <paper-input-container>
+    <label>Break Duration</label>
+    <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
+  </paper-input-container>
+<paper-button id='setTime'  on-click='handleTimeClick'>Set Slot Settings</paper-button>
+</paper-material>
 <paper-dialog id="startDialog"  class="paper-date-picker-dialog">
   <paper-date-picker id="dateStartPicker"></paper-date-picker>
     <div class="buttons">
@@ -46,8 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 </paper-dialog>
 
-      <paper-button id='setStartDate'  on-click='handleStartClick'>Set Start Date</paper-button>
-        <paper-button id='setEndDate'  on-click='handleEndClick'>Set End Date</paper-button>
+
 
   </template>
 
@@ -58,6 +120,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'create-time',
       ready: function(){
+
+      },
+      properties: {
+
 
       },
         handleStartClick: function(){
