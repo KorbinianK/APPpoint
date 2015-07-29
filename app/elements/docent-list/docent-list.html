@@ -1,0 +1,103 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="docent-list">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+
+
+  	<template is="dom-repeat" items="{{docentList}}">
+
+  			<paper-item >
+  				<div><iron-image id="avatar" sizing="cover"  style="width:50px; height:50px"; fade  src="{{item.picture}}"></iron-image></div>
+  			  <paper-item-body three-line class="paper-item-body-0">
+  			    <div><span>{{item.lastName}}</span> <span>{{item.firstName}}</span></div>
+  					<div secondary>Email: <span>{{item.email}}</span></div>
+            <div secondary>Room: <span>{{item.room}}</span></div>
+  			  </paper-item-body>
+          <paper-button flat on-click="roomClick">Room</paper-button>
+  			</paper-icon-item>
+
+
+  		</template>
+      <paper-dialog id="roomDialog" class=" paper-date-picker-dialog" >
+        <template is="dom-repeat" items="{{roomList}}">
+
+      			<paper-item >
+
+      			  <paper-item-body class="paper-item-body-0">
+
+      					<div>Room: <span>{{item.roomName}}</span></div>
+
+      			  </paper-item-body>
+
+      			</paper-icon-item>
+
+
+      		</template>
+          <div class="buttons">
+              <paper-button flat dialog-dismiss>Cancel</paper-button>
+              <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
+          </div>
+      </paper-dialog>
+  </template>
+  <script>
+  (function() {
+    Polymer({
+
+
+  		ready: function() {
+  			var self = this;
+  			var query = new Parse.Query(Parse.User);
+
+  		query.equalTo("isTeacher",true);
+
+  			query.find().then(function(results){
+  				var List = [];
+  				console.log("blablub");
+  				for (i in results) {
+  					var item = {};
+  					var object = results[i];
+  					var picURL = object.get('profilePic');
+  						item ['firstName'] = object.get('firstName');
+  						item ['lastName'] = object.get('lastName');
+  						item ['email'] = object.get('email');
+              item ['room'] = object.get('room');
+  						if(picURL  != null)
+  						{
+  							picURL = picURL.url();
+  						}
+  						item ['picture'] = picURL;
+
+  						List.push(item);
+  						console.log(item);
+
+  			}
+  			self.docentList = List;
+
+  		});
+
+    },
+    roomClick: function(e){
+      var teacher = e.model;
+      this.$.roomDialog.toggle();
+      teacher.set('item.room', teacher.item.lastName+teacher.item.firstName);
+      console.log(teacher.get('item.firstName'));
+    }
+    });
+  })();
+  </script>
+</dom-module>
