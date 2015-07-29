@@ -79,9 +79,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <span id="ye"></span>
     </p>
 </paper-item>
+        
+         <paper-item>
+    <h1>Beginn:</h1>
+      <p>
+                <span id="hs"></span>
+          <span id="seps"></span>
+      <span id="mins"></span>
+
+    <span id="ps"></span>
+          
+    </p>
+</paper-item>
+                 <paper-item>
+    <h1>End:</h1>
+      <p>
+      <span id="he"></span>
+      <span id="sepe"></span>
+      <span id="mine"></span>
+    <span id="pe"></span>
+          
+    </p>
+</paper-item>
 <paper-button id='setStartDate'  on-click='handleStartClick'>Set Start Date</paper-button>
 <paper-button id='setEndDate'  on-click='handleEndClick'>Set End Date</paper-button>
-</paper-material>
+<paper-button id='setStartTime'  on-click='handleStartTimeClick'>Set Start Time</paper-button>
+<paper-button id='setEndTime'  on-click='handleEndTimeClick'>Set End Time</paper-button>     
+      
+      </paper-material>
+
 <paper-material elevation="1">
   <paper-input-container>
     <label>Slot Duration</label>
@@ -109,6 +135,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 </paper-dialog>
 
+    <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog">
+       <paper-time-picker id="timeStartPicker"></paper-time-picker>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
+            </div>
+      </paper-dialog>
+          
+      <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog">
+       <paper-time-picker id="timeEndPicker"></paper-time-picker>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
+            </div>
+      </paper-dialog>
+
 
 
   </template>
@@ -132,17 +174,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          handleEndClick: function(){
               this.$.endDialog.toggle();
           },
+         handleStartTimeClick: function(){
+            this.$.startTimeDialog.toggle();
+        },
+         handleEndTimeClick: function(){
+              this.$.endTimeDialog.toggle();
+          },
         setStart: function(){
 
-          $('#ds').html($('.day.style-scope.paper-date-picker').html());
-          $('#ms').html($('.month.style-scope.paper-date-picker').html());
-            $('#ys').html($('.year.style-scope.paper-date-picker').html());
+          $('#ds').html($('#startDialog .day.style-scope.paper-date-picker').html());
+          $('#ms').html($('#startDialog .month.style-scope.paper-date-picker').html());
+            $('#ys').html($('#startDialog .year.style-scope.paper-date-picker').html());
         },
         setEnd: function(){
 
-          $('#de').html($('.day.style-scope.paper-date-picker').html());
-          $('#me').html($('.month.style-scope.paper-date-picker').html());
-            $('#ye').html($('.year.style-scope.paper-date-picker').html());
+          $('#de').html($('#endDialog .day.style-scope.paper-date-picker').html());
+          $('#me').html($('#endDialog .month.style-scope.paper-date-picker').html());
+            $('#ye').html($('#endDialog .year.style-scope.paper-date-picker').html());
+        },
+        
+         setStartTime: function(){
+                $('#mins').html($('#startTimeDialog .minute.style-scope.paper-time-picker').html());
+                $('#seps').html($('#startTimeDialog .sep.style-scope.paper-time-picker').html());
+                $('#hs').html($('#startTimeDialog .hour.style-scope.paper-time-picker').html());
+             $('#ps').html($('#startTimeDialog .period.style-scope.paper-time-picker').html());
+    
+    
+        },
+        setEndTime: function(){
+                  $('#mine').html($('#endTimeDialog .minute.style-scope.paper-time-picker').html());
+                $('#sepe').html($('#endTimeDialog .sep.style-scope.paper-time-picker').html());
+                $('#he').html($('#endTimeDialog .hour.style-scope.paper-time-picker').html());
+            $('#pe').html($('#endTimeDialog .period.style-scope.paper-time-picker').html());
+    
         }
 
     });
