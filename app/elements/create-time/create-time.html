@@ -17,32 +17,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-      
-<paper-dialog id="dialog" modal class="paper-date-picker-dialog">
-  <paper-date-picker id="datePicker"></paper-date-picker>
+    <paper-item>
+      <h1>Begin:
+        <span id="ds"></span>
+        <span id="ms"></span>
+        <span id="ys"></span>
+
+  </paper-item>
+  <paper-item>
+    <h1>End:</h1>
+      <span id="de"></span>
+      <span id="me"></span>
+      <span id="ye"></span>
+    
+</paper-item>
+<paper-dialog id="startDialog"  class="paper-date-picker-dialog">
+  <paper-date-picker id="dateStartPicker"></paper-date-picker>
     <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>OK</paper-button>
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
     </div>
 </paper-dialog>
-      
-        
-      <paper-button id='clicker' raised on-click='handleClick'>Click</paper-button>
-      
+<paper-dialog id="endDialog"  class="paper-date-picker-dialog">
+  <paper-date-picker id="dateEndPicker"></paper-date-picker>
+    <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
+    </div>
+</paper-dialog>
+
+      <paper-button id='setStartDate'  on-click='handleStartClick'>Set Start Date</paper-button>
+        <paper-button id='setEndDate'  on-click='handleEndClick'>Set End Date</paper-button>
+
   </template>
-  
-    
+
+
     <script>
   (function() {
+
     Polymer({
       is: 'create-time',
-        handleClick: function(){
-            this.$.dialog.toggle();
-        
-        
+      ready: function(){
+
+      },
+        handleStartClick: function(){
+            this.$.startDialog.toggle();
+        },
+         handleEndClick: function(){
+              this.$.endDialog.toggle();
+          },
+        setStart: function(){
+
+          $('#ds').html($('.day.style-scope.paper-date-picker').html());
+          $('#ms').html($('.month.style-scope.paper-date-picker').html());
+            $('#ys').html($('.year.style-scope.paper-date-picker').html());
+        },
+        setEnd: function(){
+
+          $('#de').html($('.day.style-scope.paper-date-picker').html());
+          $('#me').html($('.month.style-scope.paper-date-picker').html());
+            $('#ye').html($('.year.style-scope.paper-date-picker').html());
         }
-     
+
     });
   })();
+
   </script>
 </dom-module>
