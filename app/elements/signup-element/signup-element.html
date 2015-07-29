@@ -165,7 +165,9 @@ margin-right: auto;
 
             user.signUp(null, {
             success: function(user) {
-                alert("Success", +user);
+                alert("Ihr neuer Benutzername lautet " +username+". Bitte merken!");
+                 $('#login-element').show();
+              //  $('#signup').addClass('hidden');},
             },
             error: function(user, error) {
               // Show the error message somewhere and let the user try again.

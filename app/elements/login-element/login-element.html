@@ -50,6 +50,8 @@
 
 
    <div id="center"><paper-button class="submitButton" raised on-click="handleClick" >Anmelden</paper-button></div>
+     
+<div id="center1"><paper-button class="submitButton" raised on-click="registerClick" >Registrieren</paper-button></div>
 </paper-material>
 
 
@@ -79,7 +81,10 @@
         password:{
           type: String
         }},
-
+        registerClick:function() {
+      //  $('#login-element').hide();
+      $('#signup').removeClass('hidden').slideDown();},
+        
         handleClick: function() {
 
       console.log('click',this);

@@ -92,12 +92,12 @@ margin-right: auto;
 
 		  <paper-input-container>
 		    <label>First Name</label>
-		    <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
+		    <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
 		  </paper-input-container>
 
 	  	<paper-input-container>
 	      <label>Last Name</label>
-	      <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
+	      <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
 	  	</paper-input-container>
 
 			<paper-input-container>
@@ -130,12 +130,12 @@ margin-right: auto;
 
 				<paper-input-container>
 					<label>Password</label>
-					<input is="iron-input" name="create-password" type="password" required>
+					<input is="iron-input" name="password" type="password" required>
 				</paper-input-container>
 
 				<paper-input-container>
 					<label>E-Mail</label>
-					<input is="iron-input" name="email" type="email" >
+					<input is="iron-input" name="Email" type="Email" >
 				</paper-input-container>
 
 		</paper-item-body>
@@ -152,12 +152,12 @@ margin-right: auto;
   Polymer({
     is: 'create-docent',
 
-    properties: {
-      first: {
+      properties: {
+            firstName: {
 				 type: String,
 					value: ''
 			},
-      last: {
+            lastName: {
 				 type: String,
 					value: ''
 			},
@@ -178,8 +178,8 @@ margin-right: auto;
 					value: ''
 			}
   },
-      computeFullName: function(first, last) {
-        return first + ' ' + last;
+      computeFullName: function(firstName, lastName) {
+        return firstName + ' ' + lastName;
       },
       computeSubjects: function(subject1, subject2, subject3) {
 
@@ -187,23 +187,24 @@ margin-right: auto;
 			},
 			  handleClick: function() {
 					var
-					email = $('[name="email"]').val(),
-					password = $('[name="create-password"]').val(),
-					firstName = $('[name="first"]').val(),
-					lastName = $('[name="last"]').val(),
+					Email = $('[name="Email"]').val(),
+					password = $('[name="password"]').val(),
+					firstName = $('[name="firstName"]').val(),
+					lastName = $('[name="lastName"]').val(),
 					room = $('[name="room"]').val(),
 					subject1 = $('[name="subject1"]').val(),
 					subject2 = $('[name="subject2"]').val(),
 					subject3 = $('[name="subject3"]').val();
 
 					if(
-						email === '' ||
+						Email === '' ||
 						password === '' ||
 						firstName === '' ||
 						lastName === '' ||
 						room === '' ||
 						subject1 === ''
 					 ){
+                        console.log(Email+password+firstName+lastName+room+subject1)
 
 					alert("Error: Alle Felder müssen ausgefüllt werden");
 
@@ -217,7 +218,7 @@ margin-right: auto;
 
 							user.set("username", username);
 							user.set("password", password);
-							user.set("email", email);
+							user.set("Email", Email);
 							user.set("isTeacher", true);
 							user.set("firstName", firstName);
 							user.set("lastName", lastName);
@@ -226,7 +227,8 @@ margin-right: auto;
 							user.set("subject3", subject3);
 							user.signUp(null, {
 							success: function(user) {
-									alert("Success", +user);
+							alert("Ihr neuer Username lautet: "+ user.get("username")+" . Bitte notieren");
+                            //    alert("Success", +user);
 									var inputs, index;
 
 									inputs = document.getElementsByTagName('input');
