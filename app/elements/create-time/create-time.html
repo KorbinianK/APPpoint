@@ -15,29 +15,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
-    paper-item-body.paper-item-body-0 {
-  		display:-ms-flexbox;
-  		display:-webkit-flex;
-        display:flex;
 
-        -ms-flex-direction:column;
-        -webkit-flex-direction:column;
-        flex-direction:column;-ms-flex-pack:center;
-        -webkit-justify-content:center;
-        justify-content:center;-ms-flex:1 1 0.000000001px;
-        -webkit-flex:1;
-        flex:1;
-        -webkit-flex-basis:0.000000001px;
-        flex-basis:0.000000001px;
+paper-material{
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+    paper-item-body.paper-item-body-1 {
+  		width: 50%;
   }
 
-  paper-item-body.paper-item-body-0[two-line] {
-    min-height:72px;
-  }
-
-  paper-item-body.paper-item-body-0[three-line] {
-    min-height:108px;
-  }
 
   paper-item-body.paper-item-body-0  [secondary] {
     color:#757575;font-family:'Roboto', 'Noto', sans-serif;
@@ -64,71 +51,100 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <paper-material elevation="1">
     <paper-item>
-      <h1>Begin:</h1>
+      <paper-item-body class="paper-item-body-0" on-click='handleStartClick'>
+      <h4>Start Date:</h4>
         <p>
           <span id="ds"></span>
           <span id="ms"></span>
           <span id="ys"></span>
         </p>
+
+      </paper-item-body>
+
   </paper-item>
+
+
   <paper-item>
-    <h1>End:</h1>
+      <paper-item-body class="paper-item-body-0" on-click='handleEndClick'>
+    <h4>End Date:</h4>
       <p>
       <span id="de"></span>
       <span id="me"></span>
       <span id="ye"></span>
     </p>
-</paper-item>
-        
-         <paper-item>
-    <h1>Beginn:</h1>
-      <p>
-                <span id="hs"></span>
-          <span id="seps"></span>
-      <span id="mins"></span>
 
-    <span id="ps"></span>
-          
-    </p>
+
+  </paper-item-body>
+
 </paper-item>
-                 <paper-item>
-    <h1>End:</h1>
+</hr>
+    <paper-item>
+      <paper-item-body class="paper-item-body-0" on-click='handleStartTimeClick'>
+      <h4>Start Time:</h4>
+        <p>
+          <span id="hs"></span>
+          <span id="seps"></span>
+          <span id="mins"></span>
+          <span id="ps"></span>
+        </p>
+
+      </paper-item-body>
+
+</paper-item>
+
+<paper-item>
+   <paper-item-body class="paper-item-body-0" on-click='handleEndTimeClick'>
+    <h4>End Time:</h4>
       <p>
-      <span id="he"></span>
-      <span id="sepe"></span>
-      <span id="mine"></span>
-    <span id="pe"></span>
-          
+        <span id="he"></span>
+        <span id="sepe"></span>
+        <span id="mine"></span>
+        <span id="pe"></span>
     </p>
+
+    </paper-item-body>
+
 </paper-item>
-<paper-button id='setStartDate'  on-click='handleStartClick'>Set Start Date</paper-button>
-<paper-button id='setEndDate'  on-click='handleEndClick'>Set End Date</paper-button>
-<paper-button id='setStartTime'  on-click='handleStartTimeClick'>Set Start Time</paper-button>
-<paper-button id='setEndTime'  on-click='handleEndTimeClick'>Set End Time</paper-button>     
-      
+
+
+
+
       </paper-material>
 
 <paper-material elevation="1">
-  <paper-input-container>
-    <label>Slot Duration</label>
-    <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
-  </paper-input-container>
+  <paper-item>
 
-  <paper-input-container>
-    <label>Break Duration</label>
-    <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
-  </paper-input-container>
-<paper-button id='setTime'  on-click='handleTimeClick'>Set Slot Settings</paper-button>
+      <paper-item-body class="paper-item-body-1">
+
+        <paper-input-container>
+          <label>Slot Duration</label>
+          <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
+        </paper-input-container>
+        </paper-item-body>
+      <span>minutes.</span>
+    </paper-item>
+
+    <paper-item>
+      <paper-item-body class="paper-item-body-1">
+        <paper-input-container>
+          <label>Break Duration</label>
+          <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
+        </paper-input-container>
+      </paper-item-body>
+    <span>minutes.</span>
+    </paper-item>
+      <paper-button id='setTime'  on-click='handleTimeClick'>Set Slot Settings</paper-button>
 </paper-material>
-<paper-dialog id="startDialog"  class="paper-date-picker-dialog">
-  <paper-date-picker id="dateStartPicker"></paper-date-picker>
+
+<paper-dialog id="startDialog" modal class="paper-date-picker-dialog">
+  <paper-date-picker locale='de-DE'id="dateStartPicker"></paper-date-picker>
     <div class="buttons">
         <paper-button flat dialog-dismiss>Cancel</paper-button>
         <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
     </div>
 </paper-dialog>
-<paper-dialog id="endDialog"  class="paper-date-picker-dialog">
-  <paper-date-picker id="dateEndPicker"></paper-date-picker>
+<paper-dialog id="endDialog" modal class="paper-date-picker-dialog">
+  <paper-date-picker locale='de-DE'id="dateEndPicker"></paper-date-picker>
     <div class="buttons">
         <paper-button flat dialog-dismiss>Cancel</paper-button>
         <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
@@ -142,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
             </div>
       </paper-dialog>
-          
+
       <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog">
        <paper-time-picker id="timeEndPicker"></paper-time-picker>
             <div class="buttons">
@@ -192,21 +208,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           $('#me').html($('#endDialog .month.style-scope.paper-date-picker').html());
             $('#ye').html($('#endDialog .year.style-scope.paper-date-picker').html());
         },
-        
+
          setStartTime: function(){
                 $('#mins').html($('#startTimeDialog .minute.style-scope.paper-time-picker').html());
                 $('#seps').html($('#startTimeDialog .sep.style-scope.paper-time-picker').html());
                 $('#hs').html($('#startTimeDialog .hour.style-scope.paper-time-picker').html());
              $('#ps').html($('#startTimeDialog .period.style-scope.paper-time-picker').html());
-    
-    
+
+
         },
         setEndTime: function(){
                   $('#mine').html($('#endTimeDialog .minute.style-scope.paper-time-picker').html());
                 $('#sepe').html($('#endTimeDialog .sep.style-scope.paper-time-picker').html());
                 $('#he').html($('#endTimeDialog .hour.style-scope.paper-time-picker').html());
             $('#pe').html($('#endTimeDialog .period.style-scope.paper-time-picker').html());
-    
+
         }
 
     });
