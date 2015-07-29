@@ -10,26 +10,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="create-appointment">
+<dom-module id="create-time">
   <style>
     :host {
       display: block;
     }
   </style>
   <template>
-<div> 
-    <paper-date-picker id="picker"></paper-date-picker>
-  </template>
       
-  <script>
+<paper-dialog id="dialog" modal class="paper-date-picker-dialog">
+  <paper-date-picker id="datePicker"></paper-date-picker>
+    <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>OK</paper-button>
+    </div>
+</paper-dialog>
+      
+        
+      <paper-button id='clicker' raised on-click='handleClick'>Click</paper-button>
+      
+  </template>
+  
+    
+    <script>
   (function() {
     Polymer({
-      is: 'create-appointment',
-      ready: function(){
-        var jo = $("#picker").date;
-          console.log(jo);
-      }
-
+      is: 'create-time',
+        handleClick: function(){
+            this.$.dialog.toggle();
+        
+        
+        }
+     
     });
   })();
   </script>
