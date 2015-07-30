@@ -185,15 +185,37 @@ paper-material{
 
       },
       handleTimeClick:function(){
+        
+    //Prüfung der CalenderLogic
+          var startYear,startDay,startMonth,endYear,endDay,endMonth;
+          startYear=$('#ys').html()*1;  startDay=$('#ds').html()*1;  startMonth=$('#ms').html()*1;
+          endYear=$('#ye').html()*1;  endDay=$('#de').html()*1;  endMonth=$('#me').html()*1;
+          
+          
+        if(endYear<startYear){
+             alert("Das Enddatum liegt hinter dem Startdatum"); return;
+        }
+        
+        if(endMonth<startMonth){
+             alert("Das Enddatum liegt hinter dem Startdatum"); return;
+        }
             
+        if(endDay<startDay){
+             alert("Das Enddatum liegt hinter dem Startdatum"); return;
+        }  
+          
+          
+          
+    //Erstellung der TimeSlots in ein Array --> muss noch in Parse verarbeitet werden.      
+          
             var startHour,endHour,startMinute,endMinute, timeDiffer;
 
             startMinute=$('#mins').html()*1; 
             endMinute=$('#mine').html()*1; 
 
             if($('#ps').html()==='PM' && $('#hs').html()*1!=12*1 && $('#pe').html()==='PM'){
-                 startHour = $('#hs').html()*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1+12*1;    
+                 startHour = ($('#hs').html())*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
+                 endHour =  ($('#he').html())*1+12*1;    
 
             }else if($('#ps').html()==='AM' && $('#pe').html()==='AM'){ 
                  startHour=$('#hs').html()*1;
@@ -207,13 +229,20 @@ paper-material{
                       endHour=0;
                   }
             }
+          
+          
+            if($('#ps').html()==='AM' && $('#he').html()*1===12*1 && $('#pe').html()==='PM'){
+                endHour=12*1;
+                startHour=$('#hs').html()*1
+            }
+          
 
             if($('#ps').html()==='PM' && $('#hs').html()*1===12*1 && $('#pe').html()==='PM'){
                  startHour = $('#hs').html()*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
                  endHour =  $('#he').html()*1+12*1; 
             }   
 
-            if($('#pe').html()==='PM' && $('#ps').html()==='AM'){
+            if($('#pe').html()==='PM' && $('#ps').html()==='AM' && $('#he').html()*1!=12*1){
                  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
                  endHour =  $('#he').html()*1+12*1;    
                  startHour=$('#hs').html()*1;
@@ -221,12 +250,19 @@ paper-material{
                       startHour=0;
                   }
             }
+          
+            if($('#ps').html()==='PM' && $('#pe').html()==='AM'){
+                 startHour = $('#hs').html()*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
+                 endHour =  $('#he').html()*1; 
+            }   
 
-            if(endHour<=startHour ){
-                 if(endMinute<=startMinute){
+      
+          if(endHour<=startHour ){
+                 if(endHour<startHour|| (endHour===startHour && endMinute<startMinute)){
                     alert("die Zeitangaben scheinen nicht korrekt zu sein");
-                         }
+                }
             }
+          
       //Vorläufige Erstellung der Zeiten
 
               timeDiffer= 60*1-startMinute+60*(endHour-startHour-1)+endMinute;
@@ -255,12 +291,23 @@ paper-material{
             }
             var part= t1.add(t2);
 
-
-            for (var i = 0; i<Array1.length;i++){
+           
+          
+          for (var i = 0; i<Array1.length;i++){
                 Array1[i]= start.toString()+" - " + (start.add(t1)).toString();
                 start=start.add(part);
+            
                 console.log( Array1[i]);
             }
+          
+          var currentUser = Parse.User.current();
+         currentUser.set("companyName", "Array1");
+    
+              
+        
+       
+        
+        
           
         },
         handleStartClick: function(){
