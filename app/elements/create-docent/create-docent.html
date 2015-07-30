@@ -211,14 +211,12 @@ margin-right: auto;
 					}else{
 						var userRandom = Math.floor((Math.random() * 1000) + 1);
 
-						username = firstName.toLowerCase()
-											+ userRandom
-											+ lastName.toLowerCase();
+						username = Email;
 						var user = new Parse.User();
 
 							user.set("username", username);
 							user.set("password", password);
-							user.set("Email", Email);
+							user.set("email", Email);
 							user.set("isTeacher", true);
 							user.set("firstName", firstName);
 							user.set("lastName", lastName);

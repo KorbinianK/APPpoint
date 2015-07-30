@@ -39,7 +39,7 @@
         </paper-toolbar>
     </paper-header-panel>
     <paper-input-container>
-      <label>Benutzername</label>
+      <label>Email</label>
       <input is="iron-input" name="name" type="username" required>
     </paper-input-container>
     <paper-input-container>
@@ -91,15 +91,19 @@
       var
       username = $('[name="name"]').val(),
       password = $('[name="password"]').val();
+      
 
     // Call Parse Login function with those variables
     Parse.User.logIn(username, password, {
         // If the username and password matches
-        success: function(user) {
-
+        success: 
+            
+            function(user) {
+                
+       
             var currentUser = Parse.User.current();
 
-
+                     if(currentUser.get("emailVerified")){
             if (currentUser) {
                 (function(){
 
@@ -119,6 +123,9 @@
               })();
           } else {
 
+            }}else{
+            alert("email not verified");
+            
             }
             },
         // If there is an error
