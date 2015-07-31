@@ -292,23 +292,26 @@ paper-material{
             var part= t1.add(t2);
 
            
+        
           
           for (var i = 0; i<Array1.length;i++){
+                var Times = Parse.Object.extend("Times");
+                var timeQuery= new Times();
                 Array1[i]= start.toString()+" - " + (start.add(t1)).toString();
                 start=start.add(part);
-            
-                console.log( Array1[i]);
+                timeQuery.set("time",start.toString()+" - " + (start.add(t1)).toString());
+                timeQuery.set("available", true);
+                timeQuery.save(null,{
+                    success: function(timeQuery){
+                    },
+                
+                error: function(timeQuery,error){
+                    alert("fail");}
+                });
+                
             }
           
-          var currentUser = Parse.User.current();
-         currentUser.set("companyName", "Array1");
-    
-              
         
-       
-        
-        
-          
         },
         handleStartClick: function(){
             this.$.startDialog.toggle();
