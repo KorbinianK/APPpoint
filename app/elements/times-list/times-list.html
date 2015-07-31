@@ -1,0 +1,95 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="times-list">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+
+    	<template is="dom-repeat" items="{{timesList}}">
+
+    			<paper-item on-tap="timeClick">
+
+    			  <paper-item-body three-line class="paper-item-body-0">
+    			    <div><span>{{item.date}}</span></div>
+    					<div secondary><span>{{item.time}}</span></div>
+
+    			  </paper-item-body>
+
+    			</paper-icon-item>
+
+
+    		</template>
+  </template>
+  <script>
+  (function() {
+    Polymer({
+      is: 'times-list',
+
+        		ready: function() {
+        			var self = this;
+              var Times = Parse.Object.extend("Times");
+        			var query = new Parse.Query(Times);
+              query.limit(10);
+              query.equalTo("available", true);
+              query.equalTo("firstName","First");
+        		    //where equal to clicked teacher!
+                query.find({
+                  success: function(results){
+                  var List = [];
+                  console.log("blablub");
+                  for (i in results) {
+                    var item = {};
+                    var object = results[i];
+                    var picURL = object.get('profilePic');
+                      item ['date'] = object.get('date');
+                      item ['time'] = object.get('time');
+                      item ['docent'] = object.get('docent');
+                      List.push(item);
+                      console.log("test");
+                      console.log(item);
+
+                }
+                self.timesList = List;
+                },
+                error:function(error) {
+                  alert("error");
+                }
+                });
+        },
+        timeClick: function(e){
+          var currentUser = Parse.User.current();
+          var Appointment = Parse.Object.extend("Appointment");
+          var appQuery = new Appointment();
+          var slot = e.model;
+
+          appQuery.save({
+            time: slot.get('item.time'),
+            date: slot.get('item.date'),
+            user: currentUser.get("username")
+          }, {
+            success: function(appQuery){
+            },
+            error: function(appQuery){
+              alert("Error query");
+            }
+
+
+          });
+        }
+    });
+  })();
+  </script>
+</dom-module>

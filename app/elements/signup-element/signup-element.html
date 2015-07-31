@@ -139,7 +139,7 @@ margin-right: auto;
         password = $('[name="create-password"]').val(),
         firstName = $('[name="first"]').val(),
         lastName = $('[name="last"]').val();
-        
+
 
         if(
           email === '' ||
@@ -163,7 +163,7 @@ margin-right: auto;
             user.set("email", email);
             user.set("firstName", firstName);
             user.set("lastName", lastName);
-            user.set("isTeacher", true);
+            user.set("isTeacher", false);
 
             user.signUp(null, {
             success: function(user) {

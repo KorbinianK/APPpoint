@@ -50,7 +50,7 @@
 
 
    <div id="center"><paper-button class="submitButton" raised on-click="handleClick" >Anmelden</paper-button></div>
-     
+
 <div id="center1"><paper-button class="submitButton" raised on-click="registerClick" >Registrieren</paper-button></div>
 </paper-material>
 
@@ -64,7 +64,7 @@
     var currentUser = Parse.User.current();
         if (currentUser) {
             (function(){
-            
+
               })();
           } else {
 
@@ -82,28 +82,28 @@
           type: String
         }},
         registerClick:function() {
-      //  $('#login-element').hide();
-      $('#signup').removeClass('hidden').slideDown();},
-        
+     $('#login-element').hide();
+      $('#signup').removeClass('hidden')},
+
         handleClick: function() {
 
       console.log('click',this);
       var
       username = $('[name="name"]').val(),
       password = $('[name="password"]').val();
-      
+
 
     // Call Parse Login function with those variables
     Parse.User.logIn(username, password, {
         // If the username and password matches
-        success: 
-            
+        success:
+
             function(user) {
-                
-       
+
+
             var currentUser = Parse.User.current();
 
-                     if(currentUser.get("emailVerified")){
+                    // if(currentUser.get("emailVerified")){
             if (currentUser) {
                 (function(){
 
@@ -119,14 +119,19 @@
                   }
                      if(currentUser.get("isAdmin")){
                    document.location.href = "/admin.html";
-                  } 
+                  }
+                  else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false){
+                  document.location.href = "/user.html";
+                  }
               })();
           } else {
 
-            }}else{
-            alert("email not verified");
-            
             }
+
+          /*}else{
+            alert("email not verified");
+
+          } */
             },
         // If there is an error
         error: function(user, error) {

@@ -5,14 +5,14 @@ var currentUser = Parse.User.current();
                  document.location.href = "/admin.html";
 
              }
-                if(currentUser.get("isTeacher")){
-                  document.location.href = "/dozent.html#!/dozent.html";
+              else if(currentUser.get("isTeacher")){
+                  document.location.href = "/dozent.html";
               }
-              else{
-                  $(".teacherRole").hide();
+              else if(currentUser.get("isTeacher")===false && currentUser.get("isAdmin") === false){
+                    document.location.href = "/user.html";
               }
               })();
           } else {
 
-              $(".teacherRole").hide();
+
             }

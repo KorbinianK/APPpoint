@@ -19,6 +19,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'a-home';
     });
 
+    page('user.html/', function () {
+      app.route = 'u-home';
+    });
+
+    page('/uoverviewd', function () {
+      app.route = 'u-overview-docent';
+    });
+
+    page('/uappov', function () {
+      app.route = 'u-overview-appointment';
+    });
+
 
     // Admin Pages
 
@@ -49,18 +61,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // User Pages
 
-    page('/users', function () {
-      app.route = 'users';
-    });
-
-    page('/users/:name', function (data) {
-      app.route = 'user-info';
-      app.params = data.params;
-    });
-
-    page('/contact', function () {
-      app.route = 'contact';
-    });
 
     // add #! before urls
     page({

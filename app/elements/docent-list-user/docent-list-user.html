@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
-<dom-module id="docent-list">
+<dom-module id="docent-list-user">
   <style>
     :host {
       display: block;
@@ -18,46 +18,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
   <template>
 
-
+    <div id="dlist">
   	<template is="dom-repeat" items="{{docentList}}">
 
-  			<paper-item >
+  			<paper-item on-tap="docentClick">
   				<div><iron-image id="avatar" sizing="cover"  style="width:50px; height:50px"; fade  src="{{item.picture}}"></iron-image></div>
   			  <paper-item-body three-line class="paper-item-body-0">
   			    <div><span>{{item.lastName}}</span> <span>{{item.firstName}}</span></div>
   					<div secondary>Email: <span>{{item.email}}</span></div>
             <div secondary>Room: <span>{{item.room}}</span></div>
   			  </paper-item-body>
-          <paper-button flat on-click="roomClick">Room</paper-button>
+
   			</paper-icon-item>
 
 
   		</template>
-      <paper-dialog id="roomDialog" class=" paper-date-picker-dialog" >
-        <template is="dom-repeat" items="{{roomList}}">
+    </div>
 
-      			<paper-item >
-
-      			  <paper-item-body class="paper-item-body-0">
-
-      					<div>Room: <span>{{item.roomName}}</span></div>
-
-      			  </paper-item-body>
-
-      			</paper-icon-item>
+    <paper-dialog id="timeDialog" class=" paper-date-picker-dialog" >
 
 
-      		</template>
-          <div class="buttons">
-              <paper-button flat dialog-dismiss>Cancel</paper-button>
-              <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
-          </div>
-      </paper-dialog>
+          <times-list></times-list>
+
+
+        <div class="buttons">
+            <paper-button flat dialog-dismiss>Cancel</paper-button>
+            <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
+        </div>
+    </paper-dialog>
+
   </template>
   <script>
   (function() {
     Polymer({
-
+      is: "docent-list-user",
 
   		ready: function() {
   			var self = this;
@@ -91,10 +85,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		});
 
     },
-    roomClick: function(e){
+    docentClick: function(e){
       var teacher = e.model;
-      this.$.roomDialog.toggle();
-    
+        this.$.timeDialog.toggle();
+
       console.log(teacher.get('item.firstName'));
     }
     });
