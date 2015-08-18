@@ -1,6 +1,7 @@
 var currentUser = Parse.User.current();
-        if (currentUser) {
+        /*if (currentUser) {
             (function(){
+
              if(currentUser.get("isAdmin")){
                  document.location.href = "/admin.html";
 
@@ -16,3 +17,4 @@ var currentUser = Parse.User.current();
 
 
             }
+*/
