@@ -19,85 +19,93 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
 
-  	<template is="dom-repeat" items="{{docentList}}">
+    <template is="dom-repeat" items="{{docentList}}">
 
-  			<paper-item >
-  				<div><iron-image id="avatar" sizing="cover"  style="width:50px; height:50px"; fade  src="{{item.picture}}"></iron-image></div>
-  			  <paper-item-body three-line class="paper-item-body-0">
-  			    <div><span>{{item.lastName}}</span> <span>{{item.firstName}}</span></div>
-  					<div secondary>Email: <span>{{item.email}}</span></div>
-            <div secondary>Room: <span>{{item.room}}</span></div>
-  			  </paper-item-body>
-          <paper-button flat on-click="roomClick">Room</paper-button>
-  			</paper-icon-item>
-
-
-  		</template>
-      <paper-dialog id="roomDialog" class=" paper-date-picker-dialog" >
-        <template is="dom-repeat" items="{{roomList}}">
-
-      			<paper-item >
-
-      			  <paper-item-body class="paper-item-body-0">
-
-      					<div>Room: <span>{{item.roomName}}</span></div>
-
-      			  </paper-item-body>
-
-      			</paper-icon-item>
-
-
-      		</template>
-          <div class="buttons">
-              <paper-button flat dialog-dismiss>Cancel</paper-button>
-              <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
+      <paper-item>
+        <div>
+          <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
+        </div>
+        <paper-item-body three-line class="paper-item-body-0">
+          <div>
+            <span>{{item.lastName}}</span>
+            <span>{{item.firstName}}</span>
           </div>
-      </paper-dialog>
+          <div secondary>Email:
+            <span>{{item.email}}</span>
+          </div>
+          <div secondary>Room:
+            <span>{{item.room}}</span>
+          </div>
+        </paper-item-body>
+        <paper-button flat on-click="roomClick">Room</paper-button>
+        </paper-icon-item>
+
+
+    </template>
+    <paper-dialog id="roomDialog" class=" paper-date-picker-dialog">
+      <template is="dom-repeat" items="{{roomList}}">
+
+        <paper-item>
+
+          <paper-item-body class="paper-item-body-0">
+
+            <div>Room:
+              <span>{{item.roomName}}</span>
+            </div>
+
+          </paper-item-body>
+
+          </paper-icon-item>
+
+
+      </template>
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
+      </div>
+    </paper-dialog>
   </template>
   <script>
-  (function() {
-    Polymer({
+    (function() {
+      Polymer({
+        is: 'docent-list',
 
+        ready: function() {
+          var self = this;
+          var query = new Parse.Query(Parse.User);
+          query.equalTo("isTeacher", true);
+          query.find().then(function(results) {
+            var List = [];
 
-  		ready: function() {
-  			var self = this;
-  			var query = new Parse.Query(Parse.User);
+            for (i in results) {
+              var item = {};
+              var object = results[i];
+              var picURL = object.get('profilePic');
+              item['firstName'] = object.get('firstName');
+              item['lastName'] = object.get('lastName');
+              item['email'] = object.get('email');
+              item['room'] = object.get('room');
+              if (picURL != null) {
+                picURL = picURL.url();
+              }
+              item['picture'] = picURL;
 
-  		query.equalTo("isTeacher",true);
+              List.push(item);
+              console.log(item);
 
-  			query.find().then(function(results){
-  				var List = [];
-  				console.log("blablub");
-  				for (i in results) {
-  					var item = {};
-  					var object = results[i];
-  					var picURL = object.get('profilePic');
-  						item ['firstName'] = object.get('firstName');
-  						item ['lastName'] = object.get('lastName');
-  						item ['email'] = object.get('email');
-              item ['room'] = object.get('room');
-  						if(picURL  != null)
-  						{
-  							picURL = picURL.url();
-  						}
-  						item ['picture'] = picURL;
+            }
+            self.docentList = List;
 
-  						List.push(item);
-  						console.log(item);
+          });
 
-  			}
-  			self.docentList = List;
+        },
+        roomClick: function(e) {
+          var teacher = e.model;
+          this.$.roomDialog.toggle();
 
-  		});
-
-    },
-    roomClick: function(e){
-      var teacher = e.model;
-      this.$.roomDialog.toggle();
-    
-      console.log(teacher.get('item.firstName'));
-    }
-    });
-  })();
+          console.log(teacher.get('item.firstName'));
+        }
+      });
+    })();
   </script>
 </dom-module>

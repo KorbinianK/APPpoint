@@ -1,0 +1,204 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="rooms-list">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <paper-material elevation="1">
+
+
+      <template is="dom-repeat" items="{{roomList}}">
+
+        <paper-item>
+          <div>
+            <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
+          </div>
+          <paper-item-body three-line class="paper-item-body-0">
+            <div>
+              <h1>
+                <span>{{item.roomName}}</span>
+              </h1>
+            </div>
+            <div secondary><b>Available:</b>
+              <span>{{item.status}}</span>
+            </div>
+            <div secondary><b>Docent:</b>
+              <span>{{item.docent}}</span>
+            </div>
+            <div secondary><b>Description:</b>
+              <span>{{item.roomDesc}}</span>
+            </div>
+            <div secondary><b>Building:</b>
+              <span>{{item.roomBuild}}</span>
+            </div>
+
+
+          </paper-item-body>
+
+          <paper-button flat on-click="editButton">Edit</paper-button>
+          </paper-icon-item>
+
+      </template>
+    </paper-material>
+    <paper-dialog id="editRoomDialog">
+      <template is="dom-repeat" items="{{docentList}}">
+
+        <paper-item>
+
+          <paper-item-body class="paper-item-body-0">
+
+            <div dialog-confirm on-click="edit">
+              <span>{{item.firstName}}</span>
+              <span>{{item.lastName}}</span>
+            </div>
+
+          </paper-item-body>
+
+          </paper-icon-item>
+
+
+      </template>
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'rooms-list',
+        ready: function() {
+          var self = this;
+          var clickedRoom;
+          var clickedTeacher;
+          var docentName;
+          var Room = Parse.Object.extend("Room");
+          var query = new Parse.Query(Room);
+          query.include("Docent");
+          query.find().then(function(results) {
+            var List = [];
+
+            for (i in results) {
+
+              var item = {};
+              var object = results[i];
+              var user = object.get('Docent');
+
+              docentName = user.get("lastName") + " " + user.get("firstName");
+              item['roomName'] = object.get('roomName');
+              item['roomBuild'] = object.get('roomBuild');
+              item['roomDesc'] = object.get('roomDesc');
+              item['status'] = object.get('available');
+              item['docent'] = docentName;
+              List.push(item);
+            }
+
+            self.roomList = List;
+
+
+          });
+          var query = new Parse.Query(Parse.User);
+          query.equalTo("isTeacher", true);
+          query.find().then(function(results) {
+            var List = [];
+            var emptyItem = {};
+            emptyItem['firstName'] = "No ";
+            emptyItem['lastName'] = "Docent";
+            emptyItem['delete'] = true;
+            List.push(emptyItem);
+            for (i in results) {
+              var docent = {};
+              var object = results[i];
+              var picURL = object.get('profilePic');
+              docent['firstName'] = object.get('firstName');
+              docent['lastName'] = object.get('lastName');
+              List.push(docent);
+              console.log(docent);
+
+            }
+            self.docentList = List;
+
+          });
+
+        },
+        editButton: function(e) {
+          clickedRoom = e.model;
+          this.$.editRoomDialog.toggle();
+
+        },
+        edit: function(e) {
+          console.log("click", clickedRoom.get("item.roomName"));
+          var model = e.model;
+
+          var Room = Parse.Object.extend("Room");
+          var User = Parse.User.extend;
+          var room = new Parse.Query(Room);
+          var query = new Parse.Query(Parse.User);
+
+          if (model.get("item.delete") === true) {
+
+            room.equalTo("roomName", clickedRoom.get("item.roomName"));
+            room.first({
+              success: function(object) {
+                clickedRoom.set("item.status", "false");
+                object.set("available", true);
+                object.set("Docent", null)
+                clickedRoom.set("item.docent", "No Docent");
+                object.save();
+
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+            });
+
+
+          } else {
+            query.equalTo("firstName", model.get("item.firstName"));
+            query.equalTo("lastName", model.get("item.lastName"));
+            query.equalTo("isTeacher", true);
+            query.first({
+              success: function(user) {
+                room.equalTo("roomName", clickedRoom.get("item.roomName"));
+                room.first({
+                  success: function(object) {
+                    clickedRoom.set("item.status", "false");
+                    object.set("available", false);
+                    object.set("Docent", user)
+                    clickedRoom.set("item.docent", user.get("lastName") + " " + user.get("firstName"));
+                    object.save();
+
+                  },
+                  error: function(error) {
+                    alert("Error: " + error.code + " " + error.message);
+                  }
+                });
+
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+
+            });
+
+
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

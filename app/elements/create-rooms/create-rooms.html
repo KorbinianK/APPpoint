@@ -1,0 +1,113 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="create-rooms">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <paper-toolbar id="createDocentToolbar">
+      <h2>Create a new Room</h2>
+    </paper-toolbar>
+
+    </paper-toolbar>
+    <paper-material class="50percent">
+
+      <paper-item>
+        <paper-item-body three-line class="paper-item-body-0">
+
+          <paper-input-container>
+            <label>Room Name</label>
+            <input is="iron-input" name="roomName" type="text" value="{{roomName::input}}" required>
+          </paper-input-container>
+
+          <paper-input-container>
+            <label>Building</label>
+            <input is="iron-input" name="roomDesc" type="text" value="{{roomDesc::input}}">
+          </paper-input-container>
+
+          <paper-input-container>
+            <label>Description</label>
+            <input is="iron-input" name="roomBuild" type="text" value="{{roomBuild::input}}">
+          </paper-input-container>
+
+        </paper-item-body>
+      </paper-item>
+
+      <div id="button-create">
+        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
+      </div>
+    </paper-material>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'create-rooms',
+
+        properties: {
+          foo: {
+            type: String,
+            value: 'bar',
+            notify: true
+          }
+        },
+        handleClick: function() {
+          var
+            roomName = $('[name="roomName"]').val(),
+            roomDesc = $('[name="roomDesc"]').val(),
+            roomBuild = $('[name="roomBuild"]').val()
+
+            if (
+              roomName === ''
+            ) {
+            
+
+              alert("Error: A Room has to have a name");
+
+            } else {
+
+              var Room = Parse.Object.extend("Room");
+              var room = new Room();
+
+              room.set("roomName", roomName);
+              room.set("roomDesc", roomDesc);
+              room.set("roomBuild", roomBuild);
+              room.set("available",  true);
+
+              room.save(null, {
+                success: function(room) {
+                  // Execute any logic that should take place after the object is saved.
+                  alert('New room created with objectId: ' + room.id);
+                  var inputs, index;
+
+                  inputs = document.getElementsByTagName('input');
+                  for (index = 0; index < inputs.length; ++index) {
+                      inputs[index].val = '';
+                  }
+                },
+                error: function(room, error) {
+                  // Execute any logic that should take place if the save fails.
+                  // error is a Parse.Error with an error code and message.
+                  alert('Failed to create new object, with error code: ' + error.message);
+                }
+              });
+
+            }
+
+        }
+      });
+    })();
+  </script>
+</dom-module>
