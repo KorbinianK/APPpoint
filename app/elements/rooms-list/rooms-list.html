@@ -140,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               docent['firstName'] = object.get('firstName');
               docent['lastName'] = object.get('lastName');
               List.push(docent);
-              console.log(docent);
+
 
             }
             self.docentList = List;
@@ -168,7 +168,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.first({
               success: function(object) {
                 clickedRoom.set("item.status", true);
-
+                object.set("available", true);
                 object.set("Docent", null)
                 clickedRoom.set("item.docent", "No Docent");
                 object.save();

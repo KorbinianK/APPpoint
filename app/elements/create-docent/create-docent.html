@@ -11,182 +11,185 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
 <dom-module id="create-docent">
-<style type="text/css">
-	paper-item-body.paper-item-body-0 {
-		display:-ms-flexbox;
-		display:-webkit-flex;
-      display:flex;
+	<style type="text/css">
+		paper-item-body.paper-item-body-0 {
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			-ms-flex-direction: column;
+			-webkit-flex-direction: column;
+			flex-direction: column;
+			-ms-flex-pack: center;
+			-webkit-justify-content: center;
+			justify-content: center;
+			-ms-flex: 1 1 0.000000001px;
+			-webkit-flex: 1;
+			flex: 1;
+			-webkit-flex-basis: 0.000000001px;
+			flex-basis: 0.000000001px;
+		}
 
-      -ms-flex-direction:column;
-      -webkit-flex-direction:column;
-      flex-direction:column;-ms-flex-pack:center;
-      -webkit-justify-content:center;
-      justify-content:center;-ms-flex:1 1 0.000000001px;
-      -webkit-flex:1;
-      flex:1;
-      -webkit-flex-basis:0.000000001px;
-      flex-basis:0.000000001px;
-}
+		paper-item-body.paper-item-body-0[two-line] {
+			min-height: 72px;
+		}
 
-paper-item-body.paper-item-body-0[two-line] {
-  min-height:72px;
-}
+		paper-item-body.paper-item-body-0[three-line] {
+			min-height: 108px;
+		}
 
-paper-item-body.paper-item-body-0[three-line] {
-  min-height:108px;
-}
+		paper-item-body.paper-item-body-0 [secondary] {
+			color: #757575;
+			font-family: 'Roboto', 'Noto', sans-serif;
+			-webkit-font-smoothing: antialiased;
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 20px;
+			;
+		}
 
-paper-item-body.paper-item-body-0  [secondary] {
-  color:#757575;font-family:'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing:antialiased;
+		.spacer {
+			padding-top: 10px;
+			border-bottom: 1px solid gray;
+		}
 
-      font-size:14px;
-      font-weight:400;
-      line-height:20px;;
-}
+		label.prev {
+			padding-left: 20px;
+			color: #727272;
+			position: relative;
+			top: 10px;
+		}
 
-.spacer{
-	padding-top:10px;
-	border-bottom: 1px solid gray;
+		paper-button {
+			width: 30%;
+			display: block;
+			margin-top: 30px;
+			margin-left: auto;
+			margin-right: auto;
+		}
 
-}
+		#button-create {
+			padding: 10px;
+		}
+	</style>
+	<template>
+		<paper-toolbar id="createDocentToolbar">
+			<h2>Create a new Docent</h2>
+		</paper-toolbar>
 
-label.prev{
-	padding-left: 20px;
-	color: #727272;
-	position: relative;
-	top: 10px;
-}
-paper-button{
-width:30%;
-display: block;
-margin-top: 30px;
-margin-left: auto;
-margin-right: auto;
-}
-
-#button-create {
-	padding: 10px;
-}
-
-</style>
-  <template>
-  <paper-toolbar id="createDocentToolbar">
-		<h2>Create a new Docent</h2>
-	</paper-toolbar>
-
-  </paper-toolbar>
-    <paper-material class="50percent">
+		</paper-toolbar>
+		<paper-material class="50percent">
 			<label class="prev">Preview</label>
 			<div class="spacer"></div>
-	<paper-item>
-	  <paper-item-body three-line class="paper-item-body-0">
-      <div><span>{{computeFullName(firstName, lastName)}}</span></div>
-	    <div secondary>{{room}}</div>
-      <div secondary>{{computeSubjects(subject1,subject2,subject3)}}</div>
-    </paper-item-body>
-  </paper-item>
-<div class="spacer"></div>
-	<paper-item>
-		<paper-item-body  three-line class="paper-item-body-0">
+			<paper-item>
+				<paper-item-body three-line class="paper-item-body-0">
+					<div>
+						<span>{{computeFullName(firstName, lastName)}}</span>
+					</div>
+					<div secondary>{{room}}</div>
+					<div secondary>{{computeSubjects(subject1,subject2,subject3)}}</div>
+				</paper-item-body>
+			</paper-item>
+			<div class="spacer"></div>
+			<paper-item>
+				<paper-item-body three-line class="paper-item-body-0">
 
-		  <paper-input-container>
-		    <label>First Name</label>
-		    <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
-		  </paper-input-container>
+					<paper-input-container>
+						<label>First Name</label>
+						<input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
+					</paper-input-container>
 
-	  	<paper-input-container>
-	      <label>Last Name</label>
-	      <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
-	  	</paper-input-container>
+					<paper-input-container>
+						<label>Last Name</label>
+						<input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
+					</paper-input-container>
 
-			<paper-input-container>
-				<label>Room</label>
-				<input is="iron-input" name="room" type="text" value="{{room::input}}" required>
-			</paper-input-container>
+					<paper-input-container>
+						<label>Room</label>
+						<input is="iron-input" name="room" type="text" value="{{room::input}}" required>
+					</paper-input-container>
 
-		</paper-item-body>
-	</paper-item>
+				</paper-item-body>
+			</paper-item>
 
-	<paper-item>
-	  <paper-item-body three-line class="paper-item-body-0">
+			<paper-item>
+				<paper-item-body three-line class="paper-item-body-0">
 
-    <paper-input-container>
-      <label>Subject 1</label>
-      <input is="iron-input" name="subject1" type="text" required value="{{subject1::input}}">
-    </paper-input-container>
+					<paper-input-container>
+						<label>Subject 1</label>
+						<input is="iron-input" name="subject1" type="text" required value="{{subject1::input}}">
+					</paper-input-container>
 
-    <paper-input-container>
-      <label>Subject 2</label>
-      <input is="iron-input" name="subject2" type="text"  value="{{subject2::input}}">
-    </paper-input-container>
-
-
-				<paper-input-container>
-					<label>Subject 3</label>
-					<input is="iron-input" name="subject3" type="text"  value="{{subject3::input}}">
-				</paper-input-container>
+					<paper-input-container>
+						<label>Subject 2</label>
+						<input is="iron-input" name="subject2" type="text" value="{{subject2::input}}">
+					</paper-input-container>
 
 
-				<paper-input-container>
-					<label>Password</label>
-					<input is="iron-input" name="password" type="password" required>
-				</paper-input-container>
+					<paper-input-container>
+						<label>Subject 3</label>
+						<input is="iron-input" name="subject3" type="text" value="{{subject3::input}}">
+					</paper-input-container>
 
-				<paper-input-container>
-					<label>E-Mail</label>
-					<input is="iron-input" name="Email" type="Email" >
-				</paper-input-container>
 
-		</paper-item-body>
-  </paper-item>
-<div id="button-create">
-		<paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" >Create</paper-button>
-</div>
-</paper-material>
+					<paper-input-container>
+						<label>Password</label>
+						<input is="iron-input" name="password" type="password" required>
+					</paper-input-container>
+
+					<paper-input-container>
+						<label>E-Mail</label>
+						<input is="iron-input" name="Email" type="Email">
+					</paper-input-container>
+
+				</paper-item-body>
+			</paper-item>
+			<div id="button-create">
+				<paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
+			</div>
+		</paper-material>
 
 	</template>
 </dom-module>
 <script>
-(function() {
-  Polymer({
-    is: 'create-docent',
+	(function() {
+		Polymer({
+			is: 'create-docent',
 
-      properties: {
-            firstName: {
-				 type: String,
+			properties: {
+				firstName: {
+					type: String,
 					value: ''
-			},
-            lastName: {
-				 type: String,
+				},
+				lastName: {
+					type: String,
 					value: ''
-			},
-			room:{
-				type: String,
-				value: ''
-			},
-			subject1:{
-				 type: String,
+				},
+				room: {
+					type: String,
 					value: ''
-			},
-			subject2:{
-				 type: String,
+				},
+				subject1: {
+					type: String,
 					value: ''
-			},
-			subject3:{
-				 type: String,
+				},
+				subject2: {
+					type: String,
 					value: ''
-			}
-  },
-      computeFullName: function(firstName, lastName) {
-        return firstName + ' ' + lastName;
-      },
-      computeSubjects: function(subject1, subject2, subject3) {
+				},
+				subject3: {
+					type: String,
+					value: ''
+				}
+			},
+			computeFullName: function(firstName, lastName) {
+				return firstName + ' ' + lastName;
+			},
+			computeSubjects: function(subject1, subject2, subject3) {
 
-        return subject1 + ' ' + subject2 + ' ' + subject3;
+				return subject1 + ' ' + subject2 + ' ' + subject3;
 			},
-			  handleClick: function() {
-					var
+			handleClick: function() {
+				var
 					Email = $('[name="Email"]').val(),
 					password = $('[name="password"]').val(),
 					firstName = $('[name="firstName"]').val(),
@@ -196,55 +199,75 @@ margin-right: auto;
 					subject2 = $('[name="subject2"]').val(),
 					subject3 = $('[name="subject3"]').val();
 
-					if(
-						Email === '' ||
-						password === '' ||
-						firstName === '' ||
-						lastName === '' ||
-						room === '' ||
-						subject1 === ''
-					 ){
-                        console.log(Email+password+firstName+lastName+room+subject1)
+				if (
+					Email === '' ||
+					password === '' ||
+					firstName === '' ||
+					lastName === '' ||
+					room === '' ||
+					subject1 === ''
+				) {
+					console.log(Email + password + firstName + lastName + room + subject1)
 
 					alert("Error: Alle Felder müssen ausgefüllt werden");
 
-					}else{
-						var userRandom = Math.floor((Math.random() * 1000) + 1);
+				} else {
+					var userRandom = Math.floor((Math.random() * 1000) + 1);
 
-						username = Email;
-						var user = new Parse.User();
+					username = Email;
+					var user = new Parse.User();
+					var Docent = Parse.Object.extend("Docent");
+					var docent = new Docent();
 
-							user.set("username", username);
-							user.set("password", password);
-							user.set("email", Email);
-							user.set("isTeacher", true);
-							user.set("firstName", firstName);
-							user.set("lastName", lastName);
-							user.set("subject1", subject1);
-							user.set("subject2", subject2);
-							user.set("subject3", subject3);
-							user.signUp(null, {
-							success: function(user) {
-							alert("Ihr neuer Username lautet: "+ user.get("username")+" . Bitte notieren");
-                            //    alert("Success", +user);
-									var inputs, index;
+					docent.set("username", username);
+					docent.set("email", Email);
+					docent.set("isTeacher", true);
+					docent.set("firstName", firstName);
+					docent.set("lastName", lastName);
+					docent.set("subject1", subject1);
+					docent.set("subject2", subject2);
+					docent.set("subject3", subject3);
+					docent.save(null, {
+						success: function(docent) {
 
-									inputs = document.getElementsByTagName('input');
-									for (index = 0; index < inputs.length; ++index) {
-									    inputs[index].val = '';
-									}
+							alert('New object created with objectId: ' + docent.id);
+						},
+						error: function(docent, error) {
 
-							},
-							error: function(user, error) {
-								// Show the error message somewhere and let the user try again.
-								alert("Error: " + error.code + " " + error.message);
+							alert('Failed to create new object, with error code: ' + error.message);
+						}
+					});
+
+					user.set("username", username);
+					user.set("password", password);
+					user.set("email", Email);
+					user.set("isTeacher", true);
+					user.set("firstName", firstName);
+					user.set("lastName", lastName);
+					user.set("subject1", subject1);
+					user.set("subject2", subject2);
+					user.set("subject3", subject3);
+					user.signUp(null, {
+						success: function(user) {
+
+							var inputs, index;
+
+							inputs = document.getElementsByTagName('input');
+							for (index = 0; index < inputs.length; ++index) {
+								inputs[index].val = '';
 							}
-							});
 
-					}
-
+						},
+						error: function(user, error) {
+							// Show the error message somewhere and let the user try again.
+							alert("Error: " + error.code + " " + error.message);
+						}
+					});
 
 				}
-  });
-})();
+
+
+			}
+		});
+	})();
 </script>
