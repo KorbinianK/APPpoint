@@ -32,8 +32,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span>{{item.roomName}}</span>
               </h1>
             </div>
-            <div secondary><b>Available:</b>
-              <span>{{item.status}}</span>
+            <div secondary hidden="{{!item.status}}">
+              <b>Available</b>
+            <!--  <span>{{item.status}}</span> -->
+            </div>
+            <div secondary hidden="{{item.status}}">
+              <b>Not available</b>
+            <!--  <span>{{item.status}}</span> -->
             </div>
             <div secondary><b>Docent:</b>
               <span>{{item.docent}}</span>
@@ -81,6 +86,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function() {
       Polymer({
         is: 'rooms-list',
+        properties: {
+          available: {
+            type: Boolean,
+            value: true,
+            notify: true
+          }
+        },
         ready: function() {
           var self = this;
           var clickedRoom;
@@ -93,17 +105,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var List = [];
 
             for (i in results) {
-
               var item = {};
               var object = results[i];
               var user = object.get('Docent');
-
-              docentName = user.get("lastName") + " " + user.get("firstName");
+              if(user != null){
+                docentName = user.get("lastName") + " " + user.get("firstName");
+                item['docent'] = docentName;
+              }
               item['roomName'] = object.get('roomName');
               item['roomBuild'] = object.get('roomBuild');
               item['roomDesc'] = object.get('roomDesc');
               item['status'] = object.get('available');
-              item['docent'] = docentName;
+
               List.push(item);
             }
 
@@ -154,8 +167,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.equalTo("roomName", clickedRoom.get("item.roomName"));
             room.first({
               success: function(object) {
-                clickedRoom.set("item.status", "false");
-                object.set("available", true);
+                clickedRoom.set("item.status", true);
+
                 object.set("Docent", null)
                 clickedRoom.set("item.docent", "No Docent");
                 object.save();
@@ -176,7 +189,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 room.equalTo("roomName", clickedRoom.get("item.roomName"));
                 room.first({
                   success: function(object) {
-                    clickedRoom.set("item.status", "false");
+                    clickedRoom.set("item.status", false);
+
                     object.set("available", false);
                     object.set("Docent", user)
                     clickedRoom.set("item.docent", user.get("lastName") + " " + user.get("firstName"));
