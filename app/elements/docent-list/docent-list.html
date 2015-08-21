@@ -147,7 +147,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var docent = e.model;
           clickedDocentEmail = docent.get("item.email");
           clickedDocentRoom = docent.get("item.room");
-          console.log(clickedDocentRoom);
+          clickedDocent = docent.get("item.docent");
+          console.log("clicked docent",clickedDocent);
           var self = this;
 
           // Get all available rooms
@@ -177,15 +178,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         roomClick: function(e) {
           var model = e.model;
           var clickedRoom = model.get("item.roomName");
-
           var DocentQuery = Parse.Object.extend("Docent");
           var query = new Parse.Query(DocentQuery);
-
-          var Room = Parse.Object.extend("Room");
-          var room = new Parse.Query(Room);
-          room.equalTo("roomName", clickedRoom);
           if (model.get("item.delete") === true) {
-
             var DocentQuery = Parse.Object.extend("Docent");
             var query = new Parse.Query(DocentQuery);
             query.equalTo("email", clickedDocentEmail);
@@ -201,20 +196,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 alert("Error: " + error.code + " " + error.message);
               }
             });
+            var Room = Parse.Object.extend("Room");
+            var room = new Parse.Query(Room);
+            room.include("Docent");
+            room.equalTo("Docent", clickedDocent);
+            room.first({
+              success: function(foundRoom) {
+                foundRoom.set("available", true);
+                foundRoom.set("Docent", null);
+                foundRoom.save();
+                console.log("found ",foundRoom.get("roomName"));
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
 
+            });
           } else {
+            var Room = Parse.Object.extend("Room");
+            var room = new Parse.Query(Room);
+            room.equalTo("roomName", clickedRoom);
             room.first({
               success: function(foundRoom) {
                 foundRoom.set("available", false);
-                foundRoom.save();
 
                 query.equalTo("email", clickedDocentEmail);
                 query.first({
                   success: function(user) {
                     user.set("Room", foundRoom);
-
+                    foundRoom.set("available", false);
+                    foundRoom.set("Docent",user);
+                    foundRoom.save();
                     user.save();
-
 
                   },
                   error: function(error) {

@@ -216,27 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					username = Email;
 					var user = new Parse.User();
-					var Docent = Parse.Object.extend("Docent");
-					var docent = new Docent();
 
-					docent.set("username", username);
-					docent.set("email", Email);
-					docent.set("isTeacher", true);
-					docent.set("firstName", firstName);
-					docent.set("lastName", lastName);
-					docent.set("subject1", subject1);
-					docent.set("subject2", subject2);
-					docent.set("subject3", subject3);
-					docent.save(null, {
-						success: function(docent) {
-
-							alert('New object created with objectId: ' + docent.id);
-						},
-						error: function(docent, error) {
-
-							alert('Failed to create new object, with error code: ' + error.message);
-						}
-					});
 
 					user.set("username", username);
 					user.set("password", password);
@@ -247,6 +227,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					user.set("subject1", subject1);
 					user.set("subject2", subject2);
 					user.set("subject3", subject3);
+
 					user.signUp(null, {
 						success: function(user) {
 
@@ -256,6 +237,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							for (index = 0; index < inputs.length; ++index) {
 								inputs[index].val = '';
 							}
+							var query = new Parse.Query(Parse.User);
+							query.equalTo("email", Email);
+							query.include("Docent");
+							query.first({
+								success: function(user) {
+									var Docent = Parse.Object.extend("Docent");
+									var docent = new Docent();
+									docent.set("username", username);
+									docent.set("email", Email);
+									docent.set("isTeacher", true);
+									docent.set("firstName", firstName);
+									docent.set("lastName", lastName);
+									docent.set("subject1", subject1);
+									docent.set("subject2", subject2);
+									docent.set("subject3", subject3);
+									docent.set("Docent", user);
+									docent.save(null, {
+										success: function(docent) {
+
+
+										},
+										error: function(docent, error) {
+
+											alert('Failed to create new object, with error code: ' + error.message);
+										}
+									});
+
+
+								},
+								error : function(error){
+									alert("Error: " + error.code + " " + error.message);
+								}
+							});
+
 
 						},
 						error: function(user, error) {
