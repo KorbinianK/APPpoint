@@ -30,62 +30,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-
-
-    <template is="dom-repeat" items="{{docentList}}">
-
-      <paper-item>
-        <div>
-          <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
-        </div>
-        <paper-item-body three-line class="paper-item-body-0">
-          <div>
-            <span>{{item.lastName}}</span>
-            <span>{{item.firstName}}</span>
-          </div>
-
-          <div secondary>Room:
-            <span id="room">{{item.room}}</span>
-          </div>
-        </paper-item-body>
-        <paper-button flat on-click="roomButtonClick">Room</paper-button>
-        </paper-icon-item>
-
-
-    </template>
-    <paper-dialog id="roomDialog" modal>
+    <paper-material elevation="1">
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Available Rooms</h2>
+            <h2>Docent List</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
-      <paper-material elevation="1">
+
+      <template is="dom-repeat" items="{{docentList}}">
+
+        <paper-item>
+          <div>
+            <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
+          </div>
+          <paper-item-body three-line class="paper-item-body-0">
+            <div>
+              <span>{{item.lastName}}</span>
+              <span>{{item.firstName}}</span>
+            </div>
+
+            <div secondary>Room:
+              <span id="room">{{item.room}}</span>
+            </div>
+          </paper-item-body>
+          <paper-button flat on-click="roomButtonClick">Room</paper-button>
+          </paper-icon-item>
 
 
-        <template is="dom-repeat" items="{{roomList}}">
-
-          <paper-item>
-
-            <paper-item-body class="paper-item-body-0">
-
-              <div id="roomElement" on-click="roomClick" dialog-dismiss>
-                <span>{{item.roomName}}</span>
-              </div>
-
-            </paper-item-body>
-
-            </paper-icon-item>
+      </template>
+      <paper-dialog id="roomDialog" modal>
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Available Rooms</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+        <paper-material elevation="1">
 
 
-        </template>
+          <template is="dom-repeat" items="{{roomList}}">
+
+            <paper-item>
+
+              <paper-item-body class="paper-item-body-0">
+
+                <div id="roomElement" on-click="roomClick" dialog-dismiss>
+                  <span>{{item.roomName}}</span>
+                </div>
+
+              </paper-item-body>
+
+              </paper-icon-item>
+
+
+          </template>
+        </paper-material>
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
 
         </div>
-      </paper-material>
+    </paper-material>
     </paper-dialog>
+
   </template>
   <script>
     (function() {
@@ -110,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ready: function() {
           var self = this;
-          var clickedDocentEmail, clickedDocentRoom;
+          var clickedDocentEmail, clickedDocentRoom, docent;
 
           // Fetch all Docents
           var DocentQuery = Parse.Object.extend("Docent");
@@ -127,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               if (room != null) {
                 docent['room'] = room.get('roomName')
               }
-              console.log(object);
+
               docent['firstName'] = object.get('firstName');
               docent['lastName'] = object.get('lastName');
               docent['email'] = object.get('email');
@@ -144,11 +153,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
         roomButtonClick: function(e) {
-          var docent = e.model;
+          docent = e.model;
           clickedDocentEmail = docent.get("item.email");
           clickedDocentRoom = docent.get("item.room");
           clickedDocent = docent.get("item.docent");
-          console.log("clicked docent",clickedDocent);
+
           var self = this;
 
           // Get all available rooms
@@ -178,6 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         roomClick: function(e) {
           var model = e.model;
           var clickedRoom = model.get("item.roomName");
+
           var DocentQuery = Parse.Object.extend("Docent");
           var query = new Parse.Query(DocentQuery);
           if (model.get("item.delete") === true) {
@@ -202,10 +212,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.equalTo("Docent", clickedDocent);
             room.first({
               success: function(foundRoom) {
-                foundRoom.set("available", true);
-                foundRoom.set("Docent", null);
-                foundRoom.save();
-                console.log("found ",foundRoom.get("roomName"));
+                docent.set("item.room", " ");
+                if (foundRoom != undefined) {
+                  foundRoom.set("available", true);
+                  foundRoom.set("Docent", null);
+                  foundRoom.save();
+
+                }
+
               },
               error: function(error) {
                 alert("Error: " + error.code + " " + error.message);
@@ -219,13 +233,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.first({
               success: function(foundRoom) {
                 foundRoom.set("available", false);
-
+                docent.set("item.room", foundRoom.get("roomName"));
                 query.equalTo("email", clickedDocentEmail);
                 query.first({
                   success: function(user) {
                     user.set("Room", foundRoom);
                     foundRoom.set("available", false);
-                    foundRoom.set("Docent",user);
+                    foundRoom.set("Docent", user);
                     foundRoom.save();
                     user.save();
 

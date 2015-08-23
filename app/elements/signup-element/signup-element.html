@@ -12,68 +12,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="signup-element">
   <style>
-  paper-item-body.paper-item-body-0 {
-		display:-ms-flexbox;
-		display:-webkit-flex;
-      display:flex;
+  paper-material {
 
-      -ms-flex-direction:column;
-      -webkit-flex-direction:column;
-      flex-direction:column;-ms-flex-pack:center;
-      -webkit-justify-content:center;
-      justify-content:center;-ms-flex:1 1 0.000000001px;
-      -webkit-flex:1;
-      flex:1;
-      -webkit-flex-basis:0.000000001px;
-      flex-basis:0.000000001px;
-}
+   width: 70%;
+  margin: 0 auto;
+      padding: 0 0 20px;
 
-paper-item-body.paper-item-body-0[two-line] {
-  min-height:72px;
-}
+  }
+  paper-input-container {
+     padding: 0 20px 0 20px !important;
+    }
+    paper-button{
+    width:30%;
+    display: block;
+        margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
 
-paper-item-body.paper-item-body-0[three-line] {
-  min-height:108px;
-}
-
-paper-item-body.paper-item-body-0  [secondary] {
-  color:#757575;font-family:'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing:antialiased;
-
-      font-size:14px;
-      font-weight:400;
-      line-height:20px;;
-}
-
-.spacer{
-	padding-top:10px;
-	border-bottom: 1px solid gray;
-
-}
-
-label.prev{
-	padding-left: 20px;
-	color: #727272;
-	position: relative;
-	top: 10px;
-}
-paper-button{
-width:30%;
-display: block;
-margin-top: 30px;
-margin-left: auto;
-margin-right: auto;
-}
+    }
 
 #button-create {
 	padding: 10px;
 }
   </style>
   <template>
+<paper-material>
 
-    <paper-item>
-      <paper-item-body  three-line class="paper-item-body-0">
-
+  <paper-header-panel class="">
+       <paper-toolbar>
+            <div><h2>Bitte einloggen</h2></div>
+      </paper-toolbar>
+  </paper-header-panel>
         <paper-input-container>
           <label>First Name</label>
           <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
@@ -85,10 +54,9 @@ margin-right: auto;
         </paper-input-container>
 
       </paper-item-body>
-    </paper-item>
 
-    <paper-item>
-      <paper-item-body three-line class="paper-item-body-0">
+
+
           <paper-input-container>
             <label>Password</label>
             <input is="iron-input" name="create-password" type="password" required>
@@ -99,12 +67,11 @@ margin-right: auto;
             <input is="iron-input" name="email" type="email" >
           </paper-input-container>
 
-      </paper-item-body>
-    </paper-item>
+
   <div id="button-create">
       <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" >Erstellen</paper-button>
   </div>
-
+</paper-material>
   </template>
   <script>
   (function() {
