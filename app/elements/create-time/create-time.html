@@ -50,6 +50,33 @@ paper-material{
   </style>
   <template>
     <paper-material elevation="1">
+    
+       
+    <label for="check1">
+       <input type="checkbox" name = "check1" id="check1" >
+      Monday
+    </label> 
+    <label for="check2">
+       <input type="checkbox" name = "check2" id="check2" >
+       Tuesday
+    </label> 
+    <label for="check3">
+      <input type="checkbox"  name = "check3" id="check3">
+       Wednesday
+    </label> 
+    <label for="check4">
+      <input type="checkbox"  name = "check4" id="check4">
+       Thursday
+    </label> 
+        <label for="check5">
+      <input type="checkbox"  name = "check5" id="check5">
+      Friday
+    </label> 
+        
+
+        
+        
+        
     <paper-item>
       <paper-item-body class="paper-item-body-0" on-click='handleStartClick'>
       <h4>Start Date:</h4>
@@ -170,7 +197,7 @@ paper-material{
 
 
   </template>
-
+<script src="scripts/hour.js"></script>
 
     <script>
   (function() {
@@ -184,6 +211,7 @@ paper-material{
 
 
       },
+        
       handleTimeClick:function(){
         
     //Prüfung der CalenderLogic
@@ -192,8 +220,9 @@ paper-material{
           endYear=$('#ye').html()*1;  endDay=$('#de').html()*1;  endMonth=$('#me').html()*1;
           
           
-        if(endYear<startYear){
+     /*  if(endYear<startYear){
              alert("Das Enddatum liegt hinter dem Startdatum"); return;
+            
         }
         
         if(endMonth<startMonth){
@@ -202,117 +231,311 @@ paper-material{
             
         if(endDay<startDay){
              alert("Das Enddatum liegt hinter dem Startdatum"); return;
-        }  
+        } */ 
+          
+        if (endYear<startYear || (endYear===startYear && endMonth<startMonth)|| (endYear===startYear && endMonth===startMonth &&   endDay<startDay)){
+            alert("Das Enddatum liegt hinter dem Startdatum"); 
+            return;
+        }
+          
+        if (endYear>2016 || startYear <2015){
+            alert("Bitte geben sie ein Datum im Zeitraum 2015-2016 ein");
+        }
+       
           
           
           
     //Erstellung der TimeSlots in ein Array --> muss noch in Parse verarbeitet werden.      
           
-            var startHour,endHour,startMinute,endMinute, timeDiffer;
+          var startHour,endHour,startMinute,endMinute, timeDiffer;
 
-            startMinute=$('#mins').html()*1; 
-            endMinute=$('#mine').html()*1; 
+startMinute=$('#mins').html()*1; 
+endMinute=$('#mine').html()*1; 
+        
 
-            if($('#ps').html()==='PM' && $('#hs').html()*1!=12*1 && $('#pe').html()==='PM'){
-                 startHour = ($('#hs').html())*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  ($('#he').html())*1+12*1;    
+if($('#ps').html()==='PM' && $('#hs').html()*1!=12*1 && $('#pe').html()==='PM'){
+     startHour = $('#hs').html()*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
+     endHour =  $('#he').html()*1+12*1;    
 
-            }else if($('#ps').html()==='AM' && $('#pe').html()==='AM'){ 
-                 startHour=$('#hs').html()*1;
-                 endHour=$('#he').html()*1;
+}else if($('#ps').html()==='AM' && $('#pe').html()==='AM'){ 
+     startHour=$('#hs').html()*1;
+     endHour=$('#he').html()*1;
+    if(startHour===12){
+        startHour=0;
+    }
 
-                 if(startHour===12){
-                      startHour=0;
-                  }
+   /*  if(startHour===12){
+          startHour=0;
+      }
 
-                 if(endHour===12){
-                      endHour=0;
-                  }
-            }
+     if(endHour===12){
+          endHour=0;
+      }*/
+}
+
+if($('#ps').html()==='PM' && $('#hs').html()*1===12*1 && $('#pe').html()==='PM'){
+     //startHour = $('#hs').html()*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
+    startHour=0*1; 
+    endHour =  $('#he').html()*1+12*1; 
+}   
+if($('#pe').html()==='PM' && $('#ps').html()==='AM'){
+     //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
+     endHour =  $('#he').html()*1+12*1;    
+     startHour=$('#hs').html()*1;
+     if(startHour===12*1){
+          startHour=0*1;
+      }
+}
+
+
+if(endHour<=startHour ){
+     if(endMinute<=startMinute){
+        alert("die Zeitangaben scheinen nicht korrekt zu sein");
+             }
+}
+//Vorläufige Erstellung der Zeiten
+
+  timeDiffer= 60*1-startMinute+60*(endHour-startHour-1)+endMinute;
+  var dur =  $('[name="duration"]').val()*1;  //Duration Time
+  var Break = $('[name="break"]').val()*1;    // Break Time
+  var partTime=  dur + Break;                  
+  var Array1= new Array(parseInt(timeDiffer/partTime));  
+
+if(dur<9*1){
+    var t1= new Hour("00:0"+dur.toString());
+}
+if(dur>9*1){
+      var t1= new Hour("00:"+dur.toString());
+}
+if(Break<9*1){
+    var t2= new Hour("00:0"+Break.toString());
+}
+if(Break>9*1){
+      var t2= new Hour("00:"+Break.toString());
+}
+if(startMinute<9*1){
+    var start= new Hour(startHour + ":0" + startMinute);
+}
+if(startMinute>9*1){
+    var start= new Hour(startHour + ":" + startMinute);
+}
+var part= t1.add(t2);
+
+
+for (var i = 0; i<Array1.length;i++){
+     var Times = Parse.Object.extend("Times");
+    var timeQuery= new Times();
+    Array1[i]= start.toString()+" - " + (start.add(t1)).toString();
+    start=start.add(part);
+    console.log( Array1[i] + $('#ds').html()+"."+ $('#ms').html()+" "+ $('#ys').html() + " - " + $('#de').html()+"."+ $('#me').html()+" "+ $('#ye').html());
+   // timeQuery.set("time", Array1[i]);
+  //   timeQuery.set("available", true);
+  /*    timeQuery.save({
+          time: Array1[i],
+          date: $('#ds').html()+"."+ $('#ms').html()+" "+ $('#ys').html() + " - " + $('#de').html()+"."+ $('#me').html()+" "+ $('#ye').html(),
+          available: true
           
-          
-            if($('#ps').html()==='AM' && $('#he').html()*1===12*1 && $('#pe').html()==='PM'){
-                endHour=12*1;
-                startHour=$('#hs').html()*1
-            }
-          
-
-            if($('#ps').html()==='PM' && $('#hs').html()*1===12*1 && $('#pe').html()==='PM'){
-                 startHour = $('#hs').html()*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1+12*1; 
-            }   
-
-            if($('#pe').html()==='PM' && $('#ps').html()==='AM' && $('#he').html()*1!=12*1){
-                 //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1+12*1;    
-                 startHour=$('#hs').html()*1;
-                 if(startHour===12){
-                      startHour=0;
-                  }
-            }
-          
-            if($('#ps').html()==='PM' && $('#pe').html()==='AM'){
-                 startHour = $('#hs').html()*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1; 
-            }   
-
+          },{
+      success:function(){
       
-          if(endHour<=startHour ){
-                 if(endHour<startHour|| (endHour===startHour && endMinute<startMinute)){
-                    alert("die Zeitangaben scheinen nicht korrekt zu sein");
+      },
+    error:function(){}
+          
+      
+      });*/
+
+}
+          
+// Kalendereintrage erstellen
+          
+ function daysInFebruary(year) {
+    if(year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) {
+        // Leap year
+        return 29;
+    } else {
+        // Not a leap year
+        return 28;
+    }
+}
+
+function dateToDay(date,year) {
+    var feb = daysInFebruary(date.getFullYear());
+   // if (year*1===2016){
+     //   feb=29;
+//    }
+    var aggregateMonths = [0*1, // January
+                           31*1, // February
+                           31*1 + feb, // March
+                           31*1 + feb + 31*1, // April
+                           31*1 + feb + 31*1 + 30*1, // May
+                           31*1 + feb + 31*1 + 30*1 + 31*1, // June
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1, // July
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1 + 31*1, // August
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1 + 31*1 + 31*1, // September
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1 + 31*1 + 31*1 + 30*1, // October
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1 + 31*1 + 31*1 + 30*1 + 31*1, // November
+                           31*1 + feb + 31*1 + 30*1 + 31*1 + 30*1 + 31*1 + 31*1 + 30*1 + 31*1 + 30*1, // December
+                         ];
+    return aggregateMonths[date.getMonth()] + date.getDate();
+}
+          
+    var dateArray= [];
+    var monthNames = [
+        "Jan.", "Febr.", "Mrz.",
+        "Apr.", "Mai.", "Jun.", "Jul.",
+        "Aug.", "Sept.", "Okt.",
+        "Nov.", "Dez."
+    ];
+          function dateFromDay(year, day){
+      var date = new Date(year, 0); // initialize a date in `year-01-01`
+      return new Date(date.setDate(day)); // add the number of days
+}       
+        function dateFromDayReturn(years,days){
+            var date = dateFromDay(years,days);
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+            var resultDate=new Date(year,monthIndex,day);
+
+              //  return day+ monthNames[monthIndex]+ year;
+                return resultDate;
+        }
+          
+    function searchDate(dayKürzel,dateStart,dateEnd,year){
+        var daysInYearStart = dateToDay(dateStart,year);
+        var daysInYearEnd = dateToDay(dateEnd,year);
+            while(daysInYearStart%7!=dayKürzel){
+                daysInYearStart++;
+              //  console.log(daysInYearEnd);
+                //console.log(daysInYearStart + " " + daysInYearEnd);
+            }
+   
+            while(daysInYearStart*1<=daysInYearEnd*1+1*1){
+                //console.log(dateFromDayReturn(2015,daysInYearStart));
+                dateArray.push(dateFromDayReturn(year,daysInYearStart));
+                daysInYearStart=daysInYearStart+7*1;
+                } 
+            }      
+         
+                var constantStart = 0;
+                var constantEnd = 0;
+                for(var i = 0; i<12; i++){
+                    if($('#ms').html()===monthNames[i]){
+                        constantStart=i;
+                    }
+                    if($('#me').html()===monthNames[i]){
+                        constantEnd=i;
+                    }
                 }
-            }
+                 
+              
+                var testdate=new Date($('#ys').html()*1,constantStart,$('#ds').html()*1);
+                var testdate2=new Date ($('#ye').html()*1,constantEnd,$('#de').html()*1);
+                var endYear = new Date(2015,11,31);
+                var newYear = new Date(2016,0,1);
+              
+                if($('#ys').html()===$('#ye').html()&& $('#ys').html()*1 === 2015*1){
+                    var check1 = document.getElementById("check1");
+                    var check2 = document.getElementById("check2");
+                    var check3 = document.getElementById("check3");
+                    var check4 = document.getElementById("check4");
+                    var check5 = document.getElementById("check5");
+                    
+                    
+                    if (check1.checked){ // Monday    
+                            searchDate(5,testdate,testdate2,2015);
+                            console.log(dateArray);
+                    }
+                    if (check2.checked){ // Tuesday   
+                            searchDate(6,testdate,testdate2,2015);
+                    }
+                    if (check3.checked){ // Wednesday
+                            searchDate(0,testdate,testdate2,2015);
+                    }
+                    if (check4.checked){ // Thursday    
+                            searchDate(1,testdate,testdate2,2015);
+                    }
+                    if (check5.checked){ // Friday
+                            searchDate(2,testdate,testdate2,2015);
+                    }
           
-      //Vorläufige Erstellung der Zeiten
-
-              timeDiffer= 60*1-startMinute+60*(endHour-startHour-1)+endMinute;
-              var dur =  $('[name="duration"]').val()*1;  //Duration Time
-              var Break = $('[name="break"]').val()*1;    // Break Time
-              var partTime=  dur + Break;                  
-              var Array1= new Array(parseInt(timeDiffer/partTime));  
-
-            if(dur<9*1){
-                var t1= new Hour("00:0"+dur.toString());
-            }
-            if(dur>9*1){
-                  var t1= new Hour("00:"+dur.toString());
-            }
-            if(Break<9*1){
-                var t2= new Hour("00:0"+Break.toString());
-            }
-            if(Break>9*1){
-                  var t2= new Hour("00:"+Break.toString());
-            }
-            if(startMinute<9*1){
-                var start= new Hour(startHour + ":0" + startMinute);
-            }
-            if(startMinute>9*1){
-                var start= new Hour(startHour + ":" + startMinute);
-            }
-            var part= t1.add(t2);
-
-           
-        
+                } 
           
-          for (var i = 0; i<Array1.length;i++){
-                var Times = Parse.Object.extend("Times");
-                var timeQuery= new Times();
-                Array1[i]= start.toString()+" - " + (start.add(t1)).toString();
-                start=start.add(part);
-                timeQuery.set("time",start.toString()+" - " + (start.add(t1)).toString());
-                timeQuery.set("available", true);
-                timeQuery.save(null,{
-                    success: function(timeQuery){
-                    },
+                  if($('#ys').html()===$('#ye').html()&& $('#ys').html()*1 === 2016*1){
+                    var check1 = document.getElementById("check1");
+                    var check2 = document.getElementById("check2");
+                    var check3 = document.getElementById("check3");
+                    var check4 = document.getElementById("check4");
+                    var check5 = document.getElementById("check5");
+                    
+                    if (check1.checked){ // Monday    
+                            searchDate(4,testdate,testdate2,2016);
+                         //   console.log(dateArray);
+                    }
+                    if (check2.checked){ // Tuesday   
+                            searchDate(5,testdate,testdate2,2016);
+                        //console.log(dateArray);
+                    }
+                    if (check3.checked){ // Wednesday
+                            searchDate(6,testdate,testdate2,2016);
+                        //console.log(dateArray);
+                    }
+                    if (check4.checked){ // Thursday    
+                            searchDate(0,testdate,testdate2,2016);
+                //        console.log(dateArray);
+                    }
+                    if (check5.checked){ // Friday
+                            searchDate(1,testdate,testdate2,2016);
+                  //      console.log(dateArray);
+                    }
+          
+                } 
                 
-                error: function(timeQuery,error){
-                    alert("fail");}
-                });
-                
-            }
+                    if($('#ys').html() !==  $('#ye').html() ){
+                        var check1 = document.getElementById("check1");
+                        var check2 = document.getElementById("check2");
+                        var check3 = document.getElementById("check3");
+                        var check4 = document.getElementById("check4");
+                        var check5 = document.getElementById("check5");
+                        
+                       if (check1.checked){ // Monday    
+                                searchDate(6,testdate,endYear,2015);
+                                searchDate(4,newYear,testdate2,2016);
+                              
+                        }
+                        if (check2.checked){ // Tuesday   
+                                searchDate(0,testdate,endYear,2015);
+                                searchDate(5,newYear,testdate2,2016);
+                        }
+                        if (check3.checked){ // Wednesday
+                                searchDate(1,testdate,endYear,2015);
+                                searchDate(6,newYear,testdate2,2016);
+                        }
+                        if (check4.checked){ // Thursday    
+                                searchDate(2,testdate,endYear,2015);
+                                searchDate(0,newYear,testdate2,2016);
+                        }
+                        if (check5.checked){ // Friday
+                                searchDate(3,testdate,endYear,2015);
+                                searchDate(1,newYear,testdate2,2016);
+                        }
+
+                } 
           
-        
-        },
+                  var date_sort_asc = function (date1, date2) {
+                  // This is a comparison function that will result in dates being sorted in
+                  // ASCENDING order
+                  if (date1 > date2) return 1;
+                  if (date1 < date2) return -1;
+                  return 0;
+                }
+                  
+                dateArray.sort(date_sort_asc);
+                console.log(dateArray);
+          
+
+},
+
         handleStartClick: function(){
             this.$.startDialog.toggle();
         },
@@ -353,6 +576,7 @@ paper-material{
             $('#pe').html($('#endTimeDialog .period.style-scope.paper-time-picker').html());
 
         }
+
 
     });
   })();
