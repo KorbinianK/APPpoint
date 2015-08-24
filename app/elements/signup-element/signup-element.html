@@ -12,118 +12,117 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="signup-element">
   <style>
-  paper-material {
-
-   width: 70%;
-  margin: 0 auto;
+    paper-material {
+      width: 70%;
+      margin: 0 auto;
       padding: 0 0 20px;
-
-  }
-  paper-input-container {
-     padding: 0 20px 0 20px !important;
-    }
-    paper-button{
-    width:30%;
-    display: block;
-        margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-
     }
 
-#button-create {
-	padding: 10px;
-}
+    paper-input-container {
+      padding: 0 20px 0 20px !important;
+    }
+
+    paper-button {
+      width: 30%;
+      display: block;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #button-create {
+      padding: 10px;
+    }
   </style>
   <template>
-<paper-material>
+    <paper-material>
 
-  <paper-header-panel class="">
-       <paper-toolbar>
-            <div><h2>Bitte einloggen</h2></div>
-      </paper-toolbar>
-  </paper-header-panel>
-        <paper-input-container>
-          <label>First Name</label>
-          <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
-        </paper-input-container>
+      <paper-header-panel class="">
+        <paper-toolbar>
+          <div>
+            <h2>Register a new </h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+      <paper-input-container>
+        <label>First Name</label>
+        <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
+      </paper-input-container>
 
-        <paper-input-container>
-          <label>Last Name</label>
-          <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
-        </paper-input-container>
+      <paper-input-container>
+        <label>Last Name</label>
+        <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
+      </paper-input-container>
 
       </paper-item-body>
 
+      <paper-input-container>
+        <label>Password</label>
+        <input is="iron-input" name="create-password" type="password" required>
+      </paper-input-container>
+
+      <paper-input-container>
+        <label>E-Mail</label>
+        <input is="iron-input" name="email" type="email">
+      </paper-input-container>
 
 
-          <paper-input-container>
-            <label>Password</label>
-            <input is="iron-input" name="create-password" type="password" required>
-          </paper-input-container>
-
-          <paper-input-container>
-            <label>E-Mail</label>
-            <input is="iron-input" name="email" type="email" >
-          </paper-input-container>
-
-
-  <div id="button-create">
-      <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" >Erstellen</paper-button>
-  </div>
-</paper-material>
+      <div id="button-create">
+        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Erstellen</paper-button>
+      </div>
+    </paper-material>
   </template>
   <script>
-  (function() {
-    Polymer({
-      is: 'signup-element',
+    (function() {
+      Polymer({
+        is: 'signup-element',
 
-      properties: {
-        firstName: {
-          type: String,
-          value: '',
-          notify: true
+        properties: {
+          firstName: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          lastName: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          email: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          password: {
+            type: String,
+            value: '',
+            notify: true
+          }
         },
-        lastName: {
-          type: String,
-          value: '',
-          notify: true
-        },
-        email: {
-          type: String,
-          value: '',
-          notify: true
-        },
-        password: {
-          type: String,
-          value: '',
-          notify: true
-        }
-      },
-      handleClick: function() {
-        var
-        email = $('[name="email"]').val(),
-        password = $('[name="create-password"]').val(),
-        firstName = $('[name="first"]').val(),
-        lastName = $('[name="last"]').val();
+        handleClick: function() {
+          var
+            email = $('[name="email"]').val(),
+            password = $('[name="create-password"]').val(),
+            firstName = $('[name="first"]').val(),
+            lastName = $('[name="last"]').val();
 
 
-        if(
-          email === '' ||
-          password === '' ||
-          firstName === '' ||
-          lastName === ''
-        ){
+          if (
+            email === '' ||
+            password === '' ||
+            firstName === '' ||
+            lastName === ''
+          ) {
 
-        alert("Error: Alle Felder müssen ausgefüllt werden");
+            alert("Error: Alle Felder müssen ausgefüllt werden");
 
-        }else{
-          var userRandom = Math.floor((Math.random() * 1000) + 1);
-            username=email;
-          //username = firstName.toLowerCase()
-        //            + userRandom
-        //            + lastName.toLowerCase();
-          var user = new Parse.User();
+          } else {
+            var userRandom = Math.floor((Math.random() * 1000) + 1);
+            username = email;
+            //username = firstName.toLowerCase()
+            //            + userRandom
+            //            + lastName.toLowerCase();
+            var user = new Parse.User();
 
             user.set("username", username);
             user.set("password", password);
@@ -133,19 +132,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             user.set("isTeacher", false);
 
             user.signUp(null, {
-            success: function(user) {
-                alert("Ihr neuer Benutzername lautet " +username+". Bitte merken!");
-                 $('#login-element').show();
-              //  $('#signup').addClass('hidden');},
-            },
-            error: function(user, error) {
-              // Show the error message somewhere and let the user try again.
-              alert("Error: " + error.code + " " + error.message);
-            }
+              success: function(user) {
+                alert("Ihr neuer Benutzername lautet " + username + ". Bitte merken!");
+                $('#login-element').show();
+                //  $('#signup').addClass('hidden');},
+              },
+              error: function(user, error) {
+                // Show the error message somewhere and let the user try again.
+                alert("Error: " + error.code + " " + error.message);
+              }
             });
+          }
         }
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

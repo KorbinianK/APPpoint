@@ -125,8 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-header-panel>
 
 
-      <p>Delete the Room "
-        <span>{{roomName}}</span>" ?</p>
+      <p>Delete the Room <b><span>{{roomName}}</span></b> ?</p>
 
 
       <div class="buttons">
@@ -375,6 +374,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         roomDel: function(e) {
           var model = e.model;
           clickedDelRoom = model.get("item.roomName");
+          this.roomName = clickedDelRoom;
+          console.log("clicked to del ", clickedDelRoom);
           this.$.delRoomDialog.toggle();
         },
         confirmRoomDel: function(e) {
