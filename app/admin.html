@@ -159,42 +159,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="a-home">
-              <paper-material elevation="1">
-                <
-              </paper-material>
+              <template is="dom-if" if="{{isEqual(route, 'a-overview-docent')}}" restamp="true">
+                <paper-material elevation="1">
 
+                </paper-material>
+              </template>
             </section>
 
             <section data-route="a-overview-docent">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Docent List</h2>
-                <docent-list></docent-list>
-              </paper-material>
+              <template is="dom-if" if="{{isEqual(route, 'a-overview-docent')}}" restamp="true">
+
+
+                  <docent-list></docent-list>
+
+              </template>
             </section>
 
             <section data-route="a-create-rooms">
-            
+              <template is="dom-if" if="{{isEqual(route, 'a-create-rooms')}}" restamp="true">
 
                 <create-rooms></create-rooms>
-
+              </template>
             </section>
 
             <section data-route="a-manage-rooms">
-
-
+              <template is="dom-if" if="{{isEqual(route, 'a-manage-rooms')}}" restamp="true">
                 <rooms-list></rooms-list>
-
+              </template>
             </section>
 
 
             <section data-route="a-add-docent">
-              <create-docent></create-docent>
+              <template is="dom-if" if="{{isEqual(route, 'a-add-docent')}}" restamp="true">
+                <create-docent></create-docent>
+              </template>
             </section>
 
             <section data-route="a-manage-appointments">
-
-              <create-time></create-time>
-
+              <template is="dom-if" if="{{isEqual(route, 'a-manage-appointments')}}" restamp="true">
+                <create-time></create-time>
+              </template>
             </section>
 
 
@@ -226,7 +230,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  
+  <script src="scripts/hour.js"></script>
+  <script type="text/javascript">
+    app.isEqual = function(x, y) {
+      return x === y;
+    };
+  </script>
   <!-- endbuild-->
 </body>
 

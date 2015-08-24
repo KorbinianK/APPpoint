@@ -45,7 +45,9 @@ paper-item-body.paper-item-body-0[two-line] {
 
 }
 
-
+paper-material {
+  background-color: #fff;
+}
 
 paper-item-body.paper-item-body-0  [secondary] {
   color:#757575;font-family:'Roboto', 'Noto', sans-serif;

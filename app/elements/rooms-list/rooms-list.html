@@ -15,30 +15,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
+    paper-material.paper-material-0 {
+      width: 70%;
+      margin: 0 auto;
+    }
+
+    iron-icon {
+      fill: rgb(80, 80, 80);
+    }
+
+    iron-icon:hover {
+      fill: rgb(157, 157, 157);
+      cursor: pointer;
+    }
+
+    .pointer {
+      cursor: pointer;
+    }
+    .red{
+      color: rgb(162, 19, 0);
+    }
+    .green {
+      color:rgb(0, 140, 6);
+    }
+    paper-button#docentbutton {
+      text-align: left !important;
+      text-transform: none !important;
+    }
+
+    paper-dialog {
+      background-color: rgb(255, 255, 255);
+      max-width: 80%;
+      width: 30%;
+      max-height: 100%;
+      position: absolute;
+    }
   </style>
   <template>
     <paper-material elevation="1">
 
 
       <template is="dom-repeat" items="{{roomList}}">
-
         <paper-item>
-          <div>
-            <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
-          </div>
+          <paper-button flat on-click="editButton">Edit</paper-button>
           <paper-item-body three-line class="paper-item-body-0">
             <div>
               <h1>
                 <span>{{item.roomName}}</span>
               </h1>
             </div>
-            <div secondary hidden="{{!item.status}}">
-              <b>Available</b>
-            <!--  <span>{{item.status}}</span> -->
+            <div  secondary hidden="{{!item.status}}">
+              <b class="green">Available</b>
+              <!--  <span>{{item.status}}</span> -->
             </div>
             <div secondary hidden="{{item.status}}">
-              <b>Not available</b>
-            <!--  <span>{{item.status}}</span> -->
+              <b  class="red">Not available</b>
+              <!--  <span>{{item.status}}</span> -->
             </div>
             <div secondary><b>Docent:</b>
               <span>{{item.docent}}</span>
@@ -52,27 +85,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
           </paper-item-body>
+          <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
 
-          <paper-button flat on-click="editButton">Edit</paper-button>
-          </paper-icon-item>
+        </paper-item>
 
       </template>
     </paper-material>
-    <paper-dialog id="editRoomDialog">
+    <paper-dialog id="editRoomDialog" modal>
       <template is="dom-repeat" items="{{docentList}}">
 
         <paper-item>
 
           <paper-item-body class="paper-item-body-0">
 
-            <div dialog-confirm on-click="edit">
+            <paper-button id="docentbutton" flat dialog-confirm on-click="edit">
               <span>{{item.firstName}}</span>
               <span>{{item.lastName}}</span>
-            </div>
+            </paper-button>
 
           </paper-item-body>
 
-          </paper-icon-item>
+        </paper-item>
 
 
       </template>
@@ -80,6 +113,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button flat dialog-dismiss>Cancel</paper-button>
 
       </div>
+    </paper-dialog>
+    <paper-dialog id="delRoomDialog" modal>
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Please confirm</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+
+      <p>Delete the Room <b><span>{{roomName}}</span></b> ?</p>
+
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="confirmRoomDel">Confirm</paper-button>
+      </div>
+
     </paper-dialog>
   </template>
   <script>
@@ -91,13 +144,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             value: true,
             notify: true
+          },
+          roomList: {
+            type: Array,
+          },
+          docentList: {
+            type: Array,
+          },
+          roomName: {
+            type: String,
+            value: "Default"
+          }
+
+        },
+        observers: [
+          'roomListChanged(roomList.splices)',
+          'docentListChanged(docentList.splices)'
+        ],
+        roomListChanged: function(changeRecord) {
+          if (changeRecord) {
+            changeRecord.indexSplices.forEach(function(s) {
+              s.removed.forEach(function(room) {});
+            }, this);
+          }
+        },
+        docentListChanged: function(docentListChange) {
+          console.log("docent changed");
+          if (docentListChange) {
+            docentListChange.indexSplices.forEach(function(s) {
+              s.removed.forEach(function(docent) {});
+            }, this);
           }
         },
         ready: function() {
           var self = this;
-          var clickedRoom;
-          var clickedTeacher;
-          var docentName;
+          var clickedDelRoom, clickedRoom, clickedDocent, docentName;
           var Room = Parse.Object.extend("Room");
           var query = new Parse.Query(Room);
           query.include("Docent");
@@ -108,9 +189,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               var item = {};
               var object = results[i];
               var user = object.get('Docent');
-              if(user != null){
+              if (user != null) {
                 docentName = user.get("lastName") + " " + user.get("firstName");
                 item['docent'] = docentName;
+                item['docentObject'] = user;
               }
               item['roomName'] = object.get('roomName');
               item['roomBuild'] = object.get('roomBuild');
@@ -124,78 +206,154 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
           });
-          var query = new Parse.Query(Parse.User);
-          query.equalTo("isTeacher", true);
+
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          query.equalTo("Room", null);
+          query.include("Room");
           query.find().then(function(results) {
             var List = [];
             var emptyItem = {};
-            emptyItem['firstName'] = "No ";
+            emptyItem['firstName'] = "Remove ";
             emptyItem['lastName'] = "Docent";
             emptyItem['delete'] = true;
             List.push(emptyItem);
             for (i in results) {
               var docent = {};
               var object = results[i];
-              var picURL = object.get('profilePic');
+              var room = object.get("Room");
+              if (room != null) {
+                docent['room'] = room.get('roomName')
+              }
+
               docent['firstName'] = object.get('firstName');
               docent['lastName'] = object.get('lastName');
+              docent['email'] = object.get('email');
+              docent['docent'] = object;
+
               List.push(docent);
-              console.log(docent);
 
             }
             self.docentList = List;
 
           });
-
         },
         editButton: function(e) {
           clickedRoom = e.model;
           this.$.editRoomDialog.toggle();
+          if(clickedRoom.get("item.docent")!= null){
 
+          }
+          console.log("clicked room", clickedRoom);
+          console.log("clicked ", clickedRoom.get("item"));
         },
         edit: function(e) {
-          console.log("click", clickedRoom.get("item.roomName"));
+          var self = this;
           var model = e.model;
-
-          var Room = Parse.Object.extend("Room");
-          var User = Parse.User.extend;
-          var room = new Parse.Query(Room);
-          var query = new Parse.Query(Parse.User);
+          console.log(model);
 
           if (model.get("item.delete") === true) {
+            remDocent();
+            function remDocent(status){
+              console.log("remove docent");
+              var Room = Parse.Object.extend("Room");
+              var room = new Parse.Query(Room);
+              var DocentQuery = Parse.Object.extend("Docent");
+              var query = new Parse.Query(DocentQuery);
+              room.equalTo("roomName", clickedRoom.get("item.roomName"));
+              room.first({
+                success: function(object) {
+                  object.set("available", true);
+                  object.set("Docent", null)
+                  var DocentQuery = Parse.Object.extend("Docent");
+                  var query = new Parse.Query(DocentQuery);
+                  console.log(clickedRoom.get("item.docentObject").get("email"));
+                  query.equalTo("email", clickedRoom.get("item.docentObject").get("email"));
+                  query.first({
+                    success: function(docent) {
 
-            room.equalTo("roomName", clickedRoom.get("item.roomName"));
-            room.first({
-              success: function(object) {
-                clickedRoom.set("item.status", true);
+                      var item = {};
+                      item['firstName'] = docent.get('firstName');
+                      item['lastName'] = docent.get('lastName');
+                      item['email'] = docent.get('email');
+                      item['docent'] = docent;
+                      console.log("before item ",self.docentList);
+                      self.docentList.push(item);
+                      console.log("after item ",self.docentList);
+                      docent.set("Room", null);
+                      docent.save();
+                    },
+                    error: function(error) {
+                      alert("Error: " + error.code + " " + error.message);
+                    }
+                  });
+                  if(status != "switch"){
+                    clickedRoom.set("item.status", true);
+                    clickedRoom.set("item.docent", "No Docent");
+                  }
 
-                object.set("Docent", null)
-                clickedRoom.set("item.docent", "No Docent");
-                object.save();
+                  object.save();
+                },
+                error: function(error) {
+                  alert("Error: " + error.code + " " + error.message);
+                }
+              });
 
-              },
-              error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-              }
-            });
-
+            }
 
           } else {
+            var DocentQuery = Parse.Object.extend("Docent");
+            var query = new Parse.Query(DocentQuery);
+              var Room = Parse.Object.extend("Room");
+            var room = new Parse.Query(Room);
+
             query.equalTo("firstName", model.get("item.firstName"));
             query.equalTo("lastName", model.get("item.lastName"));
-            query.equalTo("isTeacher", true);
             query.first({
               success: function(user) {
                 room.equalTo("roomName", clickedRoom.get("item.roomName"));
                 room.first({
-                  success: function(object) {
+                  success: function(room) {
+                    if(clickedRoom.get("item.status") == false){
+                      console.log("status false");
+                      var status = "switch";
+                        remDocent(status);
+                    }
                     clickedRoom.set("item.status", false);
 
-                    object.set("available", false);
-                    object.set("Docent", user)
-                    clickedRoom.set("item.docent", user.get("lastName") + " " + user.get("firstName"));
-                    object.save();
+                    room.set("available", false);
+                    room.set("Docent", user);
+                    clickedRoom.set("item.docent", user.get("lastName") + " "+ user.get("firstName"));
+                    room.save();
 
+                    for (var i = 0; i < self.roomList.length; i++) {
+                      if (self.roomList[i].roomName == clickedRoom.get("item.roomName")) {
+                        self.roomList[i].docentObject = user;
+                        break;
+                      }
+
+                    }
+                    for (var j = 0; j < self.docentList.length; j++) {
+
+                      if (self.docentList[j].docent == model.get("item.docent")) {
+                        self.splice('docentList', j, 1);
+                        break;
+                      }
+                    }
+
+                    var DocentQuery = Parse.Object.extend("Docent");
+                    var query = new Parse.Query(DocentQuery);
+
+                    query.equalTo("email", model.get("item.email"));
+                    query.first({
+                      success: function(docent) {
+                        docent.set("Room", room);
+                        docent.save();
+                      },
+                      error: function(error) {
+                        alert("Error: " + error.code + " " + error.message);
+                      }
+                    });
                   },
                   error: function(error) {
                     alert("Error: " + error.code + " " + error.message);
@@ -210,6 +368,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             });
 
 
+          }
+
+        },
+        roomDel: function(e) {
+          var model = e.model;
+          clickedDelRoom = model.get("item.roomName");
+          this.roomName = clickedDelRoom;
+          console.log("clicked to del ", clickedDelRoom);
+          this.$.delRoomDialog.toggle();
+        },
+        confirmRoomDel: function(e) {
+          var model = e.model;
+
+          var clickedRoom = clickedDelRoom;
+          console.log("del ", clickedRoom);
+          for (var i = 0; i < this.roomList.length; i++) {
+
+            if (this.roomList[i].roomName == clickedRoom) {
+              this.splice('roomList', i, 1);
+
+              var Room = Parse.Object.extend("Room");
+              var User = Parse.User.extend;
+              var room = new Parse.Query(Room);
+              var query = new Parse.Query(Parse.User);
+
+              room.equalTo("roomName", clickedRoom);
+              room.first({
+                success: function(object) {
+
+                  object.destroy();
+
+
+                },
+                error: function(error) {
+                  alert("Error: " + error.code + " " + error.message);
+                }
+              });
+
+              break;
+            }
           }
         }
       });
