@@ -16,13 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: block;
     }
 
-    paper-dialog {
-      background-color: rgb(255, 255, 255);
-      top: 0px;
-      max-width: 80%;
-      width: calc(98% - 46px);
-      max-height: 100%;
-      position: absolute;
+    paper-dialog{
+      min-height: 400px;
+    }
+
+    paper-card {
+      width: 100%;
+    }
+
+    paper-progress {
+      width: 100%;
     }
 
     #roomElement {
@@ -30,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
+
     <paper-material elevation="1">
       <paper-header-panel>
         <paper-toolbar>
@@ -38,6 +42,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </paper-toolbar>
       </paper-header-panel>
+
+      <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
       <template is="dom-repeat" items="{{docentList}}">
 
@@ -60,7 +66,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       </template>
-      <paper-dialog id="roomDialog" modal>
+      <paper-dialog id="roomDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
         <paper-header-panel>
           <paper-toolbar>
             <div>
@@ -68,9 +75,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
           </paper-toolbar>
         </paper-header-panel>
-        <paper-material elevation="1">
 
 
+        <paper-dialog-scrollable>
           <template is="dom-repeat" items="{{roomList}}">
 
             <paper-item>
@@ -87,12 +94,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
           </template>
-        </paper-material>
+        </paper-dialog-scrollable>
+
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
 
         </div>
-    </paper-material>
+
     </paper-dialog>
 
   </template>
@@ -109,6 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'docentListChanged(item.*)'
         ],
         docentListChanged: function(changeRecord) {
+
           if (changeRecord.path == 'users.splices') {
             // a user was added or removed
           } else {
@@ -146,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               List.push(docent);
             }
             self.docentList = List;
-
+            self.loading = !self.loading;
           });
 
 

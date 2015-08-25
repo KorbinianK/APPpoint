@@ -19,58 +19,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <template is="dom-repeat" items="{{appointList}}">
 
-        <paper-item on-tap="docentClick">
+      <paper-item on-tap="docentClick">
 
-          <paper-item-body two-line class="paper-item-body-0">
-            <div><span>{{item.date}}</span> </div>
-            <div secondary><span>{{item.time}}</span></div>
+        <paper-item-body two-line class="paper-item-body-0">
+          <div>
+            <span>{{item.date}}</span>
+          </div>
+          <div secondary>
+            <span>{{item.time}}</span>
+          </div>
 
-          </paper-item-body>
+        </paper-item-body>
 
         </paper-icon-item>
 
 
-      </template>
+    </template>
   </template>
   <script>
-  (function() {
-    Polymer({
-      is: 'appointment-list-user',
+    (function() {
+      Polymer({
+        is: 'appointment-list-user',
 
-      ready: function() {
-        var self = this;
-        var Appointment = Parse.Object.extend("Appointment");
-        var query = new Parse.Query(Appointment);
-        var currentUser = Parse.User.current();
-        query.equalTo("user", currentUser.get("username"));
+        ready: function() {
+          var self = this;
+          var Appointment = Parse.Object.extend("Appointment");
+          var query = new Parse.Query(Appointment);
+          var currentUser = Parse.User.current();
+          query.equalTo("user", currentUser.get("username"));
 
           //where equal to clicked teacher!
           query.find({
-            success: function(results){
-            var List = [];
+            success: function(results) {
+              var List = [];
 
-            for (i in results) {
-              var item = {};
-              var object = results[i];
-              
-                item ['date'] = object.get('date');
-                item ['time'] = object.get('time');
+              for (i in results) {
+                var item = {};
+                var object = results[i];
+
+                item['date'] = object.get('date');
+                item['time'] = object.get('time');
 
                 List.push(item);
                 console.log("Item");
 
-          }
-          self.appointList = List;
+              }
+              self.appointList = List;
 
-          },
-          error:function(error) {
-            alert("error");
-          }
+            },
+            error: function(error) {
+              alert("error");
+            }
           });
         }
 
 
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

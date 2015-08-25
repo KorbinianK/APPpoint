@@ -49,6 +49,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
       </div>
     </paper-material>
+    <paper-dialog id="alertDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Available Rooms</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+    </paper-dialog>
 
   </template>
   <script>
@@ -69,42 +79,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             roomDesc = $('[name="roomDesc"]').val(),
             roomBuild = $('[name="roomBuild"]').val()
 
-            if (
-              roomName === ''
-            ) {
-            
+          if (
+            roomName === ''
+          ) {
 
-              alert("Error: A Room has to have a name");
 
-            } else {
+            alert("Error: A Room has to have a name");
 
-              var Room = Parse.Object.extend("Room");
-              var room = new Room();
+          } else {
 
-              room.set("roomName", roomName);
-              room.set("roomDesc", roomDesc);
-              room.set("roomBuild", roomBuild);
-              room.set("available",  true);
+            var Room = Parse.Object.extend("Room");
+            var room = new Room();
 
-              room.save(null, {
-                success: function(room) {
-                  // Execute any logic that should take place after the object is saved.
-                  alert('New room created with objectId: ' + room.id);
-                  var inputs, index;
+            room.set("roomName", roomName);
+            room.set("roomDesc", roomDesc);
+            room.set("roomBuild", roomBuild);
+            room.set("available", true);
 
-                  inputs = document.getElementsByTagName('input');
-                  for (index = 0; index < inputs.length; ++index) {
-                      inputs[index].val = '';
-                  }
-                },
-                error: function(room, error) {
-                  // Execute any logic that should take place if the save fails.
-                  // error is a Parse.Error with an error code and message.
-                  alert('Failed to create new object, with error code: ' + error.message);
+            room.save(null, {
+              success: function(room) {
+                // Execute any logic that should take place after the object is saved.
+                alert('New room created with objectId: ' + room.id);
+                var inputs, index;
+
+                inputs = document.getElementsByTagName('input');
+                for (index = 0; index < inputs.length; ++index) {
+                  inputs[index].val = '';
                 }
-              });
+              },
+              error: function(room, error) {
+                // Execute any logic that should take place if the save fails.
+                // error is a Parse.Error with an error code and message.
+                alert('Failed to create new object, with error code: ' + error.message);
+              }
+            });
 
-            }
+          }
 
         }
       });

@@ -1,0 +1,47 @@
+<!--
+Shows a loading bar animation.
+Usage:
+  <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+  Disable by putting the following when your data is loaded:
+    this.loading = !this.loading;
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="loading-placeholder">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-card{
+      width: 100%;
+    }
+
+    paper-progress{
+      width: 100%;
+    }
+  </style>
+  <template attributes="data">
+    <paper-card hidden={{!loadingStatus}} heading="Loading Data... please wait">
+      <div class="card-content">
+        <paper-progress indeterminate></paper-progress>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+  (function() {
+    Polymer({
+      is: 'loading-placeholder',
+
+      properties: {
+        loadingStatus: {
+          type: Boolean,
+          value: true,
+          notify: true
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>
