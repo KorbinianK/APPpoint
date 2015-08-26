@@ -15,45 +15,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
+    paper-card {
+      width: 100%;
+    }
   </style>
   <template>
-    <paper-material elevation="1">
-
-      <!-- <loading-placeholder loading-status="{{loading}}"></loading-placeholder> -->
-
-      <template is="dom-repeat" items="{{slotList}}">
-        <paper-item>
-
-          <paper-item-body three-line class="paper-item-body-0">
-            <div>
-              <h1>
-                <span>{{item.date}}</span>
-              </h1>
-            </div>
-            <!-- <div secondary hidden="{{!item.status}}">
-              <b class="green">Available</b>
-
-            </div>
-            <div secondary hidden="{{item.status}}">
-              <b class="red">Not available</b>
-
-            </div> -->
-            <div secondary><b>From:</b>
-              <span>{{item.startTime}}</span>
-            </div>
-            <div secondary><b>Until:</b>
-              <span>{{item.endTime}}</span>
-            </div>
 
 
+    <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
-          </paper-item-body>
+    <template is="dom-repeat" items="{{dateList}}">
+      <paper-card heading="{{item.date}}">
+        <div class="card-content">
+          <template is="dom-repeat" items="{{slotList}}">
+            <paper-card>
+              <div class="card-content">
+                From:
+                <span>{{item.startTime}}</span>
+                Until:
+                <span>{{item.endTime}}</span>
+            </paper-card>
+          </template>
+      </paper-card>
+    </template>
+    <!-- <paper-dialog id="slotDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <paper-dialog-scrollable>
+        <template is="dom-repeat" items="{{slotList}}">
+
+          <paper-item>
+
+            <paper-item-body class="paper-item-body-0">
+
+              <paper-button id="docentbutton" flat dialog-confirm on-click="edit">
+                <span>{{item.firstName}}</span>
+                <span>{{item.lastName}}</span>
+              </paper-button>
+
+            </paper-item-body>
+
+          </paper-item>
 
 
+        </template>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
 
-        </paper-item>
-
-      </template>
+      </div>
+    </paper-dialog> -->
   </template>
   <script>
     (function() {
@@ -83,44 +93,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
           var self = this;
           Parse.Cloud.run('singleDocent', {
-            email: "korbi87+2@gmail.com"
+            email: "korbi87@gmail.com"
           }, {
             success: function(result) {
 
               console.log("docent", result);
-              Parse.Cloud.run('slotList', {
+              Parse.Cloud.run('dateList', {
                 docent: result
               }, {
                 success: function(results) {
 
-                  self.loading = !self.loading;
-                  // self.slotList = result;
-                  console.log("slots", results);
+                  console.log("dates", results);
                   var List = [];
                   for (i in results) {
                     var item = {};
                     var object = results[i];
                     var slots = object.get('Slots');
-                    for(j in slots){
-                      var slot = slots[j];
-                      item["slot"] = slot;
-                      List.push(item);
-                    }
-                    // if (user != null) {
-                    //   var docentName = user.get("lastName") + " " + user.get("firstName");
-                    //   item['docent'] = docentName;
-                    //   item['docentObject'] = user;
-                    //   item['email'] = user.get("email");
-                    // }
-                    // item['roomName'] = object.get('roomName');
-                    // item['roomBuild'] = object.get('roomBuild');
-                    // item['roomDesc'] = object.get('roomDesc');
-                    // item['status'] = object.get('available');
+                    item["date"] = object.get("date");
 
+                    item["slots"] = slots;
+                    List.push(item);
 
                   }
                   List.sort();
-                  console.log(List);
+                  self.dateList = List;
+                  self.loading = !self.loading;
+                  var sList = [];
+                  for (j in self.dateList) {
+                    var singleSlot = {};
+                    var date = self.dateList[j];
+                    singleSlot["date"] = date.date;
+                    // console.log(date.date);
+                    var slots = date.slots;
+                    for (k in slots) {
+                      var x = slots[k];
+                      for (l in x) {
+                        var y = x[l];
+
+                        singleSlot["startTime"] = y.startTime;
+                        singleSlot["endTime"] = y.endTime;
+                        singleSlot["available"] = y.availability;
+
+                        // console.log(singleSlot);
+                      }
+
+                    }
+                  }
+                  self.slotList = sList;
                 },
                 error: function(error) {}
               });

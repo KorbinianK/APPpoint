@@ -145,6 +145,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <docent-list-user></docent-list-user>
               </template>
             </section>
+
+            <section data-route="u-appointment-overview">
+              <h3>Slots</h3>
+              <template is="dom-if" if="{{isEqual(route, 'u-appointment-overview')}}" restamp="true">
+              <slot-list></slot-list>
+
+              </template>
+            </section>
             <section data-route="u-login">
               <!-- <template is="dom-if" if="{{isEqual(route, 'a-home')}}" restamp="true"> -->
               <login-element></login-element>
@@ -155,16 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
 
-        <section data-route="u-overview-appointment">
-
-
-          <paper-material elevation="1" class="paper-font-body2">
-
-
-
-          </paper-material>
-          </div>
-        </section>
+      
 
         </iron-pages>
         </div>
