@@ -15,83 +15,159 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
+    paper-dialog {
+      width: 100% !important;
+      height: 150% !important;
+    }
+
+    paper-card {
+      margin: 0 auto;
+      position: relative;
+      width: 100%;
+    }
+
+    iron-icon {
+      position: absolute;
+      right: 16px;
+    }
+    iron-icon:hover {
+      fill: rgb(157, 157, 157);
+      cursor: pointer;
+    }
   </style>
   <template>
+    <paper-card hidden="{{dismissed}}">
+      <div class="card-content">
+        Logged in as:
+        <span>{{userName}}</span>
+        <iron-icon icon="highlight-off" on-tap="dismissUser"></iron-icon>
+      </div>
 
-    <div id="dlist">
-  	<template is="dom-repeat" items="{{docentList}}">
-
-  			<paper-item on-tap="docentClick">
-  				<div><iron-image id="avatar" sizing="cover"  style="width:50px; height:50px"; fade  src="{{item.picture}}"></iron-image></div>
-  			  <paper-item-body three-line class="paper-item-body-0">
-  			    <div><span>{{item.lastName}}</span> <span>{{item.firstName}}</span></div>
-  					<div secondary>Email: <span>{{item.email}}</span></div>
-            <div secondary>Room: <span>{{item.room}}</span></div>
-  			  </paper-item-body>
-
-  			</paper-icon-item>
-
-
-  		</template>
-    </div>
-
-    <paper-dialog id="timeDialog" class=" paper-date-picker-dialog" >
-
-
-          <times-list></times-list>
+    </paper-card>
+    <slot-list></slot-list>
+    <div hidden="{{!loggedIn}}">
+      <paper-material elevation="1">
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select a docent</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
 
 
-        <div class="buttons">
-            <paper-button flat dialog-dismiss>Cancel</paper-button>
-            <paper-button flat dialog-confirm on-click="setRooms">OK</paper-button>
+        <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+        <div id="dlist">
+          <template is="dom-repeat" items="{{docentList}}">
+
+            <paper-item on-tap="docentClick">
+              <div>
+                <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
+              </div>
+              <paper-item-body three-line class="paper-item-body-0">
+                <div>
+                <h4>  <span>{{item.lastName}}</span>
+                  <span>{{item.firstName}}</span> </h4>
+                </div>
+                <div secondary><b>Email:</b>
+                  <span>{{item.email}}</span>
+                </div>
+                <div secondary><b>Room:</b>
+                  <span>{{item.room}}</span>
+                </div>
+              </paper-item-body>
+
+              </paper-icon-item>
+
+
+          </template>
         </div>
-    </paper-dialog>
+    </div>
+    <div hidden="{{loggedIn}}">
+      <login-element id="login-element"></login-element>
+    </div>
 
   </template>
   <script>
-  (function() {
-    Polymer({
-      is: "docent-list-user",
+    (function() {
+      Polymer({
+        is: "docent-list-user",
+        properties: {
+          storage: {
+            type: Object
+          },
+          loggedIn: {
+            type: Boolean,
+            value: true
+          },
+          userName: {
+            type: String,
+            notify: true
+          }
+        },
+        initializeDefault: function() {
 
-  		ready: function() {
-  			var self = this;
-  			var query = new Parse.Query(Parse.User);
+          this.storage = {};
 
-  		query.equalTo("isTeacher",true);
+          console.log(this.storage);
+        },
+        // use path set api to propagate changes to localstorage
+        makeModifications: function() {
 
-  			query.find().then(function(results){
-  				var List = [];
-  				console.log("blablub");
-  				for (i in results) {
-  					var item = {};
-  					var object = results[i];
-  					var picURL = object.get('profilePic');
-  						item ['firstName'] = object.get('firstName');
-  						item ['lastName'] = object.get('lastName');
-  						item ['email'] = object.get('email');
-              item ['room'] = object.get('room');
-  						if(picURL  != null)
-  						{
-  							picURL = picURL.url();
-  						}
-  						item ['picture'] = picURL;
+          var docent = teacher;
+          this.storage[docent] = teacherMail;
+          console.log("a", this.storage);
+          // this.set('storage.docent', docent);
+        },
+        ready: function() {
 
-  						List.push(item);
-  						console.log(item);
+          var user = Parse.User.current();
+          if (user != null) {
+            this.notifyPath("userName", user.get("email"));
 
-  			}
-  			self.docentList = List;
+          }else {
+            this.dismissed = !this.dismissed;
+          }
 
-  		});
+          var self = this;
+          var teacherFirstName, teacherLastName, teacherMail;
+          var teacherFirstName, teacherLastName, teacherMail;
+          Parse.Cloud.run('docentList', {
+            status: "user"
+          }, {
+            success: function(result) {
 
-    },
-    docentClick: function(e){
-      var teacher = e.model;
-        this.$.timeDialog.toggle();
+              self.loading = !self.loading;
+              self.docentList = result;
 
-      console.log(teacher.get('item.firstName'));
-    }
-    });
-  })();
+            },
+            error: function(error) {}
+          });
+
+        },
+        dismissUser: function(e){
+          this.dismissed = !this.dismissed;
+        },
+
+        docentClick: function(e) {
+          var user = Parse.User.current();
+          if (user === null) {
+            this.loggedIn = !this.loggedIn;
+
+          }
+          // console.log(currentUser);
+          // var model = e.model;
+          // teacher = model.get("item.lastName")+ model.get("item.firstName");
+          // teacherFirstName = model.get("item.firstName");
+          // teacherLastName = model.get("item.lastname");
+          // teacherMail = model.get("item.email");
+
+
+
+
+        }
+      });
+    })();
   </script>
 </dom-module>

@@ -15,6 +15,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
+    #button {
+      padding-bottom: 20px;
+    }
+
+    paper-material {
+      width: 80% !important;
+      margin: 0 auto;
+    }
+
+    paper-toolbar {
+      width: 80% !important;
+      margin: 0 auto;
+    }
+
+    paper-button {
+      width: 30%;
+      display: block;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
   <template>
     <paper-toolbar id="createDocentToolbar">
@@ -22,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-toolbar>
 
     </paper-toolbar>
-    <paper-material class="50percent">
+    <paper-material>
 
       <paper-item>
         <paper-item-body three-line class="paper-item-body-0">
@@ -44,9 +66,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </paper-item-body>
       </paper-item>
-
-      <div id="button-create">
-        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
+      <div id="button">
+        <div id="button-create">
+          <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
+        </div>
       </div>
     </paper-material>
     <paper-dialog id="alertDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
@@ -54,10 +77,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Available Rooms</h2>
+            <h2>Missing Information</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
+
+      A room needs to have a unique name.
+
     </paper-dialog>
 
   </template>
@@ -73,7 +99,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           }
         },
-        handleClick: function() {
+        handleClick: function(e) {
+          var model = e.model;
+          console.log(model);
           var
             roomName = $('[name="roomName"]').val(),
             roomDesc = $('[name="roomDesc"]').val(),
@@ -83,8 +111,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             roomName === ''
           ) {
 
+            this.$.alertDialog.toggle();
 
-            alert("Error: A Room has to have a name");
 
           } else {
 
@@ -102,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 alert('New room created with objectId: ' + room.id);
                 var inputs, index;
 
-                inputs = document.getElementsByTagName('input');
+                inputs = document.getElementsByTagName('paper-input');
                 for (index = 0; index < inputs.length; ++index) {
                   inputs[index].val = '';
                 }

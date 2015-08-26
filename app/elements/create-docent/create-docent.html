@@ -12,6 +12,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="create-docent">
 	<style type="text/css">
+		paper-material {
+			width: 80% !important;
+			margin: 0 auto;
+		}
+
+		paper-toolbar {
+			width: 80% !important;
+			margin: 0 auto;
+		}
+
 		paper-item-body.paper-item-body-0 {
 			display: -ms-flexbox;
 			display: -webkit-flex;
@@ -85,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<div>
 						<span>{{computeFullName(firstName, lastName)}}</span>
 					</div>
-					<div secondary>{{room}}</div>
+
 					<div secondary>{{computeSubjects(subject1,subject2,subject3)}}</div>
 				</paper-item-body>
 			</paper-item>
@@ -103,10 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						<input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
 					</paper-input-container>
 
-					<paper-input-container>
-						<label>Room</label>
-						<input is="iron-input" name="room" type="text" value="{{room::input}}" required>
-					</paper-input-container>
+
 
 				</paper-item-body>
 			</paper-item>
@@ -164,10 +171,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					type: String,
 					value: ''
 				},
-				room: {
-					type: String,
-					value: ''
-				},
+
 				subject1: {
 					type: String,
 					value: ''
@@ -194,7 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					password = $('[name="password"]').val(),
 					firstName = $('[name="firstName"]').val(),
 					lastName = $('[name="lastName"]').val(),
-					room = $('[name="room"]').val(),
+
 					subject1 = $('[name="subject1"]').val(),
 					subject2 = $('[name="subject2"]').val(),
 					subject3 = $('[name="subject3"]').val();
@@ -204,10 +208,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					password === '' ||
 					firstName === '' ||
 					lastName === '' ||
-					room === '' ||
+
 					subject1 === ''
 				) {
-					console.log(Email + password + firstName + lastName + room + subject1)
+					console.log(Email + password + firstName + lastName + subject1)
 
 					alert("Error: Alle Felder müssen ausgefüllt werden");
 
@@ -216,7 +220,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					username = Email;
 					var user = new Parse.User();
-
 
 					user.set("username", username);
 					user.set("password", password);
@@ -266,7 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 								},
-								error : function(error){
+								error: function(error) {
 									alert("Error: " + error.code + " " + error.message);
 								}
 							});
@@ -285,4 +288,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			}
 		});
 	})();
-</script>
+// </script>

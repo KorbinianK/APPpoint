@@ -1,147 +1,155 @@
 <dom-module id="login-element">
 
 
-<style type="text/css">
-
-
+  <style type="text/css">
     paper-material {
-
-     width: 70%;
-    margin: 0 auto;
-        padding: 0 0 20px;
-
-    }
-	paper-input-container {
-     padding: 0 20px 0 20px !important;
+      width: 70%;
+      margin: 0 auto;
+      padding: 0 0 20px;
     }
 
-    paper-button{
-    width:30%;
-    display: block;
-        margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-
+    paper-input-container {
+      padding: 0 20px 0 20px !important;
     }
 
-    #login{
-        margin-top: 30px;
+    paper-button {
+      width: 90%;
+      display: block;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
     }
-</style>
-<template>
+
+    #login {
+      margin-top: 30px;
+    }
+  </style>
+  <template>
 
 
-<div id="login" hidden?="{{loggedIn}}">
-<paper-material >
-    <paper-header-panel class="">
-         <paper-toolbar>
-              <div><h2>Bitte einloggen</h2></div>
+
+    <paper-material hidden="{{!hidden}}">
+      <paper-header-panel class="">
+        <paper-toolbar>
+          <div>
+            <h2>Bitte einloggen</h2>
+          </div>
         </paper-toolbar>
-    </paper-header-panel>
-    <paper-input-container>
-      <label>Email</label>
-      <input is="iron-input" name="name" type="username" required>
-    </paper-input-container>
-    <paper-input-container>
-      <label>Password</label>
-      <input is="iron-input" name="password" name="name" type="password" required>
-    </paper-input-container>
+      </paper-header-panel>
+      <paper-input-container>
+        <label>Email</label>
+        <input is="iron-input" name="name" type="username" required>
+      </paper-input-container>
+      <paper-input-container>
+        <label>Password</label>
+        <input is="iron-input" name="password" name="name" type="password" required>
+      </paper-input-container>
 
 
 
-   <div id="center"><paper-button class="submitButton" raised on-click="handleClick" >Anmelden</paper-button></div>
+      <div id="center">
+        <paper-button class="submitButton" raised on-click="handleClick">Anmelden</paper-button>
+      </div>
 
-<div id="center1"><paper-button class="submitButton" raised on-click="registerClick" >Registrieren</paper-button></div>
-</paper-material>
+      <div id="center1">
+        <paper-button class="submitButton" raised on-click="registerClick">Registrieren</paper-button>
+      </div>
+    </paper-material>
 
+    <div id="signup" hidden="{{hidden}}">
+      <signup-element></signup-element>
+    </div>
 
-</template>
+  </template>
 
 </dom-module>
 
 <script>
   (function() {
     var currentUser = Parse.User.current();
-        if (currentUser) {
-            (function(){
+    if (currentUser) {
+      (function() {
 
-              })();
-          } else {
+      })();
+    } else {
 
-            }
+    }
 
-	Polymer({
-		is: "login-element",
+    Polymer({
+      is: "login-element",
 
-		properties: {
-        loggedIn: false,
+      properties: {
+        hidden: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
         username: {
           type: String
         },
-        password:{
+        password: {
           type: String
-        }},
-        registerClick:function() {
-     $('#login-element').hide();
-      $('#signup').slideDown();},
+        }
+      },
+      registerClick: function() {
+      this.hidden = !this.hidden;
+      },
 
-        handleClick: function() {
+      handleClick: function() {
 
-      console.log('click',this);
-      var
-      username = $('[name="name"]').val(),
-      password = $('[name="password"]').val();
+        console.log('click', this);
+        var
+          username = $('[name="name"]').val(),
+          password = $('[name="password"]').val();
 
 
-    // Call Parse Login function with those variables
-    Parse.User.logIn(username, password, {
-        // If the username and password matches
-        success:
+        // Call Parse Login function with those variables
+        Parse.User.logIn(username, password, {
+          // If the username and password matches
+          success:
 
             function(user) {
 
 
             var currentUser = Parse.User.current();
 
-                    // if(currentUser.get("emailVerified")){
+            // if(currentUser.get("emailVerified")){
             if (currentUser) {
-                (function(){
+              (function() {
 
-                  var inputs, index;
+                var inputs, index;
 
-                  inputs = document.getElementsByTagName('input');
-                  for (index = 0; index < inputs.length; ++index) {
-                      inputs[index].val = '';
-                  }
+                inputs = document.getElementsByTagName('input');
+                for (index = 0; index < inputs.length; ++index) {
+                  inputs[index].val = '';
+                }
 
-                  if(currentUser.get("isTeacher")){
-                   document.location.href = "/dozent.html";
-                  }
-                     if(currentUser.get("isAdmin")){
-                   document.location.href = "/admin.html";
-                  }
-                  else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false){
+                if (currentUser.get("isTeacher")) {
+                  document.location.href = "/dozent.html";
+                }
+                if (currentUser.get("isAdmin")) {
+                  document.location.href = "/admin.html";
+                } else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false) {
                   document.location.href = "/user.html";
-                  }
+                }
               })();
-          } else {
+            } else {
 
             }
 
-          /*}else{
-            alert("email not verified");
+            /*}else{
+              alert("email not verified");
 
-          } */
-            },
-        // If there is an error
-        error: function(user, error) {
+            } */
+          },
+          // If there is an error
+          error: function(user, error) {
             console.log(error);
             alert('Error!');
-        }
+          }
+        });
+
+      }
     });
-
-         }
-       });
-	})();
-
+  })();
 </script>

@@ -1,0 +1,140 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="slot-list">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <paper-material elevation="1">
+
+      <!-- <loading-placeholder loading-status="{{loading}}"></loading-placeholder> -->
+
+      <template is="dom-repeat" items="{{slotList}}">
+        <paper-item>
+
+          <paper-item-body three-line class="paper-item-body-0">
+            <div>
+              <h1>
+                <span>{{item.date}}</span>
+              </h1>
+            </div>
+            <!-- <div secondary hidden="{{!item.status}}">
+              <b class="green">Available</b>
+
+            </div>
+            <div secondary hidden="{{item.status}}">
+              <b class="red">Not available</b>
+
+            </div> -->
+            <div secondary><b>From:</b>
+              <span>{{item.startTime}}</span>
+            </div>
+            <div secondary><b>Until:</b>
+              <span>{{item.endTime}}</span>
+            </div>
+
+
+
+          </paper-item-body>
+
+
+
+        </paper-item>
+
+      </template>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'slot-list',
+
+        properties: {
+          loading: {
+            type: Boolean
+          },
+          slotList: {
+            type: Array,
+          },
+        },
+        observers: [
+          'slotListChanged(slotList.splices)'
+          // ,'docentListChanged(docentList.splices)'
+        ],
+        slotListChanged: function(changeRecord) {
+          if (changeRecord) {
+
+            changeRecord.indexSplices.forEach(function(s) {
+              s.removed.forEach(function(room) {});
+            }, this);
+          }
+        },
+        ready: function() {
+          var self = this;
+          Parse.Cloud.run('singleDocent', {
+            email: "korbi87+2@gmail.com"
+          }, {
+            success: function(result) {
+
+              console.log("docent", result);
+              Parse.Cloud.run('slotList', {
+                docent: result
+              }, {
+                success: function(results) {
+
+                  self.loading = !self.loading;
+                  // self.slotList = result;
+                  console.log("slots", results);
+                  var List = [];
+                  for (i in results) {
+                    var item = {};
+                    var object = results[i];
+                    var slots = object.get('Slots');
+                    for(j in slots){
+                      var slot = slots[j];
+                      item["slot"] = slot;
+                      List.push(item);
+                    }
+                    // if (user != null) {
+                    //   var docentName = user.get("lastName") + " " + user.get("firstName");
+                    //   item['docent'] = docentName;
+                    //   item['docentObject'] = user;
+                    //   item['email'] = user.get("email");
+                    // }
+                    // item['roomName'] = object.get('roomName');
+                    // item['roomBuild'] = object.get('roomBuild');
+                    // item['roomDesc'] = object.get('roomDesc');
+                    // item['status'] = object.get('available');
+
+
+                  }
+                  List.sort();
+                  console.log(List);
+                },
+                error: function(error) {}
+              });
+
+            },
+            error: function(error) {}
+          });
+
+          console.log("ready");
+
+
+        }
+
+      });
+    })();
+  </script>
+</dom-module>

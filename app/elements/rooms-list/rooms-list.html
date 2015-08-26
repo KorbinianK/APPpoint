@@ -185,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         docentListChanged: function(docentListChange) {
-          console.log("docent changed");
+
           if (docentListChange) {
             docentListChange.indexSplices.forEach(function(s) {
               s.removed.forEach(function(docent) {});
@@ -206,7 +206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             error: function(error) {}
           });
-          Parse.Cloud.run('docentList', {}, {
+          Parse.Cloud.run('docentList', {status: "emptyOnly"}, {
             success: function(result) {
 
 
@@ -229,7 +229,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var self = this;
           var model = e.model;
-          console.log("model", model);
+          console.log("model", clickedRoom.get("item.email"));
 
           if (model.get("item.delete") === true) {
 
@@ -238,15 +238,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Parse.Cloud.run('remFromRoom', {
               status: clickedRoom.get("item.status"),
               roomName: clickedRoom.get("item.roomName"),
+              email: clickedRoom.get("item.email"),
               docentObject: model.get("item.docentObject"),
             }, {
               success: function(result) {
-                console.log("new",result);
+                console.log("new", result);
 
-                // if (result.get("status") != "switch") {
-                //   clickedRoom.set("item.status", true);
-                //   clickedRoom.set("item.docent", "No Docent");
-                // }
+                if (result.get("status") != "switch") {
+                  clickedRoom.set("item.status", true);
+                  clickedRoom.set("item.docent", "No Docent");
+                  var item = {};
+                  item['firstName'] = result.get('firstName');
+                  item['lastName'] = result.get('lastName');
+                  item['email'] = result.get('email');
+                  item['docentObject'] = result;
+                  self.docentList.push(item);
+                  self.splice('docentList', 1, 0, item);
+                  self.docentList.sort();
+                }
 
               },
               error: function(error) {}
@@ -263,6 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               success: function(result) {
                 console.log(result);
                 clickedRoom.set("item.status", false);
+                clickedRoom.set("item.email", result.get("email"));
                 clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
                 clickedRoom.set("item.docentObject", result);
                 for (var j = 0; j < self.docentList.length; j++) {
@@ -284,7 +294,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         roomDel: function(e) {
           var model = e.model;
-          clickedDelRoom = "hallo";
+          clickedDelRoom = model.get("item.roomName");
           this.roomName = clickedDelRoom;
           console.log("clicked to del ", clickedDelRoom);
           this.$.delRoomDialog.toggle();
@@ -307,9 +317,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               room.equalTo("roomName", clickedRoom);
               room.first({
                 success: function(object) {
-
                   object.destroy();
-
 
                 },
                 error: function(error) {

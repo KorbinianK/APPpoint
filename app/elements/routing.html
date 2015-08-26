@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
   window.addEventListener('WebComponentsReady', function() {
 
-    
+
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
@@ -25,12 +25,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'u-home';
     });
 
-    page('/uoverviewd', function () {
-      app.route = 'u-overview-docent';
+    page('/uappc', function () {
+      app.route = 'u-create-appointment';
     });
 
     page('/uappov', function () {
-      app.route = 'u-overview-appointment';
+      app.route = 'u-overview-appointments';
+    });
+
+    page('/amanagep', function () {
+      app.route = 'a-manage-profil';
+    });
+
+    page('/ulogin', function () {
+        app.route = 'u-login';
     });
 
 
