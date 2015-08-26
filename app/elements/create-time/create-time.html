@@ -412,10 +412,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           var part = t1.add(t2);
 
-
-
-
-
           var startYear = $('#ys').html(),
             startMonth = $('#ms').html(),
             startDay = $('#ds').html(),
@@ -539,7 +535,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           for (var i = 0; i < Array1.length; i++) {
             Array1[i] = {
                 startTime: start.toString(),
-                endTime:(start.add(t1)).toString(),
+                endTime: (start.add(t1)).toString(),
                 availability: "true"
               }
               //Array1[i] = start.toString() +  "-" + (start.add(t1)).toString();
@@ -550,37 +546,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             slotArray[i] = Array1;
             console.log(Array1, slotArray[i]);
           }
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          query.equalTo("email", email);
+          query.first({
+            success: function(user) {
 
-          for (var i = 0; i < completeArray.length; i++) {
-            var Slots = Parse.Object.extend("Slots");
-            var slotQuery = new Slots();
-            var DocentQuery = Parse.Object.extend("Docent");
-              var query = new Parse.Query(DocentQuery);
+              for (var i = 0; i < completeArray.length; i++) {
 
-           slotQuery.save({
-
-              date: completeArray[i].toString(), // Array with sorted Date
-              Slots: slotArray //slots contains time + availability
-            }, {
-              success: function() {
-              },
-              error: function() {
-                alert("fehler");
-                console.log(completeArray, slotArray);
-              }
-            });
-            /*slotQuery.set("date", completeArray[i].toString());
-            slotQuery.set("Slots", slotArray);
-            slotQuery.save();*/
-
-            query.equalTo("email", email);
-            query.first({
-              success: function(user) {
+                var Slots = Parse.Object.extend("Slots");
+                var slotQuery = new Slots();
                 slotQuery.set("Docent", user);
+                slotQuery.set("date",completeArray[i].toString() );
+                slotQuery.set("Slots",slotArray);
                 slotQuery.save();
               }
-            });
-          }
+
+            }
+          });
+
+          //  slotQuery.save({
+          //
+          //     date: completeArray[i].toString(), // Array with sorted Date
+          //     Slots: slotArray //slots contains time + availability
+          //   }, {
+          //     success: function() {
+          //     },
+          //     error: function() {
+          //       alert("fehler");
+          //       console.log(completeArray, slotArray);
+          //     }
+          //   });
+          /*slotQuery.set("date", completeArray[i].toString());
+          slotQuery.set("Slots", slotArray);
+          slotQuery.save();*/
+
+
+
 
           // Kalendereintrage erstellen
 
