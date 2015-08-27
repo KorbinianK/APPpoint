@@ -9,353 +9,611 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<script src="../../../bower_components/moment/moment.js"></script>
 <dom-module id="create-time">
   <style>
     :host {
       display: block;
     }
 
-paper-material{
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
+    paper-button {
+      margin-bottom: 24px;
+      width: 15%;
+    }
+
+    paper-material {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
 
     paper-item-body.paper-item-body-1 {
-  		width: 50%;
-  }
+      width: 50%;
+    }
 
+    paper-item-body.paper-item-body-0 [secondary] {
+      color: #757575;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      ;
+    }
 
-  paper-item-body.paper-item-body-0  [secondary] {
-    color:#757575;font-family:'Roboto', 'Noto', sans-serif;
-        -webkit-font-smoothing:antialiased;
+    .spacer {
+      padding-top: 10px;
+      border-bottom: 1px solid gray;
+    }
 
-        font-size:14px;
-        font-weight:400;
-        line-height:20px;;
-  }
+    label.prev {
+      padding-left: 20px;
+      color: #727272;
+      position: relative;
+      top: 10px;
+    }
 
-  .spacer{
-  	padding-top:10px;
-  	border-bottom: 1px solid gray;
+    #button {
+      padding-bottom: 20px;
+      width: 100%
+    }
+    /*paper-button {
+      width: 30%;
+      display: block;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }*/
 
-  }
+    #checkboxes {
+      width: 100%;
+      text-align: center;
+    }
 
-  label.prev{
-  	padding-left: 20px;
-  	color: #727272;
-  	position: relative;
-  	top: 10px;
-  }
+    paper-checkbox {
+      padding-left: 2%;
+    }
   </style>
   <template>
+
     <paper-material elevation="1">
-    <paper-item>
-      <paper-item-body class="paper-item-body-0" on-click='handleStartClick'>
-      <h4>Start Date:</h4>
-        <p>
-          <span id="ds"></span>
-          <span id="ms"></span>
-          <span id="ys"></span>
-        </p>
-
-      </paper-item-body>
-
-  </paper-item>
-
-
-  <paper-item>
-      <paper-item-body class="paper-item-body-0" on-click='handleEndClick'>
-    <h4>End Date:</h4>
-      <p>
-      <span id="de"></span>
-      <span id="me"></span>
-      <span id="ye"></span>
-    </p>
-
-
-  </paper-item-body>
-
-</paper-item>
-</hr>
-    <paper-item>
-      <paper-item-body class="paper-item-body-0" on-click='handleStartTimeClick'>
-      <h4>Start Time:</h4>
-        <p>
-          <span id="hs"></span>
-          <span id="seps"></span>
-          <span id="mins"></span>
-          <span id="ps"></span>
-        </p>
-
-      </paper-item-body>
-
-</paper-item>
-
-<paper-item>
-   <paper-item-body class="paper-item-body-0" on-click='handleEndTimeClick'>
-    <h4>End Time:</h4>
-      <p>
-        <span id="he"></span>
-        <span id="sepe"></span>
-        <span id="mine"></span>
-        <span id="pe"></span>
-    </p>
-
-    </paper-item-body>
-
-</paper-item>
 
 
 
 
-      </paper-material>
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" on-click=''>
+          <h4>Pick the days:</h4>
+          <div class="checkboxes">
 
-<paper-material elevation="1">
-  <paper-item>
+            <paper-checkbox name="monday" checked="{{checkedMonday}}" id="monday">Monday</paper-checkbox>
+            <paper-checkbox name="tuesday" checked="{{checkedTuesday}}" id="tuesday">Tuesday</paper-checkbox>
+            <paper-checkbox name="wednesday" checked="{{checkedWednesday}}" id="wednesday">Wednesday</paper-checkbox>
+            <paper-checkbox name="thursday" checked="{{checkedThursday}}" id="thursday">Thursday</paper-checkbox>
+            <paper-checkbox name="friday" checked="{{checkedFriday}}" id="friday">Friday</paper-checkbox>
+            <paper-checkbox name="saturday" checked="{{checkedSaturday}}" id="saturday">Saturday</paper-checkbox>
+          </div>
 
-      <paper-item-body class="paper-item-body-1">
 
-        <paper-input-container>
-          <label>Slot Duration</label>
-          <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
-        </paper-input-container>
         </paper-item-body>
-      <span>minutes.</span>
-    </paper-item>
 
-    <paper-item>
-      <paper-item-body class="paper-item-body-1">
-        <paper-input-container>
-          <label>Break Duration</label>
-          <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
-        </paper-input-container>
-      </paper-item-body>
-    <span>minutes.</span>
-    </paper-item>
-      <paper-button id='setTime'  on-click='handleTimeClick'>Set Slot Settings</paper-button>
-</paper-material>
+      </paper-item>
 
-<paper-dialog id="startDialog" modal class="paper-date-picker-dialog">
-  <paper-date-picker locale='de-DE'id="dateStartPicker"></paper-date-picker>
-    <div class="buttons">
+
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" flat on-click="editButton">
+
+          <h4>Choose Docent: </h4>
+          <p>
+            <span>{{docentname}}</span>
+          </p>
+        </paper-item-body>
+
+      </paper-item>
+
+
+
+
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" on-click='handleStartClick'>
+          <h4>Start Date:</h4>
+          <p>
+            <span>{{startDate}}</span>
+            <!-- <span id="ds"></span>
+            <span id="ms"></span>
+            <span id="ys"></span> -->
+          </p>
+
+        </paper-item-body>
+
+      </paper-item>
+
+
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" on-click='handleEndClick'>
+          <h4>End Date:</h4>
+          <p>
+            <span>{{endDate}}</span>
+            <!-- <span id="de"></span>
+            <span id="me"></span>
+            <span id="ye"></span> -->
+          </p>
+
+
+        </paper-item-body>
+
+
+      </paper-item>
+      </hr>
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" on-click='handleStartTimeClick'>
+          <h4>Start Time:</h4>
+          <p>
+            <span>{{startTime}}</span>
+
+          </p>
+
+        </paper-item-body>
+
+      </paper-item>
+
+      <paper-item>
+        <paper-item-body class="paper-item-body-0" on-click='handleEndTimeClick'>
+          <h4>End Time:</h4>
+          <p>
+            <span>{{endTime}}</span>
+
+          </p>
+
+        </paper-item-body>
+
+      </paper-item>
+
+
+
+
+    </paper-material>
+
+    <paper-material elevation="1">
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-1">
+
+          <paper-input-container>
+            <label>Slot Duration</label>
+            <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
+          </paper-input-container>
+        </paper-item-body>
+        <span>minutes.</span>
+      </paper-item>
+
+      <paper-item>
+        <paper-item-body class="paper-item-body-1">
+          <paper-input-container>
+            <label>Break Duration</label>
+            <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
+          </paper-input-container>
+        </paper-item-body>
+        <span>minutes.</span>
+      </paper-item>
+
+
+      <div id="button">
+        <div id="button-create">
+          <paper-button id='setTime' raised on-click='createSlots'>Create Time Slots</paper-button>
+        </div>
+      </div>
+
+
+    </paper-material>
+
+    <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+      <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
+      <div class="buttons">
         <paper-button flat dialog-dismiss>Cancel</paper-button>
         <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
-    </div>
-</paper-dialog>
-<paper-dialog id="endDialog" modal class="paper-date-picker-dialog">
-  <paper-date-picker locale='de-DE'id="dateEndPicker"></paper-date-picker>
-    <div class="buttons">
+      </div>
+    </paper-dialog>
+    <paper-dialog id="endDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+      <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
+      <div class="buttons">
         <paper-button flat dialog-dismiss>Cancel</paper-button>
         <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
-    </div>
-</paper-dialog>
+      </div>
+    </paper-dialog>
 
-    <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog">
-       <paper-time-picker id="timeStartPicker"></paper-time-picker>
-            <div class="buttons">
-                <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
-            </div>
-      </paper-dialog>
+    <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+      <paper-time-picker id="timeStartPicker"></paper-time-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
+      </div>
+    </paper-dialog>
 
-      <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog">
-       <paper-time-picker id="timeEndPicker"></paper-time-picker>
-            <div class="buttons">
-                <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
-            </div>
-      </paper-dialog>
+    <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+      <paper-time-picker id="timeEndPicker"></paper-time-picker>
 
+
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
+
+      </div>
+
+    </paper-dialog>
+    <paper-dialog id="editDocentDialog" modal role="dialog" exit-animation="fade-out-animation">
+      <template is="dom-repeat" items="{{docentList}}">
+
+        <paper-item>
+
+          <paper-item-body class="paper-item-body-0">
+
+            <paper-button id="docentbutton" flat dialog-confirm on-click="pickDocent">
+              <span>{{item.firstName}}</span>
+              <span>{{item.lastName}}</span>
+            </paper-button>
+
+          </paper-item-body>
+
+        </paper-item>
+
+
+      </template>
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+
+      </div>
+    </paper-dialog>
 
 
   </template>
 
 
-    <script>
-  (function() {
+  <script>
+    (function() {
 
-    Polymer({
-      is: 'create-time',
-      ready: function(){
+      Polymer({
+        is: 'create-time',
+        properties: {
 
-      },
-      properties: {
-
-
-      },
-      handleTimeClick:function(){
-        
-    //Prüfung der CalenderLogic
-          var startYear,startDay,startMonth,endYear,endDay,endMonth;
-          startYear=$('#ys').html()*1;  startDay=$('#ds').html()*1;  startMonth=$('#ms').html()*1;
-          endYear=$('#ye').html()*1;  endDay=$('#de').html()*1;  endMonth=$('#me').html()*1;
-          
-          
-        if(endYear<startYear){
-             alert("Das Enddatum liegt hinter dem Startdatum"); return;
-        }
-        
-        if(endMonth<startMonth){
-             alert("Das Enddatum liegt hinter dem Startdatum"); return;
-        }
-            
-        if(endDay<startDay){
-             alert("Das Enddatum liegt hinter dem Startdatum"); return;
-        }  
-          
-          
-          
-    //Erstellung der TimeSlots in ein Array --> muss noch in Parse verarbeitet werden.      
-          
-            var startHour,endHour,startMinute,endMinute, timeDiffer;
-
-            startMinute=$('#mins').html()*1; 
-            endMinute=$('#mine').html()*1; 
-
-            if($('#ps').html()==='PM' && $('#hs').html()*1!=12*1 && $('#pe').html()==='PM'){
-                 startHour = ($('#hs').html())*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  ($('#he').html())*1+12*1;    
-
-            }else if($('#ps').html()==='AM' && $('#pe').html()==='AM'){ 
-                 startHour=$('#hs').html()*1;
-                 endHour=$('#he').html()*1;
-
-                 if(startHour===12){
-                      startHour=0;
-                  }
-
-                 if(endHour===12){
-                      endHour=0;
-                  }
-            }
-          
-          
-            if($('#ps').html()==='AM' && $('#he').html()*1===12*1 && $('#pe').html()==='PM'){
-                endHour=12*1;
-                startHour=$('#hs').html()*1
-            }
-          
-
-            if($('#ps').html()==='PM' && $('#hs').html()*1===12*1 && $('#pe').html()==='PM'){
-                 startHour = $('#hs').html()*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1+12*1; 
-            }   
-
-            if($('#pe').html()==='PM' && $('#ps').html()==='AM' && $('#he').html()*1!=12*1){
-                 //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1+12*1;    
-                 startHour=$('#hs').html()*1;
-                 if(startHour===12){
-                      startHour=0;
-                  }
-            }
-          
-            if($('#ps').html()==='PM' && $('#pe').html()==='AM'){
-                 startHour = $('#hs').html()*1+12*1;  //*1 damit JS castet <->Quick n DIrty ansatz. Unebdingt ausbessern!!!!
-                 endHour =  $('#he').html()*1; 
-            }   
-
-      
-          if(endHour<=startHour ){
-                 if(endHour<startHour|| (endHour===startHour && endMinute<startMinute)){
-                    alert("die Zeitangaben scheinen nicht korrekt zu sein");
-                }
-            }
-          
-      //Vorläufige Erstellung der Zeiten
-
-              timeDiffer= 60*1-startMinute+60*(endHour-startHour-1)+endMinute;
-              var dur =  $('[name="duration"]').val()*1;  //Duration Time
-              var Break = $('[name="break"]').val()*1;    // Break Time
-              var partTime=  dur + Break;                  
-              var Array1= new Array(parseInt(timeDiffer/partTime));  
-
-            if(dur<9*1){
-                var t1= new Hour("00:0"+dur.toString());
-            }
-            if(dur>9*1){
-                  var t1= new Hour("00:"+dur.toString());
-            }
-            if(Break<9*1){
-                var t2= new Hour("00:0"+Break.toString());
-            }
-            if(Break>9*1){
-                  var t2= new Hour("00:"+Break.toString());
-            }
-            if(startMinute<9*1){
-                var start= new Hour(startHour + ":0" + startMinute);
-            }
-            if(startMinute>9*1){
-                var start= new Hour(startHour + ":" + startMinute);
-            }
-            var part= t1.add(t2);
-
-           
-        
-          
-          for (var i = 0; i<Array1.length;i++){
-                var Times = Parse.Object.extend("Times");
-                var timeQuery= new Times();
-                Array1[i]= start.toString()+" - " + (start.add(t1)).toString();
-                start=start.add(part);
-                timeQuery.set("time",start.toString()+" - " + (start.add(t1)).toString());
-                timeQuery.set("available", true);
-                timeQuery.save(null,{
-                    success: function(timeQuery){
-                    },
-                
-                error: function(timeQuery,error){
-                    alert("fail");}
-                });
-                
-            }
-          
-        
-        },
-        handleStartClick: function(){
-            this.$.startDialog.toggle();
-        },
-         handleEndClick: function(){
-              this.$.endDialog.toggle();
+          checkedMonday: {
+            type: Boolean,
+            observer: '_mondayChanged'
           },
-         handleStartTimeClick: function(){
-            this.$.startTimeDialog.toggle();
-        },
-         handleEndTimeClick: function(){
-              this.$.endTimeDialog.toggle();
+          checkedTuesday: {
+            type: Boolean,
+            observer: '_tuesdayChanged'
           },
-        setStart: function(){
+          checkedWednesday: {
+            type: Boolean,
+            observer: '_wednesdayChanged'
+          },
+          checkedThursday: {
+            type: Boolean,
+            observer: '_thursdayChanged'
+          },
+          checkedFriday: {
+            type: Boolean,
+            observer: '_fridayChanged'
+          },
+          checkedSaturday: {
+            type: Boolean,
+            observer: '_saturdayChanged'
+          },
+          docentList: {
+            type: Array,
+          },
+          startDate: {
+            Type: Date,
+            notify: true
+          },
+          endDate: {
+            Type: Date,
+            notify: true
+          },
+          startTime: {
+            Type: Number,
+            notify: true
+          },
+          endTime: {
+            Type: Number,
+            notify: true
+          },
+          docentname: {
+            type: String,
+            notify: true
+          },
+          selectedDocent: {
+            type: Object
+          },
+          break: {
+            type: Number,
+            notify: true,
+            value: 5
+          },
+          duration: {
+            type: Number,
+            notify: true,
+            value: 10
+          }
 
-          $('#ds').html($('#startDialog .day.style-scope.paper-date-picker').html());
-          $('#ms').html($('#startDialog .month.style-scope.paper-date-picker').html());
-            $('#ys').html($('#startDialog .year.style-scope.paper-date-picker').html());
+
         },
-        setEnd: function(){
 
-          $('#de').html($('#endDialog .day.style-scope.paper-date-picker').html());
-          $('#me').html($('#endDialog .month.style-scope.paper-date-picker').html());
-            $('#ye').html($('#endDialog .year.style-scope.paper-date-picker').html());
+        _mondayChanged: function(newValue, oldValue) {
+          this.mondayChecked = !this.mondayChecked;
+          console.log("changed", this.mondayChecked);
         },
-
-         setStartTime: function(){
-                $('#mins').html($('#startTimeDialog .minute.style-scope.paper-time-picker').html());
-                $('#seps').html($('#startTimeDialog .sep.style-scope.paper-time-picker').html());
-                $('#hs').html($('#startTimeDialog .hour.style-scope.paper-time-picker').html());
-             $('#ps').html($('#startTimeDialog .period.style-scope.paper-time-picker').html());
-
+        _tuesdayChanged: function(newValue, oldValue) {
+          this.tuesdayChecked = !this.tuesdayChecked;
 
         },
-        setEndTime: function(){
-                  $('#mine').html($('#endTimeDialog .minute.style-scope.paper-time-picker').html());
-                $('#sepe').html($('#endTimeDialog .sep.style-scope.paper-time-picker').html());
-                $('#he').html($('#endTimeDialog .hour.style-scope.paper-time-picker').html());
-            $('#pe').html($('#endTimeDialog .period.style-scope.paper-time-picker').html());
+        _wednesdayChanged: function(newValue, oldValue) {
+          this.wednesdayChecked = !this.wednesdayChecked;
+          console.log("changed", this.wednesdayChecked);
+        },
+        _thursdayChanged: function(newValue, oldValue) {
+          this.thursdayChecked = !this.thursdayChecked;
+        },
+        _fridayChanged: function(newValue, oldValue) {
+          this.fridayChecked = !this.fridayChecked;
+        },
+        _saturdayChanged: function(newValue, oldValue) {
+          this.saturdayChecked = !this.saturdayChecked;
+        },
+        ready: function() {
+
+          var self = this;
+          var startWeekday, origEndTime, origStartTime;
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          var clicker;
+          var List1 = [];
+          var email;
+          query.find().then(function(results) {
+
+
+            for (i in results) {
+              var docent = {};
+              var object = results[i];
+              var docentName = object.get("lastName") + " " + object.get('firstName');
+              docent['firstName'] = object.get('firstName');
+              docent['lastName'] = object.get('lastName');
+              docent['email'] = object.get('email');
+              List1.push(docent);
+              console.log(docentName);
+            }
+            console.log("liste", List1);
+            self.docentList = List1;
+          });
+
+
+        },
+        editButton: function(e) {
+
+          clicker = e.model;
+          this.$.editDocentDialog.toggle();
+
+        },
+        pickDocent: function(e) {
+          var self = this;
+          var model = e.model;
+          console.log(model.get("item.lastName"));
+          // console.log("jo", model);
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          query.first({
+            success: function(user) {
+              self.docentname = model.get("item.firstName") + " " + model.get("item.lastName");
+              email = model.get("item.email");
+              self.selectedDocent = user;
+              console.log(self.selectedDocent);
+            }
+          });
+        },
+
+        handleStartClick: function() {
+          this.$.startDialog.toggle();
+        },
+        handleEndClick: function() {
+          this.$.endDialog.toggle();
+        },
+        handleStartTimeClick: function() {
+          this.$.startTimeDialog.toggle();
+        },
+        handleEndTimeClick: function() {
+          this.$.endTimeDialog.toggle();
+        },
+        setStart: function(e) {
+          if (this.$.dateStartPicker.date != undefined) {
+            var date = this.$.dateStartPicker.date.toDateString();
+
+          } else {
+            var date = new Date();
+            date = date.toDateString();
+          }
+          startWeekday = date.substring(0, 4);
+          console.log(startWeekday);
+          var formattedDate = date.substring(4, date.length);
+          this.startDate = formattedDate;
+
+        },
+        setEnd: function() {
+          if (this.$.dateEndPicker.date != undefined) {
+            var date = this.$.dateEndPicker.date.toDateString();
+
+          } else {
+            var date = new Date();
+            date = date.toDateString();
+          }
+          var formattedDate = date.substring(4, date.length);
+          this.endDate = formattedDate;
+
+        },
+
+        setStartTime: function() {
+
+          origStartTime = this.$.timeStartPicker.time;
+          var all = origStartTime.split(":");
+
+          var hours = parseInt(all[0]);
+          var minutes = all[1].substring(0, all[1].length - 2);
+
+          var getAMPM = origStartTime.substring(origStartTime.length - 2, origStartTime.length);
+          if (getAMPM === "PM") {
+            var hours = hours + 12;
+          }
+
+          this.startTime = hours + ":" + minutes;
+
+
+        },
+        setEndTime: function() {
+          origEndTime = this.$.timeEndPicker.time;
+          var all = origEndTime.split(":");
+
+          var hours = parseInt(all[0]);
+          var minutes = all[1].substring(0, all[1].length - 2);
+
+          var getAMPM = origEndTime.substring(origEndTime.length - 2, origEndTime.length);
+          if (getAMPM === "PM") {
+            var hours = hours + 12;
+          }
+
+          this.endTime = hours + ":" + minutes;
+        },
+
+        createSlots: function(e) {
+
+          var startDate = moment(new Date(this.startDate));
+          var endDate = moment(new Date(this.endDate));
+          var startTime = moment(this.origStartTime);
+          var endTime = moment(this.origEndTime);
+          var breakTime = this.break;
+          var duration = this.duration;
+          var monday = !this.mondayChecked;
+          var tuesday = !this.tuesdayChecked;
+          var wednesday = !this.wednesdayChecked;
+          var thursday = !this.thursdayChecked;
+          var friday = !this.fridayChecked;
+          var saturday = !this.saturdayChecked;
+
+          var weekDay = 1;
+
+          if(startDate.isBefore(endDate)){
+
+
+          var startWeekday;
+          // Determine the Start date
+          if (monday) {
+            startWeekday = 1;
+          } else if (tuesday) {
+            startWeekday = 2;
+          } else if (wednesday) {
+            startWeekday = 3;
+          } else if (thursday) {
+            startWeekday = 4;
+          } else if (friday) {
+            startWeekday = 5;
+          } else if (saturday) {
+            startWeekday = 6;
+          }
+          var newStartDate = startDate;
+          if (startWeekday != undefined) {
+            while (newStartDate.day() != startWeekday) {
+              newStartDate.add(1, 'days');
+
+            }
+            console.log("start", newStartDate);
+          }
+
+          var endWeekday;
+          var selected = [];
+          if (monday) {
+            endWeekday = 1;
+            var item = {};
+            item["day"] = endWeekday;
+            selected.push(item);
+          }
+          if (tuesday) {
+            endWeekday = 2;
+            var item = {};
+            item["day"] = endWeekday;
+            selected.push(item);
+          }
+          if (wednesday) {
+            endWeekday = 3;
+            var item = {};
+            item["day"] = 3;
+            selected.push(item);
+          }
+          if (thursday) {
+            endWeekday = 4;
+            var item = {};
+            item["day"] = endWeekday;
+            selected.push(item);
+          }
+          if (friday) {
+            friday = 5;
+            var item = {};
+            item["day"] = endWeekday;
+            selected.push(item);
+          }
+          if (saturday) {
+            endWeekday = 6;
+            var item = {};
+            item["day"] = endWeekday;
+            selected.push(item);
+          }
+
+          var newEndDate = endDate;
+          if (endWeekday != undefined) {
+            while (newEndDate.day() != endWeekday) {
+              newEndDate.subtract(1, 'days');
+
+            }
+            console.log("end", newStartDate);
+
+          }
+          // console.log("diff", newStartDate.diff(newEndDate, 'days'));
+          // console.log("da",startDate.day(2));
+          var dateArr = [];
+          console.log(newStartDate.day());
+          console.log("startWeekday",startWeekday);
+          if(selected.length === 1){
+            var day = selected[0].day;
+            var t = newStartDate;
+            var diff = newStartDate.diff(newEndDate, 'weeks') * -1;
+            for (var i = -1; i < diff; i++) {
+                var day = [];
+                var date = t;
+                day[date] = t;
+                dateArr.push(day);
+                t.add(7, "days");
+              }
+          }
+          console.log(dateArr);
+
+          // if (monday) {
+          //   var mondayStart = newStartDate;
+            // var diff = newStartDate.diff(newEndDate, 'weeks') * -1;
+          //   console.log(diff);
+          //
+          //   for (var i = -1; i < diff; i++) {
+          //     var day = [];
+          //     var date = mondayStart;
+          //     day[date] = mondayStart;
+          //     dateArr.push(day);
+          //     mondayStart.add(7, "days");
+          //   }
+          // }
+
+
+          }else{
+          alert("Startdate needs to be before the Enddate");
+          }
 
         }
-
-    });
-  })();
-
+      });
+    })();
   </script>
 </dom-module>
