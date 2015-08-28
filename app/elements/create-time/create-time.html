@@ -406,7 +406,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               self.docentname = model.get("item.firstName") + " " + model.get("item.lastName");
               email = model.get("item.email");
               self.selectedDocent = user;
-              console.log(self.selectedDocent);
             }
           });
         },
@@ -460,10 +459,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var getAMPM = origStartTime.substring(origStartTime.length - 2, origStartTime.length);
           if (getAMPM === "PM") {
-            if (hours === 12) {
+          var hours = hours + 12;
+            if (hours === 24) {
               hours = 0;
             }
-            var hours = hours + 12;
+
           }
 
           this.startTime = hours + ":" + minutes;
@@ -479,10 +479,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var getAMPM = origEndTime.substring(origEndTime.length - 2, origEndTime.length);
           if (getAMPM === "PM") {
-            if (hours === 12) {
+            var hours = hours + 12;
+            if (hours === 24) {
               hours = 0;
             }
-            var hours = hours + 12;
+
           }
 
           this.endTime = hours + ":" + minutes;
@@ -497,7 +498,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var endTime = moment(origEndTime);
           var breakTime = this.break;
           var duration = this.duration;
-          var partTime = breakTime + duration;
+          var partTime = breakTime*1 + duration*1;
           var allStart = origStartTime.split(":");
           var allEnd = origEndTime.split(":");
           var hoursStart = parseInt(allStart[0]);
@@ -506,54 +507,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var minutesEnd = allEnd[1].substring(0, allEnd[1].length - 2);
 
           var getAMPMStart = origStartTime.substring(origStartTime.length - 2, origStartTime.length);
-          if (getAMPMStart === "PM") {
-            if (hoursStart === 12) {
+          if (getAMPMStart === "PM" ) {
+              hoursStart = hoursStart + 12;
+              if(hoursStart===24){
               hoursStart = 0;
-            }
-            var hoursStart = hoursStart + 12;
+           }
           }
+
+
           var getAMPMEnd = origEndTime.substring(origEndTime.length - 2, origEndTime.length);
           if (getAMPMEnd === "PM") {
-            if (hoursEnd === 12) {
+            hoursEnd = hoursEnd + 12;
+            if (hoursEnd === 24) {
               hoursEnd = 0;
             }
-            var hoursEnd = hoursEnd + 12;
           }
-
-
-
-
-          //  console.log("jo",timeArray.length);
-
-          if (duration < 9 * 1) {
+          if (duration < 9 ) {
             var t1 = new Hour("00:0" + duration.toString());
           }
-          if (duration > 9 * 1) {
+          if (duration > 9 ) {
             var t1 = new Hour("00:" + duration.toString());
           }
-          if (breakTime < 9 * 1) {
+          if (breakTime < 9 ) {
             var t2 = new Hour("00:0" + breakTime.toString());
           }
-          if (breakTime > 9 * 1) {
+          if (breakTime > 9 ) {
             var t2 = new Hour("00:" + breakTime.toString());
           }
-          if (minutesStart < 9 * 1) {
+          if (minutesStart < 9 ) {
             var start = new Hour(hoursStart + ":0" + minutesStart);
           }
-          if (minutesStart > 9 * 1) {
+          if (minutesStart > 9 ) {
             var start = new Hour(hoursStart + ":" + minutesStart);
           }
           var part = t1.add(t2);
 
-          if (hoursEnd <= hoursStart) {
-            if (minutesEnd <= minutesStart) {
-              alert("die Zeitangaben scheinen nicht korrekt zu sein");
+          if(hoursStart >= hoursEnd){
+            if(hoursStart===hoursEnd){
+              if(minutesStart>=minutesEnd){
+                alert("Bitte Zeitangaben korrigieren");
+                return;
+              }
+            }
+            if(hoursStart>hoursEnd){
+              alert("Bitte Zeitangaben korrigieren");
+              return;
             }
           }
 
           var timeDiffer = (60 * hoursEnd + minutesEnd * 1) - (60 * hoursStart + minutesStart * 1);
-          var timeArray = new Array(parseInt(timeDiffer / partTime));
 
+          var timeArray = new Array(parseInt(timeDiffer / partTime));
+          if(partTime>timeDiffer){
+            alert("Bitte Zeitslots anpassen");
+            return;
+          }
 
           for (var i = 0; i < timeArray.length; i++) {
             timeArray[i] = {
@@ -561,16 +569,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               endTime: (start.add(t1)).toString(),
               availability: "true"
             }
+
             start = start.add(part);
           }
-
-
-
-
-          console.log(part.toString());
-          console.log(start.toString());
-
-
 
           //variables for date
           var startDate = new Date(this.startDate);
@@ -594,17 +595,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             dateArray5 = [],
             dateArray6 = [];
 
+        if (startDate <= endDate) {
 
-
-          console.log("hi", endDate);
-
-
-
-
-
-          if (endDate>startDate) {
-
-
+            console.log("3",timeArray);
             var startWeekday;
             // Determine the Start date
             if (monday) {
@@ -683,9 +676,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
 
-            var completeDateArray = dateArray.concat(dateArray2, dateArray3, dateArray4, dateArray5);
+            var completeDateArray = dateArray.concat(dateArray2, dateArray3, dateArray4, dateArray5, dateArray6);
 
             completeDateArray.sort(date_sort);
+
 
 
             var DocentQuery = Parse.Object.extend("Docent");
@@ -700,16 +694,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   var slotQuery = new Slots();
                   slotQuery.set("Docent", user);
                   slotQuery.set("dates", moment(completeDateArray[i]));
+                  console.log(completeDateArray[i].toString());
                   slotQuery.set("Slots", timeArray);
+                  console.log("warum=",timeArray[i]);
                   slotQuery.save();
                 }
 
               }
             });
+          //  console.log("timeArray",timeArray);
 
 
 
-            console.log("easy",completeDateArray);
+
             /*  var newStartDate = startDate;
               if (startWeekday != undefined) {
                 while (newStartDate.day() != startWeekday) {
@@ -801,9 +798,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             // }
 
 
-          } else {
+         } else {
             alert("Startdate needs to be before the Enddate");
-          }
+         }
 
         }
       });
