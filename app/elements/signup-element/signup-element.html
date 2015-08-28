@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       <div id="button-create">
-        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Erstellen</paper-button>
+        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" disabled="{{disabledButton}}" >Erstellen</paper-button>
       </div>
     </paper-material>
   </template>
@@ -100,6 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         handleClick: function() {
+
           var
             email = $('[name="email"]').val(),
             password = $('[name="create-password"]').val(),
@@ -117,25 +118,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             alert("Error: Alle Felder müssen ausgefüllt werden");
 
           } else {
-            var userRandom = Math.floor((Math.random() * 1000) + 1);
-            username = email;
-            //username = firstName.toLowerCase()
-            //            + userRandom
-            //            + lastName.toLowerCase();
-            var user = new Parse.User();
+            this.disabledButton = !this.disabledButton;
 
+            username = email;
+            var user = new Parse.User();
             user.set("username", username);
             user.set("password", password);
             user.set("email", email);
             user.set("firstName", firstName);
             user.set("lastName", lastName);
-            user.set("isTeacher", false);
-
             user.signUp(null, {
               success: function(user) {
-                alert("Ihr neuer Benutzername lautet " + username + ". Bitte merken!");
-                $('#login-element').show();
-                //  $('#signup').addClass('hidden');},
+
+                document.location.href = "/index.html";
+
               },
               error: function(user, error) {
                 // Show the error message somewhere and let the user try again.

@@ -16,6 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: block;
     }
 
+    paper-item {
+      position: relative;
+      cursor:pointer;
+    }
+
     paper-dialog {
       width: 100% !important;
       height: 150% !important;
@@ -27,10 +32,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       width: 100%;
     }
 
-    iron-icon {
+    iron-icon.dismiss {
       position: absolute;
       right: 16px;
     }
+
+    .dismiss:hover {
+      cursor: pointer;
+    }
+
+    .dismiss:hover iron-icon {
+      fill: rgb(157, 157, 157);
+    }
+
     iron-icon:hover {
       fill: rgb(157, 157, 157);
       cursor: pointer;
@@ -38,14 +52,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
   <template>
     <paper-card hidden="{{dismissed}}">
+
       <div class="card-content">
         Logged in as:
         <span>{{userName}}</span>
-        <iron-icon icon="highlight-off" on-tap="dismissUser"></iron-icon>
+        <iron-icon class="dismiss" icon="icons:close" on-tap="dismissUser"></iron-icon>
       </div>
 
     </paper-card>
-  
+
     <div hidden="{{!loggedIn}}">
       <paper-material elevation="1">
         <paper-header-panel>
@@ -58,17 +73,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+        <div hidden="{{slotsDismissed}}">
+
+          <paper-card class="dismiss" on-tap="dismissSlots">
+            <paper-ripple fit></paper-ripple>
+            <div class="card-content">
+              <span>Hide Slots</span>
+              <iron-icon icon="arrow-drop-up" on-tap="dismissSlots"></iron-icon>
+            </div>
+
+          </paper-card>
+          <slot-list curr-user="{{usr}}" clicked-docent="{{clickDocent}}"></slot-list>
+        </div>
         <div id="dlist">
           <template is="dom-repeat" items="{{docentList}}">
 
             <paper-item on-tap="docentClick">
+
               <div>
                 <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
               </div>
               <paper-item-body three-line class="paper-item-body-0">
+                <paper-ripple fit></paper-ripple>
                 <div>
-                <h4>  <span>{{item.lastName}}</span>
-                  <span>{{item.firstName}}</span> </h4>
+
+                  <h4>
+                    <span>{{item.lastName}}</span>
+                    <span>{{item.firstName}}</span>
+                  </h4>
+
                 </div>
                 <div secondary><b>Email:</b>
                   <span>{{item.email}}</span>
@@ -83,9 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           </template>
         </div>
+
     </div>
     <div hidden="{{loggedIn}}">
-      <login-element id="login-element"></login-element>
+      <login-element id="login-element" login-status="user"></login-element>
     </div>
 
   </template>
@@ -94,8 +128,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: "docent-list-user",
         properties: {
+          slotsDismissed: {
+            type: Boolean,
+            value: true
+          },
           storage: {
             type: Object
+          },
+          currUser: {
+            type: Object,
+
+            notify: true,
+          },
+          clickedDocent: {
+            type: Object,
+            notify: true
           },
           loggedIn: {
             type: Boolean,
@@ -103,6 +150,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           userName: {
             type: String,
+            notify: true
+          },
+          usr: {
+            type: Object,
             notify: true
           }
         },
@@ -120,13 +171,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("a", this.storage);
           // this.set('storage.docent', docent);
         },
+        dismissSlots: function() {
+          this.slotsDismissed = !this.slotsDismissed;
+        },
         ready: function() {
 
           var user = Parse.User.current();
+          this.currentUser = user;
           if (user != null) {
             this.notifyPath("userName", user.get("email"));
-
-          }else {
+            // this.notifyPath("currUser", user);
+            this.usr = user;
+          } else {
             this.dismissed = !this.dismissed;
           }
 
@@ -140,13 +196,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               self.loading = !self.loading;
               self.docentList = result;
-
+              console.log(result);
             },
             error: function(error) {}
           });
 
         },
-        dismissUser: function(e){
+        dismissUser: function(e) {
           this.dismissed = !this.dismissed;
         },
 
@@ -155,10 +211,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (user === null) {
             this.loggedIn = !this.loggedIn;
 
+          } else {
+            this.slotsDismissed = false;
+            var model = e.model;
+            console.log("docentOb",model.get("item.docentObject"));
+            // var cDocent = model.get("item.email");
+            var cDocent = model.get("item.docentObject");
+            this.clickDocent = cDocent;
           }
+
+
           // console.log(currentUser);
-          // var model = e.model;
-          // teacher = model.get("item.lastName")+ model.get("item.firstName");
+
           // teacherFirstName = model.get("item.firstName");
           // teacherLastName = model.get("item.lastname");
           // teacherMail = model.get("item.email");

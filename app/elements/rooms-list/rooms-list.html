@@ -34,13 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       cursor: pointer;
     }
 
-    .red {
-      color: rgb(162, 19, 0);
-    }
 
-    .green {
-      color: rgb(0, 140, 6);
-    }
 
     paper-button#docentbutton {
       text-align: left !important;
@@ -180,7 +174,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (changeRecord) {
 
             changeRecord.indexSplices.forEach(function(s) {
-              s.removed.forEach(function(room) {});
+              s.removed.forEach(function(room) {
+
+              });
+              console.log("added");
             }, this);
           }
         },
@@ -277,7 +274,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 clickedRoom.set("item.docentObject", result);
                 for (var j = 0; j < self.docentList.length; j++) {
 
-                  if (self.docentList[j].docent == model.get("item.docent")) {
+                  if (self.docentList[j].docent === model.get("item.docent")) {
                     self.splice('docentList', j, 1);
                     break;
                   }
@@ -306,7 +303,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("del ", clickedRoom);
           for (var i = 0; i < this.roomList.length; i++) {
 
-            if (this.roomList[i].roomName == clickedRoom) {
+            if (this.roomList[i].roomName === clickedRoom) {
               this.splice('roomList', i, 1);
 
               var Room = Parse.Object.extend("Room");

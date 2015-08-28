@@ -19,51 +19,94 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-card {
       width: 100%;
     }
+paper-button {
+  float:left;
+  padding-top: 10px;
+}
+
+    paper-item.custom-item{
+      padding-left: 94px;
+    }
   </style>
   <template>
 
-
+<!-- <span>{{currUser}}</span><span>{{clickedDocent}}</span> -->
     <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
-    <template is="dom-repeat" items="{{dateList}}">
-      <paper-card heading="{{item.date}}">
-        <div class="card-content">
-          <template is="dom-repeat" items="{{slotList}}">
-            <paper-card>
-              <div class="card-content">
-                From:
-                <span>{{item.startTime}}</span>
-                Until:
-                <span>{{item.endTime}}</span>
-            </paper-card>
+    <template is="dom-repeat" items="{{dateList}}" as="list">
+      <paper-card id="{{list.date}}">
+
+        <div class="card-content" >
+          <!-- <paper-ripple fit></paper-ripple> -->
+          <paper-button on-tap="toggleSlots">
+            <iron-icon icon="{{icon}}"></iron-icon>
+
+          </paper-button>
+          <h3>{{list.date}}</h3>
+
+          <template is="dom-repeat" items="{{list.slots}}" as="slot" >
+
+            <paper-item id="{{slot.startTime}}" class="custom-item" hidden="{{!toggle}}" on-click="slotClicked">
+              <paper-item-body three-line class="paper-item-body-0">
+                <div hidden="{{!slot.availability}}">
+                  <b class="green">Available</b>
+
+                </div>
+                <div hidden="{{slot.availability}}">
+                  <b class="red">Not available</b>
+
+                </div>
+                <div secondary><b>From:</b>
+                  <span>{{slot.startTime}}</span>
+                </div>
+                <div secondary><b>Until:</b>
+                  <span>{{slot.endTime}}</span>
+                </div>
+              </paper-item-body>
+            </paper-item>
+
+
           </template>
+
       </paper-card>
     </template>
-    <!-- <paper-dialog id="slotDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-      <paper-dialog-scrollable>
-        <template is="dom-repeat" items="{{slotList}}">
+    <paper-dialog id="confirmDialog" modal>
 
-          <paper-item>
-
-            <paper-item-body class="paper-item-body-0">
-
-              <paper-button id="docentbutton" flat dialog-confirm on-click="edit">
-                <span>{{item.firstName}}</span>
-                <span>{{item.lastName}}</span>
-              </paper-button>
-
-            </paper-item-body>
-
-          </paper-item>
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Please confirm</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
 
 
-        </template>
-      </paper-dialog-scrollable>
+
+      <paper-item >
+        <paper-item-body three-line class="paper-item-body-0">
+          <div>
+            <h3>{{docent}}</h3>
+            <p>Do you want to reserve this slot?</p>
+
+          </div>
+
+          <div secondary><b>From:</b>
+            <span>{{startTime}}</span>
+          </div>
+          <div secondary><b>Until:</b>
+            <span>{{endTime}}</span>
+          </div>
+        </paper-item-body>
+      </paper-item>
+
+
       <div class="buttons">
         <paper-button flat dialog-dismiss>Cancel</paper-button>
-
+        <paper-button flat dialog-confirm on-click="confirmClick">Confirm</paper-button>
       </div>
-    </paper-dialog> -->
+    </paper-dialog>
+
+
   </template>
   <script>
     (function() {
@@ -71,87 +114,150 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'slot-list',
 
         properties: {
+          currUser:{
+            type: Object
+          },
+          currentUser: String,
+          clickedDocent: {
+            type: Object,
+            observer: 'clickedDocentChanged'
+          },
           loading: {
             type: Boolean
           },
-          slotList: {
+          icon: {
+            type: String,
+            value: "expand-more",
+            notify: true
+          },
+          toggle: {
+            type: Boolean,
+            value: false
+          },
+          dateList: {
             type: Array,
+            //  observer: 'dateListChanged'
           },
         },
-        observers: [
-          'slotListChanged(slotList.splices)'
-          // ,'docentListChanged(docentList.splices)'
-        ],
-        slotListChanged: function(changeRecord) {
-          if (changeRecord) {
 
-            changeRecord.indexSplices.forEach(function(s) {
-              s.removed.forEach(function(room) {});
-            }, this);
-          }
+      clickedDocentChanged: function(oldValue, newValue) {
+        var self = this;
+        console.log("change",oldValue,newValue);
+
+        Parse.Cloud.run('singleDocent', {
+          email: this.clickedDocent.get("email")
+        }, {
+          success: function(result) {
+            retrievedDocentId = result;
+            console.log("docent", result);
+            Parse.Cloud.run('dateList', {
+              docent: result
+            }, {
+              success: function(results) {
+
+                var List = [];
+                for (i in results) {
+
+                  var item = {};
+                  var object = results[i];
+                  var slots = object.get('Slots');
+                  var date = object.get("date");
+                  date = new Date(date);
+                  date = new moment(date);
+                  date = date.format("ddd, MMM DD YYYY")
+                  console.log(date);
+                  item["date"] = date;
+                  item["slots"] = slots;
+                  item["toggle"] = false;
+                  List.push(item);
+
+                }
+                List.sort();
+
+                self.dateList = List;
+                self.loading = !self.loading;
+
+              },
+              error: function(error) {
+                console.log("error");
+              }
+            });
+
+          },
+          error: function(error) {}
+        });
+
         },
         ready: function() {
           var self = this;
-          Parse.Cloud.run('singleDocent', {
-            email: "korbi87@gmail.com"
+          var clickedSlot;
+          var retrievedDocentId;
+        },
+        toggleSlots: function(e) {
+
+          var model = e.model;
+          // var toggle = model.get("item");
+          // console.log("tog",model);
+          this.toggle = !this.toggle;
+          if (this.toggle) {
+            this.icon = "expand-less";
+          } else {
+            this.icon = "expand-more";
+          }
+
+        },
+        dateClicked: function(e) {
+
+        },
+        slotClicked: function(e) {
+            var model = e.model;
+            clickedSlot = model.get("slot.startTime");
+          function parent(){
+            var test = $('#00:00').html();
+            console.log("a",test);
+          }
+          parent();
+
+          console.log("this",e);
+          var available = model.get("slot.availability");
+
+          var docentName = this.clickedDocent.get("lastName")+" "+this.clickedDocent.get("firstName");
+
+          this.startTime = model.get("slot.startTime");
+          this.endTime = model.get("slot.endTime");
+          this.docent = docentName;
+          console.log("slot", model);
+          if(available){
+            model.set("slot.availability",false);
+            this.currentUser = this.currUser.get("email");
+            this.$.confirmDialog.toggle();
+          }else{
+            model.set("slot.availability",true);
+          }
+        },
+        confirmClick: function(e){
+          var model = e.model;
+            var user = Parse.User.current();
+          console.log(user.get("email"));
+          Parse.Cloud.run('createAppointment', {
+            docentId: retrievedDocentId,
+            userEmail: user.get("email"),
+            slotStartTime: this.startTime,
+            // slotDate: ,
           }, {
             success: function(result) {
-
-              console.log("docent", result);
-              Parse.Cloud.run('dateList', {
-                docent: result
-              }, {
-                success: function(results) {
-
-                  console.log("dates", results);
-                  var List = [];
-                  for (i in results) {
-                    var item = {};
-                    var object = results[i];
-                    var slots = object.get('Slots');
-                    item["date"] = object.get("date");
-
-                    item["slots"] = slots;
-                    List.push(item);
-
-                  }
-                  List.sort();
-                  self.dateList = List;
-                  self.loading = !self.loading;
-                  var sList = [];
-                  for (j in self.dateList) {
-                    var singleSlot = {};
-                    var date = self.dateList[j];
-                    singleSlot["date"] = date.date;
-                    // console.log(date.date);
-                    var slots = date.slots;
-                    for (k in slots) {
-                      var x = slots[k];
-                      for (l in x) {
-                        var y = x[l];
-
-                        singleSlot["startTime"] = y.startTime;
-                        singleSlot["endTime"] = y.endTime;
-                        singleSlot["available"] = y.availability;
-
-                        // console.log(singleSlot);
-                      }
-
-                    }
-                  }
-                  self.slotList = sList;
-                },
-                error: function(error) {}
-              });
+              console.log("created",result);
+              // clickedRoom.set("item.status", false);
+              // clickedRoom.set("item.email", result.get("email"));
+              // clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
+              // clickedRoom.set("item.docentObject", result);
 
             },
             error: function(error) {}
           });
 
-          console.log("ready");
-
-
         }
+
 
       });
     })();
