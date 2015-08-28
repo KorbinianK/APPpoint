@@ -18,44 +18,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     paper-card {
       width: 100%;
+      position: relative;
     }
-paper-button {
-  float:left;
-  padding-top: 10px;
-}
 
-    paper-item.custom-item{
+    paper-button {
+      float: left;
+      padding-top: 10px;
+    }
+
+    paper-item.custom-item {
       padding-left: 94px;
+      position: relative;
     }
   </style>
   <template>
 
-<!-- <span>{{currUser}}</span><span>{{clickedDocent}}</span> -->
+    <!-- <span>{{currUser}}</span><span>{{clickedDocent}}</span> -->
     <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
     <template is="dom-repeat" items="{{dateList}}" as="list">
       <paper-card id="{{list.date}}">
 
-        <div class="card-content" >
-          <!-- <paper-ripple fit></paper-ripple> -->
+        <div class="card-content">
+
           <paper-button on-tap="toggleSlots">
             <iron-icon icon="{{icon}}"></iron-icon>
 
           </paper-button>
           <h3>{{list.date}}</h3>
 
-          <template is="dom-repeat" items="{{list.slots}}" as="slot" >
+          <template is="dom-repeat" items="{{list.slots}}" as="slot">
 
+            <span hidden="true">{{list.date}}</span>
             <paper-item id="{{slot.startTime}}" class="custom-item" hidden="{{!toggle}}" on-click="slotClicked">
               <paper-item-body three-line class="paper-item-body-0">
+                <paper-ripple fit></paper-ripple>
+
                 <div hidden="{{!slot.availability}}">
                   <b class="green">Available</b>
-
                 </div>
+
                 <div hidden="{{slot.availability}}">
                   <b class="red">Not available</b>
 
                 </div>
+
                 <div secondary><b>From:</b>
                   <span>{{slot.startTime}}</span>
                 </div>
@@ -82,14 +89,16 @@ paper-button {
 
 
 
-      <paper-item >
+      <paper-item>
         <paper-item-body three-line class="paper-item-body-0">
           <div>
             <h3>{{docent}}</h3>
             <p>Do you want to reserve this slot?</p>
 
           </div>
-
+          <div secondary><b>Date:</b>
+            <span>{{date}}</span>
+          </div>
           <div secondary><b>From:</b>
             <span>{{startTime}}</span>
           </div>
@@ -114,7 +123,7 @@ paper-button {
         is: 'slot-list',
 
         properties: {
-          currUser:{
+          currUser: {
             type: Object
           },
           currentUser: String,
@@ -140,58 +149,59 @@ paper-button {
           },
         },
 
-      clickedDocentChanged: function(oldValue, newValue) {
-        var self = this;
-        console.log("change",oldValue,newValue);
+        clickedDocentChanged: function(oldValue, newValue) {
+          var self = this;
+          console.log("change", oldValue, newValue);
 
-        Parse.Cloud.run('singleDocent', {
-          email: this.clickedDocent.get("email")
-        }, {
-          success: function(result) {
-            retrievedDocentId = result;
-            console.log("docent", result);
-            Parse.Cloud.run('dateList', {
-              docent: result
-            }, {
-              success: function(results) {
+          Parse.Cloud.run('singleDocent', {
+            email: this.clickedDocent.get("email")
+          }, {
+            success: function(result) {
+              retrievedDocentId = result;
+              console.log("docent", result);
+              Parse.Cloud.run('dateList', {
+                docent: result
+              }, {
+                success: function(results) {
 
-                var List = [];
-                for (i in results) {
+                  var List = [];
+                  for (i in results) {
 
-                  var item = {};
-                  var object = results[i];
-                  var slots = object.get('Slots');
-                  var date = object.get("date");
-                  date = new Date(date);
-                  date = new moment(date);
-                  date = date.format("ddd, MMM DD YYYY")
-                  console.log(date);
-                  item["date"] = date;
-                  item["slots"] = slots;
-                  item["toggle"] = false;
-                  List.push(item);
+                    var item = {};
+                    var object = results[i];
+                    var slots = object.get('Slots');
+                    var date = object.get("date");
+                    date = new Date(date);
+                    date = new moment(date);
+                    date = date.format("ddd, MMM DD YYYY")
+                    console.log(date);
+                    item["date"] = date;
+                    item["slots"] = slots;
+                    item["slots"].date = date;
+                    item["toggle"] = false;
+                    List.push(item);
+                  }
+                  // List.sort();
+                  console.log("List", List);
+                  self.dateList = List;
+                  self.loading = !self.loading;
 
+                },
+                error: function(error) {
+                  console.log("error");
                 }
-                List.sort();
+              });
 
-                self.dateList = List;
-                self.loading = !self.loading;
-
-              },
-              error: function(error) {
-                console.log("error");
-              }
-            });
-
-          },
-          error: function(error) {}
-        });
+            },
+            error: function(error) {}
+          });
 
         },
         ready: function() {
           var self = this;
           var clickedSlot;
           var retrievedDocentId;
+          var fixedDate;
         },
         toggleSlots: function(e) {
 
@@ -210,43 +220,42 @@ paper-button {
 
         },
         slotClicked: function(e) {
-            var model = e.model;
-            clickedSlot = model.get("slot.startTime");
-          function parent(){
-            var test = $('#00:00').html();
-            console.log("a",test);
-          }
-          parent();
+          var model = e.model;
+          clickedSlot = model.get("slot.startTime");
 
-          console.log("this",e);
+
           var available = model.get("slot.availability");
 
-          var docentName = this.clickedDocent.get("lastName")+" "+this.clickedDocent.get("firstName");
+          var docentName = this.clickedDocent.get("lastName") + " " + this.clickedDocent.get("firstName");
 
           this.startTime = model.get("slot.startTime");
           this.endTime = model.get("slot.endTime");
           this.docent = docentName;
+          fixedDate = new moment(new Date(model.get("list.date")));
+          // this.date = new moment(new Date(model.get("list.date")));
+          this.date = model.get("list.date");
           console.log("slot", model);
-          if(available){
-            model.set("slot.availability",false);
+          console.log(fixedDate);
+          if (available) {
+            model.set("slot.availability", false);
             this.currentUser = this.currUser.get("email");
             this.$.confirmDialog.toggle();
-          }else{
-            model.set("slot.availability",true);
+          } else {
+            model.set("slot.availability", true);
           }
         },
-        confirmClick: function(e){
+        confirmClick: function(e) {
           var model = e.model;
-            var user = Parse.User.current();
+          var user = Parse.User.current();
           console.log(user.get("email"));
           Parse.Cloud.run('createAppointment', {
             docentId: retrievedDocentId,
             userEmail: user.get("email"),
             slotStartTime: this.startTime,
-            // slotDate: ,
+            slotDate: fixedDate,
           }, {
             success: function(result) {
-              console.log("created",result);
+              console.log("created", result);
               // clickedRoom.set("item.status", false);
               // clickedRoom.set("item.email", result.get("email"));
               // clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
