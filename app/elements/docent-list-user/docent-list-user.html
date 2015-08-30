@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     paper-item {
       position: relative;
-      cursor:pointer;
+      cursor: pointer;
     }
 
     paper-dialog {
@@ -73,28 +73,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
-        <div hidden="{{slotsDismissed}}">
+        <!-- <div hidden="{{slotsDismissed}}"> -->
 
-          <paper-card class="dismiss" on-tap="dismissSlots">
+        <!-- <paper-card class="dismiss" on-tap="dismissSlots">
             <paper-ripple fit></paper-ripple>
             <div class="card-content">
               <span>Hide Slots</span>
               <iron-icon icon="arrow-drop-up" on-tap="dismissSlots"></iron-icon>
             </div>
 
-          </paper-card>
-          <slot-list curr-user="{{usr}}" clicked-docent="{{clickDocent}}"></slot-list>
-        </div>
+          </paper-card> -->
+
+        <!-- </div> -->
+
         <div id="dlist">
           <template is="dom-repeat" items="{{docentList}}">
 
-            <paper-item on-tap="docentClick">
 
-              <div>
-                <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
-              </div>
+            <paper-item>
+              <paper-button on-click="toggleTest">
+                <iron-icon icon="expand-more"></iron-icon>
+
+              </paper-button>
               <paper-item-body three-line class="paper-item-body-0">
-                <paper-ripple fit></paper-ripple>
+                <!-- <paper-ripple fit></paper-ripple> -->
                 <div>
 
                   <h4>
@@ -109,10 +111,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div secondary><b>Room:</b>
                   <span>{{item.room}}</span>
                 </div>
+
+                <iron-collapse id="{{computeID(item.firstName, item.lastName)}}">
+
+                  <slot-list curr-user="{{usr}}" clicked-docent="{{clickDocent}}"></slot-list>
+
+                </iron-collapse>
               </paper-item-body>
 
               </paper-icon-item>
-
 
           </template>
         </div>
@@ -128,8 +135,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: "docent-list-user",
         properties: {
+          clickDocentID: {
+            type: String,
+          },
+
           slotsDismissed: {
-            type: Boolean,
+            Type: Boolean,
             value: true
           },
           storage: {
@@ -157,6 +168,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           }
         },
+        computeID: function(first, last) {
+          var id = first.toLowerCase() + last.toLowerCase();
+        return id;
+      },
         initializeDefault: function() {
 
           this.storage = {};
@@ -174,12 +189,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         dismissSlots: function() {
           this.slotsDismissed = !this.slotsDismissed;
         },
+        toggleTest: function(e) {
+          var model = e.model;
+          var id = model.get("item.firstName").toLowerCase()+model.get("item.lastName").toLowerCase();
+          console.log(id);
+
+          document.querySelector('#'+id).toggle();
+
+          var user = Parse.User.current();
+          if (user === null) {
+            this.loggedIn = !this.loggedIn;
+
+          } else {
+            this.slotsDismissed = false;
+            // var model = e.model;
+            var cDocent = model.get("item.docentObject");
+            this.clickDocent = cDocent;
+            this.clickedDocentID = cDocent.get("firstName");
+            // document.querySelector("#" + this.clickedDocentID).toggle();
+          console.log(this.clickedDocentID);
+          }
+
+          teacherFirstName = model.get("item.firstName");
+          teacherLastName = model.get("item.lastname");
+          teacherMail = model.get("item.email");
+
+
+        },
         ready: function() {
 
           var user = Parse.User.current();
           this.currentUser = user;
           if (user != null) {
-            var name = user.get("firstName") + " "+ user.get("lastName");
+            var name = user.get("firstName") + " " + user.get("lastName");
+
             this.notifyPath("userName", name);
             // this.notifyPath("currUser", user);
             this.usr = user;
@@ -208,22 +251,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         docentClick: function(e) {
-          var user = Parse.User.current();
-          if (user === null) {
-            this.loggedIn = !this.loggedIn;
-
-          } else {
-            this.slotsDismissed = false;
-            var model = e.model;
-            console.log("docentOb",model.get("item.docentObject"));
-            // var cDocent = model.get("item.email");
-            var cDocent = model.get("item.docentObject");
-            this.clickDocent = cDocent;
-          }
+          console.log("docentClicked");
 
 
+          // var user = Parse.User.current();
+          // if (user === null) {
+          //   this.loggedIn = !this.loggedIn;
+          //
+          // } else {
+          //   this.slotsDismissed = false;
+          //   var model = e.model;
+          //   var cDocent = model.get("item.docentObject");
+          //   this.clickDocent = cDocent;
+          //   this.clickedDocentID = cDocent.get("firstName");
+          //   // document.querySelector("#" + this.clickedDocentID).toggle();
+          // console.log(this.clickedDocentID);
+          // }
+          //
+          //
           // console.log(currentUser);
-
+          //
           // teacherFirstName = model.get("item.firstName");
           // teacherLastName = model.get("item.lastname");
           // teacherMail = model.get("item.email");

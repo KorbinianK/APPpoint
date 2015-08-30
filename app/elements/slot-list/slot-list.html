@@ -35,58 +35,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
   <template>
 
-    <!-- <span>{{currUser}}</span><span>{{clickedDocent}}</span> -->
-    <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+
+    <!-- <loading-placeholder loading-status="{{loading}}"></loading-placeholder> -->
 
     <template is="dom-repeat" items="{{dateList}}" as="list">
-      <paper-card id="{{list.date}}">
+
+      <paper-card>
 
         <div class="card-content">
 
-          <paper-button on-tap="toggleSlots">
+          <paper-button on-click="expandSlots">
             <iron-icon icon="{{icon}}"></iron-icon>
 
           </paper-button>
           <h3>{{list.date}}</h3>
 
+          <iron-collapse id="{{getID(list.date)}}">
+          <!-- <h3>  test</h3>
+     -->
           <template is="dom-repeat" items="{{list.slots}}" as="slot">
 
-            <span hidden="true">{{list.date}}</span>
-            <paper-item id="{{slot.startTime}}" class="custom-item" hidden="{{!toggle}}" on-click="slotClicked">
-              <paper-item-body three-line class="paper-item-body-0">
-                <paper-ripple fit></paper-ripple>
+              <span hidden="true">{{list.date}}</span>
+              <paper-item class="custom-item" on-click="slotClicked">
+                <paper-item-body three-line class="paper-item-body-0">
+                  <paper-ripple fit></paper-ripple>
 
-                <div hidden="{{!slot.availability}}">
-                  <b class="green">Available</b>
-                </div>
+                  <div hidden="{{!slot.availability}}">
+                    <b class="green">Available</b>
+                  </div>
 
-                <div hidden="{{slot.availability}}">
-                  <b class="red">Not available</b>
+                  <div hidden="{{slot.availability}}">
+                    <b class="red">Not available</b>
 
-                </div>
+                  </div>
 
-                <div secondary><b>From:</b>
-                  <span>{{slot.startTime}}</span>
-                </div>
-                <div secondary><b>Until:</b>
-                  <span>{{slot.endTime}}</span>
-                </div>
-              </paper-item-body>
-            </paper-item>
+                  <div secondary><b>From:</b>
+                    <span>{{slot.startTime}}</span>
+                  </div>
+                  <div secondary><b>Until:</b>
+                    <span>{{slot.endTime}}</span>
+                  </div>
+                </paper-item-body>
+              </paper-item>
 
 
-          </template>
-
+            </template>
+      </iron-collapse>
       </paper-card>
     </template>
     <paper-dialog id="confirmDialog" modal>
 
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Please confirm</h2>
-          </div>
-        </paper-toolbar>
+      <paper-toolbar>
+        <div>
+          <h2>Please confirm</h2>
+        </div>
+      </paper-toolbar>
       </paper-header-panel>
 
 
@@ -143,14 +146,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           toggle: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           dateList: {
             type: Array,
             //  observer: 'dateListChanged'
           },
         },
-
+        test: function(){
+          document.querySelector('#test').toggle();
+        },
+        getID: function(date) {
+          var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length);
+          console.log(id);
+          return id;
+        },
         clickedDocentChanged: function(oldValue, newValue) {
           var self = this;
           console.log("change", oldValue, newValue);
@@ -178,11 +189,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         "January", "February", "March", "April", "May", "June", "July",
                         "August", "September", "October", "November", "December"
                       ]
-                    }).format("ddd, MMM YYYY");
+                    }).format("ddd, DD MMM YYYY");
 
                     item["slots"] = slots;
                     item["slots"].date = date;
                     item["toggle"] = false;
+                    item["toggleIcon"] = false;
                     List.push(item);
                   }
                   // List.sort();
@@ -207,18 +219,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var retrievedDocentId;
           var fixedDate;
         },
-        toggleSlots: function(e) {
-
+        expandSlots: function(e) {
           var model = e.model;
-          // var toggle = model.get("item");
-          // console.log("tog",model);
-          this.toggle = !this.toggle;
-          if (this.toggle) {
-            this.icon = "expand-less";
-          } else {
-            this.icon = "expand-more";
-          }
-
+          var date = model.get("list.date");
+          var theID = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length);
+        theID = "#"+theID;
+        console.log(this.querySelector(theID));
+        this.querySelector(theID).toggle();
         },
         dateClicked: function(e) {
 
@@ -232,23 +239,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var docentName = this.clickedDocent.get("lastName") + " " + this.clickedDocent.get("firstName");
 
-          this.startTime = moment(model.get("slot.startTime")).locale('en', {
-            months: [
-              "January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December"
-            ]
-          }).format("HH:mm");
-          this.endTime = moment(model.get("slot.endTime")).locale('en', {
-            months: [
-              "January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December"
-            ]
-          }).format("HH:mm");
+          this.startTime = model.get("slot.startTime");
+          this.endTime = model.get("slot.endTime");
           this.docent = docentName;
           fixedDate = new moment(new Date(model.get("list.date")));
           this.date = model.get("list.date");
-          console.log("slot", model);
-          console.log(fixedDate);
+          // console.log("slot", model);
+          // console.log(fixedDate);
           if (available) {
             model.set("slot.availability", false);
             this.currentUser = this.currUser.get("email");

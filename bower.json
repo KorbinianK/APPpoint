@@ -2,6 +2,7 @@
   "name": "polymer-starter-kit",
   "private": true,
   "dependencies": {
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.3",
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
     "moment": "~2.10.6",
     "moment-recur": "~1.0.5",
