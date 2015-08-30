@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<script src="../../../bower_components/moment/moment.js"></script>
+<script src="../../bower_components/moment-recur/moment-recur.js"></script>
 
 <dom-module id="slot-list">
   <style>
@@ -171,11 +173,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var object = results[i];
                     var slots = object.get('Slots');
                     var date = object.get("date");
-                    date = new Date(date);
-                    date = new moment(date);
-                    date = date.format("ddd, MMM DD YYYY")
-                    console.log(date);
-                    item["date"] = date;
+                    item["date"] = moment(date).locale('en', {
+                      months: [
+                        "January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October", "November", "December"
+                      ]
+                    }).format("ddd, MMM YYYY");
+
                     item["slots"] = slots;
                     item["slots"].date = date;
                     item["toggle"] = false;
@@ -228,11 +232,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var docentName = this.clickedDocent.get("lastName") + " " + this.clickedDocent.get("firstName");
 
-          this.startTime = model.get("slot.startTime");
-          this.endTime = model.get("slot.endTime");
+          this.startTime = moment(model.get("slot.startTime")).locale('en', {
+            months: [
+              "January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"
+            ]
+          }).format("HH:mm");
+          this.endTime = moment(model.get("slot.endTime")).locale('en', {
+            months: [
+              "January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"
+            ]
+          }).format("HH:mm");
           this.docent = docentName;
           fixedDate = new moment(new Date(model.get("list.date")));
-          // this.date = new moment(new Date(model.get("list.date")));
           this.date = model.get("list.date");
           console.log("slot", model);
           console.log(fixedDate);

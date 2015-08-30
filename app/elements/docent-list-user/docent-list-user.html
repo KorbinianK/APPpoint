@@ -179,7 +179,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var user = Parse.User.current();
           this.currentUser = user;
           if (user != null) {
-            this.notifyPath("userName", user.get("email"));
+            var name = user.get("firstName") + " "+ user.get("lastName");
+            this.notifyPath("userName", name);
             // this.notifyPath("currUser", user);
             this.usr = user;
           } else {

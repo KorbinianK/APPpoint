@@ -50,7 +50,7 @@ paper-item-body.paper-item-body-0[two-line] {
 paper-dialog {
   background-color: rgb(255, 255, 255);
   max-width: 80%;
-  width: 60%;
+  /*width: 60%;*/
   /*height: 50% !important;*/
   max-height: 100%;
   position: fixed !important;
