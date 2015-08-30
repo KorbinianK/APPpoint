@@ -38,7 +38,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-      ;
+    }
+
+    paper-dialog {
+      max-width: 450px;
+      top: 40%;
+    }
+
+    paper-dialog > * {
+      padding: 0px !important;
+    }
+
+    paper-dialog span {
+      padding: 16px !important;
     }
 
     .paper-date-picker-dialog {
@@ -321,9 +333,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: 'create-time',
         properties: {
-          selDocent:{
+          selDocent: {
             Type: Object,
-            notify:true
+            notify: true
           },
           errorType: {
             Type: String,
@@ -427,16 +439,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var self = this;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
+
           var query = new Parse.Query(DocentQuery);
+
           var clicker;
           var List = [];
-          var email;
-            var allDocent = {};
-            allDocent['fullName'] = "All Docents";
-            allDocent['status'] = "all";
-            allDocent['object'] = {};
-             List.push(allDocent);
-            query.find().then(function(results) {
+          var allDocent = {};
+          allDocent['fullName'] = "All Docents";
+
+          allDocent['object'] = {
+            status: "all"
+          };
+          List.push(allDocent);
+          query.find().then(function(results) {
 
             for (i in results) {
               var docent = {};
@@ -517,11 +532,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (hours === 24) {
               hours = 0;
             }
-            }else if(getAMPM === "AM") {
-              if(hours === 12){
-                hours = 0;
-              }
+          } else if (getAMPM === "AM") {
+            if (hours === 12) {
+              hours = 0;
             }
+          }
           this.startTime = hours + ":" + minutes;
 
         },
@@ -538,18 +553,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (hours === 24) {
               hours = 0;
             }
-            }else if(getAMPM === "AM") {
-              if(hours === 12){
-                hours = 0;
-              }
+          } else if (getAMPM === "AM") {
+            if (hours === 12) {
+              hours = 0;
             }
+          }
 
           this.endTime = hours + ":" + minutes;
         },
 
         createSlots: function(e) {
+
+
           var selected = this.selDocent;
-          console.log(selected);
+
           var startDate = moment(new Date(this.startDate));
           var endDate = moment(new Date(this.endDate));
 
@@ -558,171 +575,168 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var breakTime = this.break;
           var duration = this.duration;
-          var partTime = breakTime * 1 + duration * 1;
-          var allStart = startTime.split(":");
-          var allEnd = endTime.split(":");
-          var hoursStart = parseInt(allStart[0]);
-          var minutesStart = allStart[1].substring(0, allStart[1].length - 2);
-          var hoursEnd = parseInt(allEnd[0]);
-          var minutesEnd = allEnd[1].substring(0, allEnd[1].length - 2);
-          console.log(startDate, endDate);
+          var monday = !this.mondayChecked;
+          var tuesday = !this.tuesdayChecked;
+          var wednesday = !this.wednesdayChecked;
+          var thursday = !this.thursdayChecked;
+          var friday = !this.fridayChecked;
+          var saturday = !this.saturdayChecked;
+
+          var endWeekday;
+          var selected = [];
+          if (monday) {
+            endWeekday = 1;
+            selected.push(endWeekday);
+          }
+          if (tuesday) {
+            endWeekday = 2;
+            selected.push(endWeekday);
+          }
+          if (wednesday) {
+            endWeekday = 3;
+            selected.push(endWeekday);
+          }
+          if (thursday) {
+            endWeekday = 4;
+            selected.push(endWeekday);
+          }
+          if (friday) {
+            friday = 5;
+            selected.push(endWeekday);
+          }
+          if (saturday) {
+            endWeekday = 6;
+            selected.push(endWeekday);
+          }
+
+          if (startTime === undefined || endTime === undefined || startDate === undefined || endDate === undefined || selected.length === 0) {
+            this.errorType = "Empty fields"
+            this.errorMessage = "Please fill out everything";
+            this.$.warningDialog.toggle();
+          } else if (duration === 0) {
+            this.errorType = "Duration wrong"
+            this.errorMessage = "An appointment cannot be 0 minutes long";
+            this.$.warningDialog.toggle();
+          } else {
+
+            var partTime = breakTime * 1 + duration * 1;
+            var allStart = startTime.split(":");
+            var allEnd = endTime.split(":");
+            var hoursStart = parseInt(allStart[0]);
+            var minutesStart = allStart[1].substring(0, allStart[1].length - 2);
+            var hoursEnd = parseInt(allEnd[0]);
+            var minutesEnd = allEnd[1].substring(0, allEnd[1].length - 2);
+            console.log(startDate, endDate);
 
 
-          if (hoursStart >= hoursEnd) {
-            if (hoursStart === hoursEnd) {
-              if (minutesStart >= minutesEnd) {
-                this.errorType ="Times are set incorrectly"
+            if (hoursStart >= hoursEnd) {
+              if (hoursStart === hoursEnd) {
+                if (minutesStart >= minutesEnd) {
+                  this.errorType = "Times are set incorrectly"
+                  this.errorMessage = "Please check the time settings";
+                  this.$.warningDialog.toggle();
+                  return;
+                }
+              }
+              if (hoursStart > hoursEnd) {
+                this.errorType = "Times are set incorretly"
                 this.errorMessage = "Please check the time settings";
                 this.$.warningDialog.toggle();
                 return;
               }
             }
-            if (hoursStart > hoursEnd) {
-              this.errorType ="Times are set incorretly"
-              this.errorMessage = "Please check the time settings";
-              this.$.warningDialog.toggle();
-              return;
-            }
-          }
 
-          //   var timeDiffer = (60 * hoursEnd + minutesEnd * 1) - (60 * hoursStart + minutesStart * 1);
-          // // console.log("times",hoursEnd,minutesEnd,hoursStart,minutesEnd);
-          //   // console.log("differ",timeDiffer);
-          //   var timeArray = new Array(parseInt(timeDiffer / partTime));
-          // if (partTime > timeDiffer) {
-          //   alert("Bitte Zeitslots anpassen");
-          //   return;
-          // }
-          //
-          // for (var i = 0; i < timeArray.length; i++) {
-            // timeArray[i] = {
-            //   startTime: start.toString(),
-            //   endTime: (start.add(t1)).toString(),
-            //   availability: "true"
-            // }
-          //
-          //   start = start.add(part);
-          // }
+            if (startDate.isBefore(endDate)) {
 
 
-          if (startDate.isBefore(endDate)) {
 
-            var monday = !this.mondayChecked;
-            var tuesday = !this.tuesdayChecked;
-            var wednesday = !this.wednesdayChecked;
-            var thursday = !this.thursdayChecked;
-            var friday = !this.fridayChecked;
-            var saturday = !this.saturdayChecked;
+              if (startDate.diff(endDate, 'days') * -1 >= 366) {
 
-            var endWeekday;
-            var selected = [];
-            if (monday) {
-              endWeekday = 1;
-              selected.push(endWeekday);
-            }
-            if (tuesday) {
-              endWeekday = 2;
-              selected.push(endWeekday);
-            }
-            if (wednesday) {
-              endWeekday = 3;
-              selected.push(endWeekday);
-            }
-            if (thursday) {
-              endWeekday = 4;
-              selected.push(endWeekday);
-            }
-            if (friday) {
-              friday = 5;
-              selected.push(endWeekday);
-            }
-            if (saturday) {
-              endWeekday = 6;
-              selected.push(endWeekday);
-            }
+                this.errorType = "Dates are set incorretly"
+                this.errorMessage = "The time span is longer than one year";
+                this.$.warningDialog.toggle();
+              } else {
 
-            if (startDate.diff(endDate, 'days') * -1 >= 366) {
+                var myDate = startDate;
+                var recurrence = myDate.recur().every(selected).daysOfWeek();
+                recurrence.startDate(startDate);
+                recurrence.endDate(endDate);
+                var allDates = recurrence.all("L");
+                // console.log("allDates", allDates);
 
-              this.errorType = "Dates are set incorretly"
-              this.errorMessage = "The time span is longer than one year";
-              this.$.warningDialog.toggle();
-            } else {
+                for (i in allDates) {
 
-              var myDate = startDate;
-              var recurrence = myDate.recur().every(selected).daysOfWeek();
-              recurrence.startDate(startDate);
-              recurrence.endDate(endDate);
-              var allDates = recurrence.all("L");
-              // console.log("allDates", allDates);
+                  var day = allDates[i];
+                  var dayString = day.substring(0, 2);
+                  var monthString = day.substring(3, 6);
+                  var yearString = day.substring(6, day.length);
+                  console.log("year", yearString);
+                  var fixedStartDate = new moment();
+                  fixedStartDate.set('year', yearString);
+                  fixedStartDate.set('month', monthString);
+                  fixedStartDate.set('date', dayString);
+                  fixedStartDate.set('hour', hoursStart);
+                  fixedStartDate.set('minute', minutesStart);
 
-              for (i in allDates) {
+                  var fixedEndDate = new moment();
+                  fixedEndDate.set('year', yearString);
+                  fixedEndDate.set('month', monthString);
+                  fixedEndDate.set('date', dayString);
+                  fixedEndDate.set('hour', hoursEnd);
+                  fixedEndDate.set('minute', minutesEnd);
 
-                var day = allDates[i];
-                var dayString = day.substring(0, 2);
-                var monthString = day.substring(3, 6);
-                var yearString = day.substring(6, day.length);
-                console.log("year", yearString);
-                var fixedStartDate = new moment();
-                fixedStartDate.set('year', yearString);
-                fixedStartDate.set('month', monthString);
-                fixedStartDate.set('date', dayString);
-                fixedStartDate.set('hour', hoursStart);
-                fixedStartDate.set('minute', minutesStart);
+                  var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
+                  var sT = fixedStartDate;
+                  var timeArray = [];
+                  while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
+                    var slot = {};
+                    var slotStart = sT.clone();
+                    var slotEnd = slotStart.clone().add(duration, "minutes");
+                    slot['startTime'] = moment(slotStart).locale('en', {
+                      months: [
+                        "January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October", "November", "December"
+                      ]
+                    }).format("HH:mm");
+                    slot['endTime'] = moment(slotEnd).locale('en', {
+                      months: [
+                        "January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October", "November", "December"
+                      ]
+                    }).format("HH:mm");
 
-                var fixedEndDate = new moment();
-                fixedEndDate.set('year', yearString);
-                fixedEndDate.set('month', monthString);
-                fixedEndDate.set('date', dayString);
-                fixedEndDate.set('hour', hoursEnd);
-                fixedEndDate.set('minute', minutesEnd);
+                    slot['availability'] = true;
+                    timeArray.push(slot);
+                    sT.add(duration, "minutes").add(breakTime, "minutes");
 
-                var timeSpan = fixedStartDate.diff(fixedEndDate,"minute")*-1;
-                var sT = fixedStartDate;
-                var timeArray= [];
-                while(sT.diff(fixedEndDate,"minute")*-1 >= 0+duration+breakTime){
-                  var slot ={};
-                  var slotStart = sT.clone();
-                  var slotEnd = slotStart.clone().add(duration,"minutes");
-                  slot['startTime'] = moment(slotStart).locale('en', {
-                    months: [
-                      "January", "February", "March", "April", "May", "June", "July",
-                      "August", "September", "October", "November", "December"
-                    ]
-                  }).format("HH:mm");
-                  slot['endTime'] = moment(slotEnd).locale('en', {
-                    months: [
-                      "January", "February", "March", "April", "May", "June", "July",
-                      "August", "September", "October", "November", "December"
-                    ]
-                  }).format("HH:mm");
-;
+                  }
 
-                  slot['availability'] = true;
-                  timeArray.push(slot);
-                  sT.add(duration,"minutes").add(breakTime,"minutes");
-
-                }
-
-                  console.log("sel",this.selDocent);
-                  console.log("start",fixedStartDate);
+                  console.log("sel", this.selDocent);
+                  console.log("start", fixedStartDate);
 
                   var Slots = Parse.Object.extend("Slots");
-                   var slotQuery = new Slots();
-                  //  slotQuery.include("Docent");
-                   slotQuery.set("Docent", this.selDocent);
-                   slotQuery.set("date", fixedStartDate);
+                  var slotQuery = new Slots();
 
-                   slotQuery.set("Slots", timeArray);
-                  //  console.log("warum=", timeArray[i]);
-                   slotQuery.save();
-                 }
-               }
-          } else {
-            this.errorType = "Dates are set incorretly"
-            this.errorMessage = "The Start Date needs to be before the End Date";
-            this.$.warningDialog.toggle();
+                  if (this.selDocent.status === "all") {
+                    console.log("all docents");
+                  } else {
+                    slotQuery.set("Docent", this.selDocent);
+                    slotQuery.set("date", fixedStartDate);
+
+                    slotQuery.set("Slots", timeArray);
+                    slotQuery.save();
+                  }
+
+
+                }
+              }
+            } else {
+              this.errorType = "Dates are set incorretly"
+              this.errorMessage = "The Start Date needs to be before the End Date";
+              this.$.warningDialog.toggle();
+            }
+
           }
-
         }
       });
     })();
