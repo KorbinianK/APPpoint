@@ -324,6 +324,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button flat dialog-dismiss>OK</paper-button>
       </div>
     </paper-dialog>
+
+
+    <paper-dialog id="deleteSlot" modal>
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Docent already have Slots</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+
+      <p>Do you want to delete the old Slots?</p>
+
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+      </div>
+    </paper-dialog>
+
+
+    <paper-dialog id="overwrite" modal>
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Old Slots has been deleted</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+
+      <p>Do you want to add the new Slots?</p>
+
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="createSlots">Ok</paper-button>
+      </div>
+    </paper-dialog>
+
   </template>
 
 
@@ -415,7 +458,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _mondayChanged: function(newValue, oldValue) {
           this.mondayChecked = !this.mondayChecked;
-          console.log("changed", this.mondayChecked);
         },
         _tuesdayChanged: function(newValue, oldValue) {
           this.tuesdayChecked = !this.tuesdayChecked;
@@ -423,7 +465,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         _wednesdayChanged: function(newValue, oldValue) {
           this.wednesdayChecked = !this.wednesdayChecked;
-          console.log("changed", this.wednesdayChecked);
         },
         _thursdayChanged: function(newValue, oldValue) {
           this.thursdayChecked = !this.thursdayChecked;
@@ -463,11 +504,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               docent['fullName'] = docentName;
               docent['object'] = object;
               List.push(docent);
-              // console.log(docentName);
             }
-
             self.docentList = List;
-            console.log("liste", self.docentList);
           });
 
 
@@ -500,7 +538,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             date = date.toDateString();
           }
           startWeekday = date.substring(0, 4);
-          console.log(startWeekday);
           var formattedDate = date.substring(4, date.length);
           this.startDate = formattedDate;
 
@@ -561,10 +598,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           this.endTime = hours + ":" + minutes;
         },
+        deleteOldSlot: function(e) {
+          var doc = this.selDocent;
+          var docentInSlot = Parse.Object.extend("Slots");
+          var docentInSlotQuery = new Parse.Query(docentInSlot);
+          docentInSlotQuery.equalTo("Docent", doc);
+          docentInSlotQuery.find().then(function(results) {
+              for (i in results) {
+              results[i].destroy();
+            }
+          });
 
+          this.$.overwrite.toggle();
+
+        },
         createSlots: function(e) {
 
-
+          var deleteSlot = this.$.deleteSlot;
+          var doc = this.selDocent;
           var selected = this.selDocent;
 
           var startDate = moment(new Date(this.startDate));
@@ -626,7 +677,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var minutesStart = allStart[1].substring(0, allStart[1].length - 2);
             var hoursEnd = parseInt(allEnd[0]);
             var minutesEnd = allEnd[1].substring(0, allEnd[1].length - 2);
-            console.log(startDate, endDate);
 
 
             if (hoursStart >= hoursEnd) {
@@ -657,78 +707,92 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.warningDialog.toggle();
               } else {
 
-                var myDate = startDate;
-                var recurrence = myDate.recur().every(selected).daysOfWeek();
-                recurrence.startDate(startDate);
-                recurrence.endDate(endDate);
-                var allDates = recurrence.all("L");
-                // console.log("allDates", allDates);
+                var Query = Parse.Object.extend("Slots");
+                var queryQuery = new Parse.Query(Query);
+                queryQuery.equalTo("Docent", this.selDocent);
+                queryQuery.find({
+                  success: function(docent) {
+                    if (docent.length > 0) {
+                      deleteSlot.toggle();
+                    } else {
+                      funktion();
 
-                for (i in allDates) {
-
-                  var day = allDates[i];
-                  var dayString = day.substring(0, 2);
-                  var monthString = day.substring(3, 6);
-                  var yearString = day.substring(6, day.length);
-                  console.log("year", yearString);
-                  var fixedStartDate = new moment();
-                  fixedStartDate.set('year', yearString);
-                  fixedStartDate.set('month', monthString);
-                  fixedStartDate.set('date', dayString);
-                  fixedStartDate.set('hour', hoursStart);
-                  fixedStartDate.set('minute', minutesStart);
-
-                  var fixedEndDate = new moment();
-                  fixedEndDate.set('year', yearString);
-                  fixedEndDate.set('month', monthString);
-                  fixedEndDate.set('date', dayString);
-                  fixedEndDate.set('hour', hoursEnd);
-                  fixedEndDate.set('minute', minutesEnd);
-
-                  var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
-                  var sT = fixedStartDate;
-                  var timeArray = [];
-                  while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
-                    var slot = {};
-                    var slotStart = sT.clone();
-                    var slotEnd = slotStart.clone().add(duration, "minutes");
-                    slot['startTime'] = moment(slotStart).locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    }).format("HH:mm");
-                    slot['endTime'] = moment(slotEnd).locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    }).format("HH:mm");
-
-                    slot['availability'] = true;
-                    timeArray.push(slot);
-                    sT.add(duration, "minutes").add(breakTime, "minutes");
-
+                    }
                   }
 
-                  console.log("sel", this.selDocent);
-                  console.log("start", fixedStartDate);
+                });
 
-                  var Slots = Parse.Object.extend("Slots");
-                  var slotQuery = new Slots();
 
-                  if (this.selDocent.status === "all") {
-                    console.log("all docents");
-                  } else {
-                    slotQuery.set("Docent", this.selDocent);
-                    slotQuery.set("date", fixedStartDate);
 
-                    slotQuery.set("Slots", timeArray);
-                    slotQuery.save();
+
+                var funktion = function() {
+                  var myDate = startDate;
+                  var recurrence = myDate.recur().every(selected).daysOfWeek();
+                  recurrence.startDate(startDate);
+                  recurrence.endDate(endDate);
+                  var allDates = recurrence.all("L");
+
+                  for (i in allDates) {
+
+                    var day = allDates[i];
+                    var dayString = day.substring(0, 2);
+                    var monthString = day.substring(3, 6);
+                    var yearString = day.substring(6, day.length);
+                    var fixedStartDate = new moment();
+                    fixedStartDate.set('year', yearString);
+                    fixedStartDate.set('month', monthString);
+                    fixedStartDate.set('date', dayString);
+                    fixedStartDate.set('hour', hoursStart);
+                    fixedStartDate.set('minute', minutesStart);
+
+                    var fixedEndDate = new moment();
+                    fixedEndDate.set('year', yearString);
+                    fixedEndDate.set('month', monthString);
+                    fixedEndDate.set('date', dayString);
+                    fixedEndDate.set('hour', hoursEnd);
+                    fixedEndDate.set('minute', minutesEnd);
+
+                    var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
+                    var sT = fixedStartDate;
+                    var timeArray = [];
+                    while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
+                      var slot = {};
+                      var slotStart = sT.clone();
+                      var slotEnd = slotStart.clone().add(duration, "minutes");
+                      slot['startTime'] = moment(slotStart).locale('en', {
+                        months: [
+                          "January", "February", "March", "April", "May", "June", "July",
+                          "August", "September", "October", "November", "December"
+                        ]
+                      }).format("HH:mm");
+                      slot['endTime'] = moment(slotEnd).locale('en', {
+                        months: [
+                          "January", "February", "March", "April", "May", "June", "July",
+                          "August", "September", "October", "November", "December"
+                        ]
+                      }).format("HH:mm");
+
+                      slot['availability'] = true;
+                      timeArray.push(slot);
+                      sT.add(duration, "minutes").add(breakTime, "minutes");
+
+                    }
+
+                    var Slots = Parse.Object.extend("Slots");
+                    var slotQuery = new Slots();
+                    if (doc.status === "all") {
+                      console.log("all docents");
+                    } else {
+                      slotQuery.set("Docent", doc);
+                      slotQuery.set("date", fixedStartDate);
+                      slotQuery.set("Slots", timeArray);
+                      slotQuery.save();
+                    }
+
+
                   }
+                };
 
-
-                }
               }
             } else {
               this.errorType = "Dates are set incorretly"
