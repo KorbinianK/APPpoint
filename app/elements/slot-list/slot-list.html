@@ -36,19 +36,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
 
-    <!-- <loading-placeholder loading-status="{{loading}}"></loading-placeholder> -->
+    <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
     <template is="dom-repeat" items="{{dateList}}" as="list">
 
       <paper-card>
 
         <div class="card-content">
-
+  <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
           <paper-button on-click="expandSlots">
             <iron-icon icon="{{icon}}"></iron-icon>
 
           </paper-button>
-          <h3>{{list.date}}</h3>
+          <h4>{{list.date}}</h4>
 
           <iron-collapse id="{{getID(list.date)}}">
           <!-- <h3>  test</h3>
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-item class="custom-item" on-click="slotClicked">
                 <paper-item-body three-line class="paper-item-body-0">
                   <paper-ripple fit></paper-ripple>
-
+                  <!-- <span>{{slot.availability}}</span> -->
                   <div hidden="{{!slot.availability}}">
                     <b class="green">Available</b>
                   </div>
@@ -159,13 +159,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         getID: function(date) {
           var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length);
-          console.log(id);
+          // console.log(id);
           return id;
         },
         clickedDocentChanged: function(oldValue, newValue) {
           var self = this;
-          console.log("change", oldValue, newValue);
-
+          // console.log("change", oldValue, newValue);
           Parse.Cloud.run('singleDocent', {
             email: this.clickedDocent.get("email")
           }, {
@@ -190,21 +189,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         "August", "September", "October", "November", "December"
                       ]
                     }).format("ddd, DD MMM YYYY");
-
+                    item["dateObject"] = date;
                     item["slots"] = slots;
                     item["slots"].date = date;
                     item["toggle"] = false;
                     item["toggleIcon"] = false;
                     List.push(item);
+                    // console.log("date",date);
                   }
                   // List.sort();
-                  console.log("List", List);
+                  // console.log("List", List);
                   self.dateList = List;
                   self.loading = !self.loading;
 
                 },
                 error: function(error) {
                   console.log("error");
+
                 }
               });
 
@@ -218,13 +219,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var clickedSlot;
           var retrievedDocentId;
           var fixedDate;
+          var queryDate;
         },
         expandSlots: function(e) {
           var model = e.model;
           var date = model.get("list.date");
           var theID = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length);
         theID = "#"+theID;
-        console.log(this.querySelector(theID));
+        // console.log(this.querySelector(theID));
         this.querySelector(theID).toggle();
         },
         dateClicked: function(e) {
@@ -242,30 +244,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.startTime = model.get("slot.startTime");
           this.endTime = model.get("slot.endTime");
           this.docent = docentName;
-          fixedDate = new moment(new Date(model.get("list.date")));
-          this.date = model.get("list.date");
-          // console.log("slot", model);
-          // console.log(fixedDate);
+          // fixedDate = new moment(new Date(model.get("list.date")));
+          this.date = model.get("list.dateObject");
+          queryDate = this.date;
+          console.log("date", model.get("list.dateObject"));
+
           if (available) {
             model.set("slot.availability", false);
             this.currentUser = this.currUser.get("email");
             this.$.confirmDialog.toggle();
-          } else {
-            model.set("slot.availability", true);
           }
         },
         confirmClick: function(e) {
           var model = e.model;
           var user = Parse.User.current();
-          console.log(user.get("email"));
+          // var queryDate = fixedDate;
+          // queryDate.utc();
+          // queryDate.locale('en', {
+          //   months: [
+          //     "January", "February", "March", "April", "May", "June", "July",
+          //     "August", "September", "October", "November", "December"
+          //   ]
+          // });
+          // queryDate.set('hour', 0);
+          // queryDate.set('minute', 0);
+          // queryDate.set('second', 0);
+          // queryDate.set('millisecond', 0);
+          // queryDate.toISOString();
+
+          console.log("queryDate",queryDate);
           Parse.Cloud.run('createAppointment', {
             docentId: retrievedDocentId,
             userEmail: user.get("email"),
             slotStartTime: this.startTime,
-            slotDate: fixedDate,
+            slotDate: queryDate
           }, {
             success: function(result) {
               console.log("created", result);
+              if(JSON.stringify(result) === JSON.stringify(queryDate) ){
+                console.log("???");
+              }
               // clickedRoom.set("item.status", false);
               // clickedRoom.set("item.email", result.get("email"));
               // clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));

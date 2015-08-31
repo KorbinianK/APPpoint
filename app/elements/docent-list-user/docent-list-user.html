@@ -37,17 +37,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       right: 16px;
     }
 
+    iron-icon:hover {
+      fill: rgb(157, 157, 157);
+      cursor: pointer;
+    }
+
+    paper-item-body.paper-item-body-0 [secondary] {
+      padding-left: 80px;
+    }
+
+    paper-button {
+      min-width: 54px !important;
+    }
+
     .dismiss:hover {
       cursor: pointer;
     }
 
     .dismiss:hover iron-icon {
       fill: rgb(157, 157, 157);
-    }
-
-    iron-icon:hover {
-      fill: rgb(157, 157, 157);
-      cursor: pointer;
     }
   </style>
   <template>
@@ -73,53 +81,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
-        <!-- <div hidden="{{slotsDismissed}}"> -->
-
-        <!-- <paper-card class="dismiss" on-tap="dismissSlots">
-            <paper-ripple fit></paper-ripple>
-            <div class="card-content">
-              <span>Hide Slots</span>
-              <iron-icon icon="arrow-drop-up" on-tap="dismissSlots"></iron-icon>
-            </div>
-
-          </paper-card> -->
-
-        <!-- </div> -->
 
         <div id="dlist">
           <template is="dom-repeat" items="{{docentList}}">
 
 
-            <paper-item>
-              <paper-button on-click="toggleTest">
-                <iron-icon icon="expand-more"></iron-icon>
 
-              </paper-button>
-              <paper-item-body three-line class="paper-item-body-0">
-                <!-- <paper-ripple fit></paper-ripple> -->
-                <div>
+            <paper-item-body three-line class="paper-item-body-0">
+              <!-- <paper-ripple fit></paper-ripple> -->
+              <div>
+                <paper-item>
+                  <paper-button on-click="toggleDocent">
+                    <iron-icon id="{{computeID1(item.firstName, item.lastName)}}" icon="{{icon}}"></iron-icon>
 
-                  <h4>
+                  </paper-button>
+                  <h3>
                     <span>{{item.lastName}}</span>
                     <span>{{item.firstName}}</span>
-                  </h4>
+                  </h3>
 
-                </div>
-                <div secondary><b>Email:</b>
-                  <span>{{item.email}}</span>
-                </div>
-                <div secondary><b>Room:</b>
-                  <span>{{item.room}}</span>
-                </div>
+              </div>
+              <div secondary><b>Email:</b>
+                <span>{{item.email}}</span>
+              </div>
+              <div secondary><b>Room:</b>
+                <span>{{item.room}}</span>
+              </div>
 
-                <iron-collapse id="{{computeID(item.firstName, item.lastName)}}">
-
+              <iron-collapse id="{{computeID2(item.firstName, item.lastName)}}">
+                <div>
                   <slot-list curr-user="{{usr}}" clicked-docent="{{clickDocent}}"></slot-list>
+                </div>
+              </iron-collapse>
+            </paper-item-body>
 
-                </iron-collapse>
-              </paper-item-body>
-
-              </paper-icon-item>
+            </paper-icon-item>
 
           </template>
         </div>
@@ -135,10 +131,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: "docent-list-user",
         properties: {
+          hidden: {
+            type: Boolean,
+            value: true
+          },
           clickDocentID: {
             type: String,
           },
-
+          icon: {
+            type: String,
+            value: "expand-more"
+          },
           slotsDismissed: {
             Type: Boolean,
             value: true
@@ -168,33 +171,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             notify: true
           }
         },
-        computeID: function(first, last) {
+        computeID1: function(first, last) {
+          var id = first.toLowerCase() + last.toLowerCase() + "icon";
+          return id;
+        },
+        computeID2: function(first, last) {
           var id = first.toLowerCase() + last.toLowerCase();
-        return id;
-      },
-        initializeDefault: function() {
-
-          this.storage = {};
-
-          console.log(this.storage);
+          return id;
         },
-        // use path set api to propagate changes to localstorage
-        makeModifications: function() {
 
-          var docent = teacher;
-          this.storage[docent] = teacherMail;
-          console.log("a", this.storage);
-          // this.set('storage.docent', docent);
-        },
         dismissSlots: function() {
           this.slotsDismissed = !this.slotsDismissed;
         },
-        toggleTest: function(e) {
+        toggleDocent: function(e) {
+          // if(this.hidden === true){
+          //
+          // }
+          // this.hidden = !this.hidden;
           var model = e.model;
-          var id = model.get("item.firstName").toLowerCase()+model.get("item.lastName").toLowerCase();
-          console.log(id);
+          var theID = model.get("item.firstName").toLowerCase() + model.get("item.lastName").toLowerCase();
+          // console.log(model);
 
-          document.querySelector('#'+id).toggle();
+          // $("icon[value='expand-more']").attr("icon", "expand-less");
+          // $("icon[value='expand-more']").closest('iron-collapse').toggle();
+          // console.log(toggleAll);
+
 
           var user = Parse.User.current();
           if (user === null) {
@@ -207,13 +208,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.clickDocent = cDocent;
             this.clickedDocentID = cDocent.get("firstName");
             // document.querySelector("#" + this.clickedDocentID).toggle();
-          console.log(this.clickedDocentID);
+            // console.log(this.clickedDocentID);
           }
 
           teacherFirstName = model.get("item.firstName");
           teacherLastName = model.get("item.lastname");
           teacherMail = model.get("item.email");
+          if (this.querySelector(".iron-collapse-opened") != null) {
+            var found = this.querySelector(".iron-collapse-opened");
+            var foundID = $(found).attr('id');
 
+
+
+            if (foundID != theID) {
+              this.querySelector(".iron-collapse-opened").toggle();
+              var ico = Polymer.dom(this.root).querySelector('#' + foundID + "icon");
+              if (ico != undefined) {
+                ico.setAttribute("icon", "expand-more");
+              }
+            }
+            this.querySelector('#' + theID).toggle();
+
+          } else {
+            this.querySelector('#' + theID).toggle();
+          }
+
+          var iconstatus = this.querySelector('#' + theID + "icon");
+          iconstatus = iconstatus.getAttribute("icon");
+          if (iconstatus === "expand-less") {
+            console.log("less");
+            this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-more");
+          } else {
+            console.log("more");
+            this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-less");
+          }
 
         },
         ready: function() {
@@ -239,6 +267,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             success: function(result) {
 
               self.loading = !self.loading;
+
+
+
               self.docentList = result;
               console.log(result);
             },

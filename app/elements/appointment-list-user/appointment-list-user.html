@@ -15,25 +15,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
+    paper-card {
+      width: 100%;
+      position: relative;
+    }
+    paper-item:hover{
+      cursor:pointer;
+    }
   </style>
   <template>
     <template is="dom-repeat" items="{{appointList}}">
 
-      <paper-item on-tap="docentClick">
 
-        <paper-item-body two-line class="paper-item-body-0">
-          <div>
-            <span>{{item.date}}</span>
-          </div>
-          <div secondary>
-            <span>{{item.time}}</span>
-          </div>
+      <paper-card>
+        <div class="card-content">
+          <paper-item on-tap="appointClick">
+            <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
+              <paper-ripple></paper-ripple>
+            <paper-item-body two-line class="paper-item-body-0">
+              <div>
+              <span>{{item.date}}</span>
+              </div>
+              <div secondary>
+                Docent: <span>{{item.docentName}}</span>
+              </div>
+              <div secondary>
+                From: <span>{{item.startTime}}</span> Until:<span>{{item.endTime}}</span>
+              </div>
 
-        </paper-item-body>
+            </paper-item-body>
 
-        </paper-icon-item>
-
-
+            </paper-icon-item>
+        </div>
+      </paper-card>
     </template>
   </template>
   <script>
@@ -46,7 +61,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var Appointment = Parse.Object.extend("Appointment");
           var query = new Parse.Query(Appointment);
           var currentUser = Parse.User.current();
-          query.equalTo("user", currentUser.get("username"));
+          query.include("Docent");
+          query.equalTo("user", currentUser.get("email"));
 
           //where equal to clicked teacher!
           query.find({
@@ -56,10 +72,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               for (i in results) {
                 var item = {};
                 var object = results[i];
+                var date = object.get('date');
+                  var docent = object.get('docent');
+                item["date"] = moment(date).locale('en', {
+                  months: [
+                    "January", "February", "March", "April", "May", "June", "July",
+                    "August", "September", "October", "November", "December"
+                  ]
+                }).format("ddd, DD MMM YYYY");
 
-                item['date'] = object.get('date');
-                item['time'] = object.get('time');
-
+                item['startTime'] = object.get('startTime');
+                item['endTime'] = object.get('endTime');
+                item['docent'] = docent;
+                console.log(docent);
+                item['docentName'] = docent.get('lastName')+" "+docent.get('firstName');
                 List.push(item);
                 console.log("Item");
 
@@ -71,6 +97,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               alert("error");
             }
           });
+        },
+        appointClick: function(e) {
+
         }
 
 

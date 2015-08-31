@@ -331,13 +331,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Docent already have Slots</h2>
+            <h2>Docent already has Slots</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
 
 
-      <p>Do you want to delete the old Slots?</p>
+
+              <div>
+                <span>Do you want to delete the old Slots?</span>
 
 
       <div class="buttons">
@@ -777,14 +779,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       sT.add(duration, "minutes").add(breakTime, "minutes");
 
                     }
-
+                    var queryDate = fixedStartDate;
+                    queryDate.utc();
+                  queryDate.set('hour', 0);
+                  queryDate.set('minute', 0);
+                  queryDate.set('second', 0);
+                  queryDate.set('millisecond', 0);
+                    queryDate.toISOString();
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();
                     if (doc.status === "all") {
                       console.log("all docents");
                     } else {
                       slotQuery.set("Docent", doc);
-                      slotQuery.set("date", fixedStartDate);
+                      slotQuery.set("date", queryDate);
                       slotQuery.set("Slots", timeArray);
                       slotQuery.save();
                     }
