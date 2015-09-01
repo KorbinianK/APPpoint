@@ -98,6 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <h3>
                     <span>{{item.lastName}}</span>
                     <span>{{item.firstName}}</span>
+                    <span>{{item.empty}}</span>
                   </h3>
 
               </div>
@@ -107,12 +108,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div secondary><b>Room:</b>
                 <span>{{item.room}}</span>
               </div>
+              <div>
 
-              <iron-collapse id="{{computeID2(item.firstName, item.lastName)}}">
-                <div>
+                <iron-collapse id="{{computeID2(item.firstName, item.lastName)}}">
+
                   <slot-list curr-user="{{usr}}" clicked-docent="{{clickDocent}}"></slot-list>
-                </div>
-              </iron-collapse>
+
+                </iron-collapse>
+              </div>
             </paper-item-body>
 
             </paper-icon-item>
@@ -133,7 +136,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         properties: {
           hidden: {
             type: Boolean,
-            value: true
+            value: true,
+            notify: true
           },
           clickDocentID: {
             type: String,
@@ -184,17 +188,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.slotsDismissed = !this.slotsDismissed;
         },
         toggleDocent: function(e) {
-          // if(this.hidden === true){
-          //
-          // }
-          // this.hidden = !this.hidden;
+
           var model = e.model;
           var theID = model.get("item.firstName").toLowerCase() + model.get("item.lastName").toLowerCase();
-          // console.log(model);
 
-          // $("icon[value='expand-more']").attr("icon", "expand-less");
-          // $("icon[value='expand-more']").closest('iron-collapse').toggle();
-          // console.log(toggleAll);
 
 
           var user = Parse.User.current();
@@ -203,12 +200,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           } else {
             this.slotsDismissed = false;
-            // var model = e.model;
+
             var cDocent = model.get("item.docentObject");
+
             this.clickDocent = cDocent;
             this.clickedDocentID = cDocent.get("firstName");
-            // document.querySelector("#" + this.clickedDocentID).toggle();
-            // console.log(this.clickedDocentID);
+
           }
 
           teacherFirstName = model.get("item.firstName");
@@ -217,8 +214,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (this.querySelector(".iron-collapse-opened") != null) {
             var found = this.querySelector(".iron-collapse-opened");
             var foundID = $(found).attr('id');
-
-
 
             if (foundID != theID) {
               this.querySelector(".iron-collapse-opened").toggle();

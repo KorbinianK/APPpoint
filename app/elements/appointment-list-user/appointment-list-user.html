@@ -19,10 +19,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-card {
       width: 100%;
       position: relative;
+      padding: 5px;
     }
     paper-item:hover{
       cursor:pointer;
     }
+
+    iron-icon {
+      fill: rgb(80, 80, 80);
+    }
+
+    iron-icon:hover {
+      fill: rgb(157, 157, 157);
+      cursor: pointer;
+    }
+
   </style>
   <template>
     <template is="dom-repeat" items="{{appointList}}">
@@ -31,9 +42,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-card>
         <div class="card-content">
           <paper-item on-tap="appointClick">
-            <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
-              <paper-ripple></paper-ripple>
+
             <paper-item-body two-line class="paper-item-body-0">
+              <paper-ripple fit></paper-ripple>
               <div>
               <span>{{item.date}}</span>
               </div>
@@ -45,8 +56,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
 
             </paper-item-body>
-
-            </paper-icon-item>
+<iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
+            </paper-item>
         </div>
       </paper-card>
     </template>
@@ -61,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var Appointment = Parse.Object.extend("Appointment");
           var query = new Parse.Query(Appointment);
           var currentUser = Parse.User.current();
-          query.include("Docent");
+          query.include("docent");
           query.equalTo("user", currentUser.get("email"));
 
           //where equal to clicked teacher!
@@ -73,23 +84,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var item = {};
                 var object = results[i];
                 var date = object.get('date');
-                  var docent = object.get('docent');
-                item["date"] = moment(date).locale('en', {
-                  months: [
-                    "January", "February", "March", "April", "May", "June", "July",
-                    "August", "September", "October", "November", "December"
-                  ]
-                }).format("ddd, DD MMM YYYY");
+                date =  moment(date).locale('en', {
+                 months: [
+                   "January", "February", "March", "April", "May", "June", "July",
+                   "August", "September", "October", "November", "December"
+                 ]
+               }).format("ddd, DD MMM YYYY");
 
+                  var docent = object.get('docent');
+                item["date"] =date;
                 item['startTime'] = object.get('startTime');
                 item['endTime'] = object.get('endTime');
-                item['docent'] = docent;
-                console.log(docent);
+                item['docent'] = docent.get('firstName');
+                console.log("docent",docent);
                 item['docentName'] = docent.get('lastName')+" "+docent.get('firstName');
                 List.push(item);
-                console.log("Item");
 
               }
+
+              function sortByKey(array, key) {
+                return array.sort(function (a, b) {
+                  var x = a[key];
+                  console.log(x);
+
+                  var y = b[key];
+                  console.log(y);
+                  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                });
+              }
+              sortByKey(List,"startTime");
               self.appointList = List;
 
             },
