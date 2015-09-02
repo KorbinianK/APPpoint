@@ -338,14 +338,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-              <div>
-                <span>Do you want to delete the old Slots?</span>
+      <div>
+        <span>Do you want to delete the old Slots?</span>
 
 
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
-      </div>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+        </div>
     </paper-dialog>
 
 
@@ -569,10 +569,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (getAMPM === "PM") {
             var hours = hours + 12;
             if (hours === 24) {
-              hours = 0;
+              hours = 12;
             }
-          } else if (getAMPM === "AM") {
-            if (hours === 12) {
+          }else if(getAMPM ==="AM"){
+            if(hours === 12){
               hours = 0;
             }
           }
@@ -590,11 +590,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (getAMPM === "PM") {
             var hours = hours + 12;
             if (hours === 24) {
-              hours = 0;
-            }
-          } else if (getAMPM === "AM") {
-            if (hours === 12) {
-              hours = 0;
+              hours = 12;
             }
           }
 
@@ -606,7 +602,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var docentInSlotQuery = new Parse.Query(docentInSlot);
           docentInSlotQuery.equalTo("Docent", doc);
           docentInSlotQuery.find().then(function(results) {
-              for (i in results) {
+            for (i in results) {
               results[i].destroy();
             }
           });
@@ -746,14 +742,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     fixedStartDate.set('date', dayString);
                     fixedStartDate.set('hour', hoursStart);
                     fixedStartDate.set('minute', minutesStart);
-
+                    console.log("startdate", fixedStartDate);
                     var fixedEndDate = new moment();
                     fixedEndDate.set('year', yearString);
                     fixedEndDate.set('month', monthString);
                     fixedEndDate.set('date', dayString);
                     fixedEndDate.set('hour', hoursEnd);
                     fixedEndDate.set('minute', minutesEnd);
-
+                    console.log("enddate", fixedEndDate);
                     var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
                     var sT = fixedStartDate;
                     var timeArray = [];
@@ -780,12 +776,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     }
                     var queryDate = fixedStartDate;
-                    queryDate.utc();
-                  queryDate.set('hour', 0);
-                  queryDate.set('minute', 0);
-                  queryDate.set('second', 0);
-                  queryDate.set('millisecond', 0);
+                    // queryDate.utc();
+                    queryDate.set('hour', 0);
+                    queryDate.set('minute', 0);
+                    queryDate.set('second', 0);
+                    queryDate.set('millisecond', 0);
                     queryDate.toISOString();
+                    console.log("queryDate", queryDate);
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();
                     if (doc.status === "all") {
