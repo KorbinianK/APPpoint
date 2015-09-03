@@ -1,5 +1,7 @@
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
+var moment = require('cloud/moment.js');
+var moment = require("cloud/moment-timezone-with-data.js");
 
 Parse.Cloud.define("roomList", function (request, response) {
   var query = new Parse.Query("Room");
@@ -111,12 +113,57 @@ Parse.Cloud.define("docentList", function (request, response) {
 function sortByKey(array, key) {
   return array.sort(function (a, b) {
     var x = a[key];
-    console.log(x);
+    // console.log(x);
 
     var y = b[key];
-    console.log(y);
+    // console.log(y);
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
   });
+}
+
+function objSort() {
+    var args = arguments,
+        array = args[0],
+        case_sensitive, keys_length, key, desc, a, b, i;
+
+    if (typeof arguments[arguments.length - 1] === 'boolean') {
+        case_sensitive = arguments[arguments.length - 1];
+        keys_length = arguments.length - 1;
+    } else {
+        case_sensitive = false;
+        keys_length = arguments.length;
+    }
+
+    return array.sort(function (obj1, obj2) {
+        for (i = 1; i < keys_length; i++) {
+            key = args[i];
+            if (typeof key !== 'string') {
+                desc = key[1];
+                key = key[0];
+                a = obj1[args[i][0]];
+                b = obj2[args[i][0]];
+            } else {
+                desc = false;
+                a = obj1[args[i]];
+                b = obj2[args[i]];
+            }
+
+            if (case_sensitive === false && typeof a === 'string') {
+                a = a.toLowerCase();
+                b = b.toLowerCase();
+            }
+
+            if (! desc) {
+                if (a < b) return -1;
+                if (a > b) return 1;
+            } else {
+                if (a > b) return -1;
+                if (a < b) return 1;
+            }
+        }
+        return 0;
+    });
+
 }
 
 Parse.Cloud.define("setDocentToRoom", function (request, response) {
@@ -217,7 +264,7 @@ Parse.Cloud.define("dateList", function (request, response) {
 
 
 Parse.Cloud.define("createAppointment", function (request, response) {
-  var moment = require('moment');
+
   var userEmail = request.params.userEmail;
   var docentId = request.params.docentId;
   var slotStartTime = request.params.slotStartTime;
@@ -280,18 +327,13 @@ Parse.Cloud.define("createAppointment", function (request, response) {
                     });
                   },
                   error: function (error) {
-                    alert("Error: " + error.code + " " + error.message);
+                    alert("Error: " + error.code + ", " + error.message);
                   }
                 });
               }
 
             }
           }
-
-
-
-
-          // response.success(slots);
         },
         error: function () {
           response.error("query failed");
@@ -305,3 +347,49 @@ Parse.Cloud.define("createAppointment", function (request, response) {
   });
 
 });
+
+  Parse.Cloud.define("appointmentList", function (request, response) {
+    var moment = require('cloud/moment.js');
+    var moment = require("cloud/moment-timezone-with-data.js");
+    var query = new Parse.Query("Appointment");
+    query.include("docent");
+    query.equalTo("user", request.params.user);
+    query.find({
+      success: function (results) {
+        var List = [];
+        for (i in results) {
+          var item = {};
+          var object = results[i];
+          var date = object.get('date');
+          console.log(date);
+          // date.locale('en', {
+          //   months: [
+          //     "January", "February", "March", "April", "May", "June", "July",
+          //     "August", "September", "October", "November", "December"
+          //   ]
+          // }).format("ddd, DD MMM YYYY Europe/Berlin");
+          var docent = object.get('docent');
+          item["date"] = date;
+          item['startTime'] = object.get('startTime');
+          item['endTime'] = object.get('endTime');
+          item['docent'] = docent.get('firstName');
+          // item["d"] = moment(date).locale('en', {
+          //   months: [
+          //     "January", "February", "March", "April", "May", "June", "July",
+          //     "August", "September", "October", "November", "December"
+          //   ]
+          // }).format("DD MMM YYYY");
+          item['docentName'] = docent.get('lastName') + " " + docent.get('firstName');
+          List.push(item);
+
+        }
+        objSort(List,'d','endTime');
+        response.success(List);
+
+      },
+      error: function () {
+        console.log("d");
+        response.error("query failed");
+      }
+    });
+  });

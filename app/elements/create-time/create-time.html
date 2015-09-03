@@ -10,7 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script src="../../../bower_components/moment/moment.js"></script>
+<script src="../../bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
 <script src="../../bower_components/moment-recur/moment-recur.js"></script>
+
 <dom-module id="create-time">
   <style>
     :host {
@@ -480,9 +482,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
 
           var self = this;
+        var origStartDate, origEndDate;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
-
+          moment.tz.add("Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00");
           var query = new Parse.Query(DocentQuery);
 
           var clicker;
@@ -539,9 +542,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var date = new Date();
             date = date.toDateString();
           }
+              origStartDate = date;
           startWeekday = date.substring(0, 4);
           var formattedDate = date.substring(4, date.length);
           this.startDate = formattedDate;
+
 
         },
         setEnd: function() {
@@ -552,6 +557,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var date = new Date();
             date = date.toDateString();
           }
+            origEndDate = date;
           var formattedDate = date.substring(4, date.length);
           this.endDate = formattedDate;
 
@@ -616,9 +622,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var doc = this.selDocent;
           var selected = this.selDocent;
 
-          var startDate = moment(new Date(this.startDate));
-          var endDate = moment(new Date(this.endDate));
-
+          var startDate = new Date(origStartDate);
+          startDate = moment(startDate);
+          startDate.tz("Europe/Berlin").format();
+            console.log("start", startDate);
+          var endDate = new Date(origEndDate);
+          endDate = moment(endDate);
+          endDate.tz("Europe/Berlin").format();
+          console.log("end",endDate);
           var startTime = this.startTime;
           var endTime = this.endTime;
 
@@ -720,9 +731,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 });
 
-
-
-
                 var funktion = function() {
                   var myDate = startDate;
                   var recurrence = myDate.recur().every(selected).daysOfWeek();
@@ -736,34 +744,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var dayString = day.substring(0, 2);
                     var monthString = day.substring(3, 6);
                     var yearString = day.substring(6, day.length);
-                    var fixedStartDate = new moment();
+                    var fixedStartDate = moment();
                     fixedStartDate.set('year', yearString);
                     fixedStartDate.set('month', monthString);
                     fixedStartDate.set('date', dayString);
                     fixedStartDate.set('hour', hoursStart);
                     fixedStartDate.set('minute', minutesStart);
-                    console.log("startdate", fixedStartDate);
-                    var fixedEndDate = new moment();
+                    fixedStartDate.tz("Europe/Berlin").format();
+                    // console.log("startdate", fixedStartDate);
+                    var fixedEndDate = moment();
                     fixedEndDate.set('year', yearString);
                     fixedEndDate.set('month', monthString);
                     fixedEndDate.set('date', dayString);
                     fixedEndDate.set('hour', hoursEnd);
                     fixedEndDate.set('minute', minutesEnd);
-                    console.log("enddate", fixedEndDate);
+                    fixedEndDate.tz("Europe/Berlin").format();
+                    // console.log("enddate", fixedEndDate);
                     var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
                     var sT = fixedStartDate;
                     var timeArray = [];
                     while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
                       var slot = {};
                       var slotStart = sT.clone();
+
                       var slotEnd = slotStart.clone().add(duration, "minutes");
-                      slot['startTime'] = moment(slotStart).locale('en', {
+                      slot['startTime'] = slotStart.locale('en', {
                         months: [
                           "January", "February", "March", "April", "May", "June", "July",
                           "August", "September", "October", "November", "December"
                         ]
                       }).format("HH:mm");
-                      slot['endTime'] = moment(slotEnd).locale('en', {
+                      slot['endTime'] = slotEnd.locale('en', {
                         months: [
                           "January", "February", "March", "April", "May", "June", "July",
                           "August", "September", "October", "November", "December"
@@ -781,7 +792,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
                     queryDate.set('millisecond', 0);
-                    queryDate.toISOString();
+                      queryDate.tz("Europe/Berlin").format();
+                    queryDate.locale('en', {
+                      months: [
+                        "January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October", "November", "December"
+                      ]
+                    });
+
                     console.log("queryDate", queryDate);
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();

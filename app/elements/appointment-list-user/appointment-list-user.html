@@ -9,6 +9,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<script src="../../../bower_components/moment/moment.js"></script>
+<script src="../../bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
+<script src="../../bower_components/moment-recur/moment-recur.js"></script>
 
 <dom-module id="appointment-list-user">
   <style>
@@ -21,8 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       position: relative;
       padding: 5px;
     }
-    paper-item:hover{
-      cursor:pointer;
+
+    paper-item:hover {
+      cursor: pointer;
     }
 
     iron-icon {
@@ -33,7 +37,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       fill: rgb(157, 157, 157);
       cursor: pointer;
     }
-
   </style>
   <template>
     <template is="dom-repeat" items="{{appointList}}">
@@ -46,18 +49,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
               <div>
-              <span>{{item.date}}</span>
+                <span>{{item.docentName}}</span>
               </div>
               <div secondary>
-                Docent: <span>{{item.docentName}}</span>
+                Date:
+                <span>{{item.date}}</span>
               </div>
               <div secondary>
-                From: <span>{{item.startTime}}</span> Until:<span>{{item.endTime}}</span>
+                From:
+                <span>{{item.startTime}}</span> Until:
+                <span>{{item.endTime}}</span>
               </div>
 
             </paper-item-body>
-<iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
-            </paper-item>
+            <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
+          </paper-item>
         </div>
       </paper-card>
     </template>
@@ -69,56 +75,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ready: function() {
           var self = this;
-          var Appointment = Parse.Object.extend("Appointment");
-          var query = new Parse.Query(Appointment);
           var currentUser = Parse.User.current();
-          query.include("docent");
-          query.equalTo("user", currentUser.get("email"));
 
-          //where equal to clicked teacher!
-          query.find({
+          Parse.Cloud.run('appointmentList', {
+            user:  currentUser.get("email")
+          }, {
             success: function(results) {
               var List = [];
 
-              for (i in results) {
-                var item = {};
-                var object = results[i];
-                var date = object.get('date');
-                date =  moment(date).locale('en', {
-                 months: [
-                   "January", "February", "March", "April", "May", "June", "July",
-                   "August", "September", "October", "November", "December"
-                 ]
-               }).format("ddd, DD MMM YYYY");
 
-                  var docent = object.get('docent');
-                item["date"] =date;
-                item['startTime'] = object.get('startTime');
-                item['endTime'] = object.get('endTime');
-                item['docent'] = docent.get('firstName');
-                console.log("docent",docent);
-                item['docentName'] = docent.get('lastName')+" "+docent.get('firstName');
-                List.push(item);
 
-              }
+            for(i in results){
+              var object = results[i];
+              var date = object.date;
 
-              function sortByKey(array, key) {
-                return array.sort(function (a, b) {
-                  var x = a[key];
-                  console.log(x);
-
-                  var y = b[key];
-                  console.log(y);
-                  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                });
-              }
-              sortByKey(List,"startTime");
-              self.appointList = List;
-
-            },
-            error: function(error) {
-              alert("error");
+              date = moment(date);
+              date.locale('en', {
+                months: [
+                  "January", "February", "March", "April", "May", "June", "July",
+                  "August", "September", "October", "November", "December"
+                ]
+              });
+              date = date.format("ddd, DD MMM YYYY");
+              results[i].date = date;
+              console.log("date",date);
             }
+              self.appointList = results;
+              console.log(results);
+            },
+            error: function(error) {}
           });
         },
         appointClick: function(e) {

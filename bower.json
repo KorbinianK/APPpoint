@@ -6,6 +6,7 @@
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
     "moment": "~2.10.6",
     "moment-recur": "~1.0.5",
+    "moment-timezone": "~0.4.0",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
     "page": "visionmedia/page.js#~1.6.3",
     "paper-card": "PolymerElements/paper-card#~1.0.3",
