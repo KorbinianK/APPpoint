@@ -13,72 +13,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   window.addEventListener('WebComponentsReady', function() {
 
 
-
-    // We use Page.js for routing. This is a Micro
-    // client-side router inspired by the Express router
-    // More info: https://visionmedia.github.io/page.js/
-    page('/', function () {
+    page('/', function() {
       app.route = 'a-home';
     });
 
-    page('user.html/', function () {
-      app.route = 'u-home';
-    });
 
-    page('/uappc', function () {
+    page('/uappc', function() {
       app.route = 'u-create-appointment';
     });
 
-    page('/uappov', function () {
+    page('/uappov', function() {
       app.route = 'u-appointment-overview';
     });
 
-    page('/amanagep', function () {
+    page('/amanagep', function() {
       app.route = 'a-manage-profil';
     });
 
-    page('/ulogin', function () {
-        app.route = 'u-login';
+    page('/ulogin', function() {
+      app.route = 'u-login';
     });
 
 
     // Admin Pages
 
-    page('/aoverviewd', function () {
+    page('/aoverviewd', function() {
       app.route = 'a-overview-docent';
     });
 
-    page('/aaddd', function () {
+    page('/aaddd', function() {
       app.route = 'a-add-docent';
     });
 
-    page('/amanaged', function () {
+    page('/amanaged', function() {
       app.route = 'a-manage-docent';
     });
 
-    page('/aoverviewa', function () {
+    page('/aoverviewa', function() {
       app.route = 'a-overview-appointments';
     });
 
-    page('/amanagea', function () {
+    page('/amanagea', function() {
       app.route = 'a-manage-appointments';
     });
 
-    page('/amanagep', function () {
+    page('/amanagep', function() {
       app.route = 'a-manage-profil';
     });
 
-    page('/amanager', function () {
+    page('/amanager', function() {
       app.route = 'a-manage-rooms';
     });
 
-    page('/acreater', function () {
+    page('/acreater', function() {
       app.route = 'a-create-rooms';
     });
 
 
-    // User Pages
+    // Docent Pages
 
+
+    page('/dappov', function() {
+      app.route = 'd-appointments-overview';
+    });
 
     // add #! before urls
     page({

@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../../bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
 <script src="../../bower_components/moment-recur/moment-recur.js"></script>
 
-<dom-module id="appointment-list-user">
+<dom-module id="appointment-list-docent">
   <style>
     :host {
       display: block;
@@ -39,9 +39,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
+
     <template is="dom-repeat" items="{{appointList}}">
-
-
       <paper-card>
         <div class="card-content">
           <paper-item on-tap="appointClick">
@@ -49,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
               <div>
-                <span>{{item.docentName}}</span>
+                <span>{{item.userName}}</span>
               </div>
               <div secondary>
                 Date:
@@ -69,46 +68,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </template>
   <script>
-    (function() {
-      Polymer({
-        is: 'appointment-list-user',
+  (function() {
+    Polymer({
+      is: 'appointment-list-docent',
 
-        ready: function() {
-          var self = this;
-          var currentUser = Parse.User.current();
-
-          Parse.Cloud.run('appointmentList', {
-            id: currentUser.id
-          }, {
-            success: function(results) {
-              // var List = [];
-              for (i in results) {
-                var object = results[i];
-                var date = object.date;
-
-                date = moment(date);
-                date.locale('en', {
-                  months: [
-                    "January", "February", "March", "April", "May", "June", "July",
-                    "August", "September", "October", "November", "December"
-                  ]
-                });
-                date = date.format("ddd, DD MMM YYYY");
-                results[i].date = date;
-                console.log("date", date);
-              }
-              self.appointList = results;
-              console.log(results);
-            },
-            error: function(error) {}
-          });
-        },
-        appointClick: function(e) {
-
+      properties: {
+        foo: {
+          type: String,
+          value: 'bar',
+          notify: true
         }
+      },
+      ready: function(){
+        var self = this;
+        var currentUser = Parse.User.current();
+        console.log(currentUser.id);
 
+        Parse.Cloud.run('appointmentListDocent', {
+          id:  currentUser.id
+        }, {
+          success: function(results) {
+              console.log("result",results);
+            // var List = [];
+          for(i in results){
+            var object = results[i];
+            var date = object.date;
 
-      });
-    })();
+            date = moment(date);
+            date.locale('en', {
+              months: [
+                "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"
+              ]
+            });
+            date = date.format("ddd, DD MMM YYYY");
+            results[i].date = date;
+            console.log("date",date);
+          }
+            self.appointList = results;
+
+          },
+          error: function(error) {}
+        });
+      }
+    });
+  })();
   </script>
 </dom-module>
