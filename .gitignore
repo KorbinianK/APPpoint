@@ -1,6 +1,9 @@
 node_modules
 dist
-bower_components
+bower_components/*
+!bower_components/polymer-themes/
+bower_components/polymer-themes/*
+!bower_components/polymer-themes/candy.html
 .tmp
 APPoint
 CloudCode/public

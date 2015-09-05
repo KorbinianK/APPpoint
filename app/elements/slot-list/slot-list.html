@@ -30,12 +30,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding-left: 94px;
       position: relative;
     }
-    paper-dialog{
+
+    paper-dialog {
       max-width: 600px;
     }
 
     .pointer {
-      cursor:pointer;
+      cursor: pointer;
     }
   </style>
   <template>
@@ -48,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-card>
 
         <div class="card-content">
-<!-- <paper-material elevation="1"> -->
+          <!-- <paper-material elevation="1"> -->
 
 
           <paper-button on-click="expandSlots">
@@ -85,12 +86,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-item>
 
 
+
+
             </template>
+
           </iron-collapse>
           </paper-material>
         </div>
       </paper-card>
     </template>
+
     <paper-dialog id="confirmDialog" modal>
 
       <paper-toolbar>
@@ -127,7 +132,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button flat dialog-confirm on-click="confirmClick">Confirm</paper-button>
       </div>
     </paper-dialog>
+    <paper-item class="custom-item" hidden="{{slots}}">
+      <paper-item-body three-line class="pointer paper-item-body-0">
 
+
+        <div>
+          <h3>This docent has no available slots</h3>
+        </div>
+      </paper-item-body>
+    </paper-item>
 
   </template>
   <script>
@@ -139,6 +152,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           currUser: {
             type: Object
           },
+          slots: {
+            type: Boolean,
+            value: false,
+            notify: true
+          },
           currentUser: String,
           clickedDocent: {
             type: Object,
@@ -147,7 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           loading: {
             type: Boolean,
             value: false,
-            notify:true
+            notify: true
           },
           icon: {
             type: String,
@@ -169,29 +187,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         getID: function(date) {
           var doc = this.clickedDocent.get("firstName").toLowerCase();
-          var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase()
-           + date.substring(12, date.length) + doc;
+          var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length) + doc;
           // console.log(id);
           return id;
         },
         computeID1: function(date) {
-            var doc = this.clickedDocent.get("firstName").toLowerCase();
-            var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase()
-             + date.substring(12, date.length) + doc + "icon";
+          var doc = this.clickedDocent.get("firstName").toLowerCase();
+          var id = date.substring(0, 3).toLowerCase() + date.substring(5, 7).toLowerCase() + date.substring(8, 11).toLowerCase() + date.substring(12, date.length) + doc + "icon";
           return id;
         },
         clickedDocentChanged: function(oldValue, newValue) {
 
-
-
           var self = this;
-              self.loading = !self.loading;
+          self.slots = !self.slots;
+          self.loading = !self.loading;
           Parse.Cloud.run('singleDocent', {
             email: this.clickedDocent.get("email")
           }, {
             success: function(result) {
               retrievedDocentId = result;
-              console.log("docent", result);
+              // console.log("docent", result);
               Parse.Cloud.run('dateList', {
                 docent: result
               }, {
@@ -222,14 +237,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     item["toggle"] = false;
                     item["toggleIcon"] = false;
                     List.push(item);
-                    // console.log("date",date);
+
                   }
-                  // if(List.length === 0){
-                  //     var item = {};
-                  //   item["empty"] = "This Docent is currently not available";
-                  //       List.push(item);
-                  // }
-                  objSort(List,"d");
+
+                  objSort(List, "d");
+                  if (List.length === 0) {
+                    if (self.slots === true) {
+                      self.slots = !self.slots;
+                    }
+                    // console.log("empty", self.slots);
+                  }
+
                   self.dateList = List;
                   self.loading = !self.loading;
 
@@ -251,7 +269,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var retrievedDocentId;
           var fixedDate;
           var queryDate;
-          moment.tz.add("Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00");
+          moment.tz.add(
+            "Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00"
+          );
           moment.tz.setDefault("Europe/Berlin");
         },
         expandSlots: function(e) {
@@ -269,7 +289,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (foundID != theID) {
               Polymer.dom(this.root).querySelector(".iron-collapse-opened").toggle();
               var ico = Polymer.dom(this.root).querySelector('#' + foundID + "icon");
-              console.log("ico",ico);
+              // console.log("ico", ico);
               if (ico != undefined) {
                 ico.setAttribute("icon", "expand-more");
               }
@@ -277,16 +297,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.querySelector('#' + theID).toggle();
 
           } else {
-            console.log(theID);
+            // console.log(theID);
             this.querySelector('#' + theID).toggle();
           }
           var iconstatus = this.querySelector('#' + theID + "icon");
           iconstatus = iconstatus.getAttribute("icon");
           if (iconstatus === "expand-less") {
-            console.log("less");
+            // console.log("less");
             this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-more");
           } else {
-            console.log("more");
+            // console.log("more");
             this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-less");
           }
         },
@@ -308,7 +328,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // fixedDate = new moment(new Date(model.get("list.date")));
           this.date = model.get("list.dateObject");
           queryDate = this.date;
-          console.log("querydate");
+          // console.log("querydate");
           this.date = moment(this.date).locale('en', {
             months: [
               "January", "February", "March", "April", "May", "June", "July",
@@ -335,8 +355,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             slotDate: queryDate
           }, {
             success: function(result) {
-            clickedSlot.set("slot.availability", false);
-              console.log("result",result);
+              clickedSlot.set("slot.availability", false);
+              // console.log("result", result);
             },
             error: function(error) {}
           });

@@ -12,15 +12,45 @@ body {
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
+
 .hidden {
   display: none;
 }
+
 .red {
   color: rgb(162, 19, 0);
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .green {
   color: rgb(0, 140, 6);
+}
+
+#coverimage {
+  height: 192px;
+  top: 0;
+}
+
+#headericon{
+  width: 250px;
+height: 250px;
+}
+
+#crop{
+  width: 250px;
+   height: 125px;
+   overflow: hidden;
+   position: absolute;
+   right: 32px;
+   top: -61px;
+
+}
+
+.username{
+  font-size: 100%;
 }
 paper-item-body {
   border-bottom: 1px solid lightgray;
@@ -60,6 +90,7 @@ paper-dialog {
   margin-left: auto !important;
   margin-right: auto !important;
 }
+
 paper-item-body.paper-item-body-0 [secondary] {
   color: #757575;
   font-family: 'Roboto', 'Noto', sans-serif;

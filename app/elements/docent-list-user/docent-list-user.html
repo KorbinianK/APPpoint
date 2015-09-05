@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     paper-item {
       position: relative;
-      cursor: pointer;
+      /*cursor: pointer;*/
     }
 
     paper-dialog {
@@ -50,22 +50,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       min-width: 54px !important;
     }
 
-    .dismiss:hover {
-      cursor: pointer;
-    }
-
-    .dismiss:hover iron-icon {
-      fill: rgb(157, 157, 157);
-    }
   </style>
   <template>
     <paper-card hidden="{{dismissed}}">
 
-      <div class="card-content">
-        Logged in as:
-        <span>{{userName}}</span>
-        <iron-icon class="dismiss" icon="icons:close" on-tap="dismissUser"></iron-icon>
-      </div>
+
 
     </paper-card>
 
@@ -85,8 +74,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div id="dlist">
           <template is="dom-repeat" items="{{docentList}}">
 
-
-
             <paper-item-body three-line class="paper-item-body-0">
               <!-- <paper-ripple fit></paper-ripple> -->
               <div>
@@ -105,8 +92,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div secondary><b>Email:</b>
                 <span>{{item.email}}</span>
               </div>
-              <div secondary><b>Room:</b>
-                <span>{{item.room}}</span>
+              <div secondary><b>Subjects:</b>
+                <span>{{computeSubjects(item.subject1,item.subject2,item.subject3)}}</span>
               </div>
               <div>
 
@@ -173,6 +160,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           usr: {
             type: Object,
             notify: true
+          },
+          subject1: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          subject2: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          subject3: {
+            type: String,
+            value: '',
+            notify: true
+          }
+        },
+        computeSubjects: function(subject1, subject2, subject3) {
+          if(subject2 === '' && subject3 === ''){
+            return subject1
+          }else if(subject3 === ''){
+            return subject1 +', '+subject2;
+          }else{
+          return subject1 + ', ' + subject2 + ', ' + subject3;
           }
         },
         computeID1: function(first, last) {
@@ -231,10 +242,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var iconstatus = this.querySelector('#' + theID + "icon");
           iconstatus = iconstatus.getAttribute("icon");
           if (iconstatus === "expand-less") {
-            console.log("less");
+            // console.log("less");
             this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-more");
           } else {
-            console.log("more");
+            // console.log("more");
             this.querySelector('#' + theID + "icon").setAttribute("icon", "expand-less");
           }
 
@@ -266,7 +277,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
               self.docentList = result;
-              console.log(result);
+              // console.log(result);
             },
             error: function(error) {}
           });
@@ -278,32 +289,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         docentClick: function(e) {
           console.log("docentClicked");
-
-
-          // var user = Parse.User.current();
-          // if (user === null) {
-          //   this.loggedIn = !this.loggedIn;
-          //
-          // } else {
-          //   this.slotsDismissed = false;
-          //   var model = e.model;
-          //   var cDocent = model.get("item.docentObject");
-          //   this.clickDocent = cDocent;
-          //   this.clickedDocentID = cDocent.get("firstName");
-          //   // document.querySelector("#" + this.clickedDocentID).toggle();
-          // console.log(this.clickedDocentID);
-          // }
-          //
-          //
-          // console.log(currentUser);
-          //
-          // teacherFirstName = model.get("item.firstName");
-          // teacherLastName = model.get("item.lastname");
-          // teacherMail = model.get("item.email");
-
-
-
-
         }
       });
     })();

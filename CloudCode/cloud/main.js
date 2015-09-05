@@ -87,6 +87,9 @@ Parse.Cloud.define("docentList", function (request, response) {
           docent['firstName'] = object.get('firstName');
           docent['lastName'] = object.get('lastName');
           docent['email'] = object.get('email');
+          docent['subject1'] = object.get('subject1');
+          docent['subject2'] = object.get('subject2');
+          docent['subject3'] = object.get('subject3');
           var Room = object.get("Room");
           if (Room != null) {
             docent['room'] = Room.get('roomName');

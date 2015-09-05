@@ -23,6 +23,12 @@
     #login {
       margin-top: 30px;
     }
+
+    paper-toast {
+      z-index: 10;
+      right: 50%;
+      width: 60%;
+    }
   </style>
   <template>
 
@@ -55,11 +61,14 @@
         <paper-button class="submitButton" raised on-click="registerClick">Registrieren</paper-button>
       </div>
     </paper-material>
-
+    <!-- <paper-button raised on-click="test">toast</paper-button> -->
     <div id="signup" hidden="{{hidden}}">
       <signup-element></signup-element>
     </div>
-
+    <paper-toast id="loggedInToast" duration="6000">
+      <iron-icon icon="done"></iron-icon>
+      <span>Successfully logged in</span>
+    </paper-toast>
   </template>
 
 </dom-module>
@@ -92,12 +101,18 @@
         }
       },
       registerClick: function() {
-      this.hidden = !this.hidden;
+        this.hidden = !this.hidden;
+      },
+      ready: function() {
+
+      },
+      test: function() {
+        this.$.loggedInToast.show();
       },
 
       handleClick: function() {
-
-        console.log('click', this);
+        var self = this;
+        // console.log('click', this);
         var
           username = $('[name="name"]').val().toLowerCase(),
           password = $('[name="password"]').val();
@@ -120,6 +135,8 @@
                 var inputs, index;
 
                 inputs = document.getElementsByTagName('input');
+
+
                 for (index = 0; index < inputs.length; ++index) {
                   inputs[index].val = '';
                 }
@@ -131,16 +148,23 @@
                   document.location.href = "/admin.html";
                 } else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false) {
                   document.location.href = "/user.html";
+                } else {
+                  // document.location.href = "/#!";
+                  self.$.loggedInToast.show();
+
+                  $(self).ready(function() {
+                    setTimeout(function() {
+                      window.location.reload();
+                    }, 1000);
+
+                  });
+
                 }
               })();
             } else {
 
             }
 
-            /*}else{
-              alert("email not verified");
-
-            } */
           },
           // If there is an error
           error: function(user, error) {
@@ -148,6 +172,13 @@
             alert('Error!');
           }
         });
+        $.wait = function(ms) {
+          var defer = $.Deferred();
+          setTimeout(function() {
+            defer.resolve();
+          }, ms);
+          return defer;
+        };
 
       }
     });

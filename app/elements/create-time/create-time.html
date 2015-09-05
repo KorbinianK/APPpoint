@@ -40,8 +40,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-    }
 
+    }
+paper-item{
+  position: relative;
+}
     paper-dialog {
       max-width: 450px;
       top: 40%;
@@ -115,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       <paper-item>
-        <paper-item-body class="paper-item-body-0" on-click=''>
+        <paper-item-body class="paper-item-body-0">
           <h4>Pick the days:</h4>
           <div class="checkboxes">
 
@@ -148,15 +151,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       </paper-item>
 
-      <!-- <paper-item>
-        <paper-item-body class="paper-item-body-0" flat>
-<span>[[selDocent]]</span>
-        </paper-item-body>
-
-      </paper-item> -->
-
       <paper-item>
-        <paper-item-body class="paper-item-body-0" on-click='handleStartClick'>
+        <paper-item-body class="pointer paper-item-body-0" on-click='handleStartClick'>
+          <paper-ripple fit></paper-ripple>
           <h4>Start Date:</h4>
           <p>
             <span>{{startDate}}</span>
@@ -168,7 +165,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       <paper-item>
-        <paper-item-body class="paper-item-body-0" on-click='handleEndClick'>
+        <paper-item-body class="pointer paper-item-body-0" on-click='handleEndClick'>
+          <paper-ripple fit></paper-ripple>
           <h4>End Date:</h4>
           <p>
             <span>{{endDate}}</span>
@@ -181,7 +179,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-item>
       </hr>
       <paper-item>
-        <paper-item-body class="paper-item-body-0" on-click='handleStartTimeClick'>
+        <paper-item-body class="pointer paper-item-body-0" on-click='handleStartTimeClick'>
+          <paper-ripple fit></paper-ripple>
           <h4>Start Time:</h4>
           <p>
             <span>{{startTime}}</span>
@@ -192,7 +191,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-item>
 
       <paper-item>
-        <paper-item-body class="paper-item-body-0" on-click='handleEndTimeClick'>
+        <paper-item-body class="pointer paper-item-body-0" on-click='handleEndTimeClick'>
+          <paper-ripple fit></paper-ripple>
           <h4>End Time:</h4>
           <p>
             <span>{{endTime}}</span>
@@ -482,7 +482,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
 
           var self = this;
-        var origStartDate, origEndDate;
+          var origStartDate, origEndDate;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
           moment.tz.add("Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00");
