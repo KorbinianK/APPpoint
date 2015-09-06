@@ -267,20 +267,24 @@ Parse.Cloud.define("dateList", function (request, response) {
 
 
 Parse.Cloud.define("createAppointment", function (request, response) {
-
+  Parse.Cloud.useMasterKey();
   var userEmail = request.params.userEmail;
   var docentId = request.params.docentId;
   var slotStartTime = request.params.slotStartTime;
   var slotDate = request.params.slotDate;
   var Docent = Parse.Object.extend("Docent");
   var docentQuery = new Parse.Query("Docent");
-    var user = Parse.User.current();
+  // var docentQuery = new Parse.Query(Parse.User);
+  var user = Parse.User.current();
+    docentQuery.include("Docent");
   docentQuery.equalTo("objectId", docentId);
+
   docentQuery.first({
     success: function (docent) {
 
       var slotQuery = new Parse.Query("Slots");
       var foundDocent = docent;
+      // var foundDocentUser = docent.get("Docent");
       slotQuery.include("Docent");
       slotQuery.equalTo("Docent", docent);
 
@@ -318,8 +322,8 @@ Parse.Cloud.define("createAppointment", function (request, response) {
                     appointment.set("startTime", app.startTime);
                     appointment.set("endTime", app.endTime);
                     appointment.set("user", user);
-
                     appointment.set("docent", foundDocent);
+
                     appointment.save(null, {
                       success: function (appointment) {
                         response.success(slotDate);
@@ -359,10 +363,10 @@ Parse.Cloud.define("appointmentList", function (request, response) {
   query.include("docent");
   query.include("user");
   query.equalTo("user", {
-        __type: "Pointer",
-        className: "_User",
-        objectId: request.params.id
-    });
+    __type: "Pointer",
+    className: "_User",
+    objectId: request.params.id
+  });
   query.find({
     success: function (results) {
       var List = [];
@@ -400,11 +404,11 @@ Parse.Cloud.define("appointmentListDocent", function (request, response) {
 
   query.include("docent");
   query.include("user");
-  query.equalTo("user", {
-        __type: "Pointer",
-        className: "_User",
-        objectId: request.params.id
-    });
+  query.equalTo("docent", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: request.params.id
+  });
   query.find({
     success: function (results) {
       var List = [];
@@ -429,5 +433,113 @@ Parse.Cloud.define("appointmentListDocent", function (request, response) {
       console.log("d");
       response.error("query failed");
     }
+  });
+});
+
+
+Parse.Cloud.define("removeDocentSlots", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var docent = request.params.docent;
+
+  var slotsQuery = new Parse.Query("Slots");
+  slotsQuery.include("Docent");
+  slotsQuery.equalTo("Docent", {
+    __type: "Pointer",
+    className: "Docent",
+    objectId: request.params.docent
+  });
+  slotsQuery.find({
+    success: function (results) {
+      if (results.length != 0) {
+        for (i in results) {
+          results[i].destroy(); //destroys the rows with Docent in "slots"
+        }
+      }
+      response.success("Slots deleted");
+    },
+    error: function (error) {}
+  });
+});
+
+Parse.Cloud.define("removeDocentRoom", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var docent = request.params.docent;
+
+  var roomQuery = new Parse.Query("Room");
+  roomQuery.include("Docent");
+  roomQuery.equalTo("Docent", {
+    __type: "Pointer",
+    className: "Docent",
+    objectId: request.params.docent
+  });
+  roomQuery.first({
+    success: function (object) {
+      if (object != null) {
+        object.set("Docent", null);
+        object.save();
+      }
+      response.success("Room deleted");
+    },
+    error: function (error) {}
+  });
+});
+
+Parse.Cloud.define("removeDocentDocent", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var docent = request.params.docent;
+  var docentQuery = new Parse.Query("Docent");
+
+  docentQuery.equalTo("objectId", docent);
+  docentQuery.first({
+    success: function (object) {
+
+        object.destroy();
+
+      response.success("Docent deleted");
+    },
+    error: function (error) {
+      response.error("Docent error");
+    }
+  });
+});
+
+
+Parse.Cloud.define("removeDocentUser", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var docent = request.params.docent;
+  var userQuery = new Parse.Query(Parse.User);
+  userQuery.equalTo("username", docent);
+
+  userQuery.first({
+    success: function (object) {
+      if (object != null) {
+        object.destroy();
+      }
+      response.success("Docent deleted");
+    },
+    error: function (error) {}
+  });
+});
+
+Parse.Cloud.define("removeDocentAppointments", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var appointmentQuery = new Parse.Query("Appointment");
+  var docent = request.params.docent;
+  appointmentQuery.include("docent");
+  appointmentQuery.equalTo("docent", docent);
+
+  appointmentQuery.find({
+    success: function (results) {
+
+      if (results.length = !0) {
+        for (i in results) {
+
+
+          results[i].destroy(); //destroys the rows with Docent in "Appointment"
+        }
+        response.success("Appointments deleted");
+      }
+    },
+    error: function (error) {}
   });
 });

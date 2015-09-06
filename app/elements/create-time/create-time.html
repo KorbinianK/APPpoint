@@ -40,11 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-
     }
-paper-item{
-  position: relative;
-}
+
+    paper-item {
+      position: relative;
+    }
+
     paper-dialog {
       max-width: 450px;
       top: 40%;
@@ -110,267 +111,266 @@ paper-item{
       padding-left: 2%;
     }
   </style>
+
   <template>
-
-    <paper-material elevation="1">
-
+    <div class="" hidden="{{!isAdmin}}">
 
 
-
-      <paper-item>
-        <paper-item-body class="paper-item-body-0">
-          <h4>Pick the days:</h4>
-          <div class="checkboxes">
-
-            <paper-checkbox name="monday" checked="{{checkedMonday}}" id="monday">Monday</paper-checkbox>
-            <paper-checkbox name="tuesday" checked="{{checkedTuesday}}" id="tuesday">Tuesday</paper-checkbox>
-            <paper-checkbox name="wednesday" checked="{{checkedWednesday}}" id="wednesday">Wednesday</paper-checkbox>
-            <paper-checkbox name="thursday" checked="{{checkedThursday}}" id="thursday">Thursday</paper-checkbox>
-            <paper-checkbox name="friday" checked="{{checkedFriday}}" id="friday">Friday</paper-checkbox>
-            <paper-checkbox name="saturday" checked="{{checkedSaturday}}" id="saturday">Saturday</paper-checkbox>
-          </div>
-
-
-        </paper-item-body>
-
-      </paper-item>
-
-
-      <paper-item>
-        <paper-item-body class="paper-item-body-0" flat>
-          <paper-dropdown-menu label="Select a docent">
-            <paper-menu id="dropdown" selected="{{selDocent}}" attr-for-selected="docent" class="dropdown-content">
-              <template is="dom-repeat" items="{{docentList}}" as="docent">
-                <paper-item docent="{{docent.object}}">
-                  <span class="docentItem">{{docent.fullName}}</span>
-                </paper-item>
-              </template>
-            </paper-menu>
-          </paper-dropdown-menu>
-        </paper-item-body>
-
-      </paper-item>
-
-      <paper-item>
-        <paper-item-body class="pointer paper-item-body-0" on-click='handleStartClick'>
-          <paper-ripple fit></paper-ripple>
-          <h4>Start Date:</h4>
-          <p>
-            <span>{{startDate}}</span>
-          </p>
-
-        </paper-item-body>
-
-      </paper-item>
-
-
-      <paper-item>
-        <paper-item-body class="pointer paper-item-body-0" on-click='handleEndClick'>
-          <paper-ripple fit></paper-ripple>
-          <h4>End Date:</h4>
-          <p>
-            <span>{{endDate}}</span>
-          </p>
-
-
-        </paper-item-body>
-
-
-      </paper-item>
-      </hr>
-      <paper-item>
-        <paper-item-body class="pointer paper-item-body-0" on-click='handleStartTimeClick'>
-          <paper-ripple fit></paper-ripple>
-          <h4>Start Time:</h4>
-          <p>
-            <span>{{startTime}}</span>
-          </p>
-
-        </paper-item-body>
-
-      </paper-item>
-
-      <paper-item>
-        <paper-item-body class="pointer paper-item-body-0" on-click='handleEndTimeClick'>
-          <paper-ripple fit></paper-ripple>
-          <h4>End Time:</h4>
-          <p>
-            <span>{{endTime}}</span>
-          </p>
-
-        </paper-item-body>
-
-      </paper-item>
-
-
-
-
-    </paper-material>
-
-    <paper-material elevation="1">
-      <paper-item>
-
-        <paper-item-body class="paper-item-body-1">
-
-          <paper-input-container>
-            <label>Slot Duration</label>
-            <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
-          </paper-input-container>
-        </paper-item-body>
-        <span>minutes.</span>
-      </paper-item>
-
-      <paper-item>
-        <paper-item-body class="paper-item-body-1">
-          <paper-input-container>
-            <label>Break Duration</label>
-            <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
-          </paper-input-container>
-        </paper-item-body>
-        <span>minutes.</span>
-      </paper-item>
-
-
-      <div id="button">
-        <div id="button-create">
-          <paper-button id='setTime' raised on-click='createSlots'>Create Time Slots</paper-button>
-        </div>
-      </div>
-
-
-    </paper-material>
-
-    <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-      <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
-      </div>
-    </paper-dialog>
-    <paper-dialog id="endDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-      <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
-      </div>
-    </paper-dialog>
-
-    <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-      <paper-time-picker id="timeStartPicker"></paper-time-picker>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
-      </div>
-    </paper-dialog>
-
-    <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-
-      <paper-time-picker id="timeEndPicker"></paper-time-picker>
-
-
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
-
-      </div>
-
-    </paper-dialog>
-    <paper-dialog id="editDocentDialog" modal role="dialog" exit-animation="fade-out-animation">
-      <template is="dom-repeat" items="{{docentList}}">
-        <div id="docentbutton" on-click="pickDocent" dialog-confirm>
-
-
+      <paper-material elevation="1">
+        <paper-item>
           <paper-item-body class="paper-item-body-0">
+            <h4>Pick the days:</h4>
+            <div class="checkboxes">
 
-            <!-- <paper-button flat dialog-confirm > -->
-            <p class="docent">
-              <paper-ripple fit></paper-ripple>
-              <!-- <paper-ripple fit></paper-ripple> -->
-              <span>{{item.firstName}}</span>
-              <span>{{item.lastName}}</span>
-            </p>
-            <!-- </paper-button> -->
+              <paper-checkbox name="monday" checked="{{checkedMonday}}" id="monday">Monday</paper-checkbox>
+              <paper-checkbox name="tuesday" checked="{{checkedTuesday}}" id="tuesday">Tuesday</paper-checkbox>
+              <paper-checkbox name="wednesday" checked="{{checkedWednesday}}" id="wednesday">Wednesday</paper-checkbox>
+              <paper-checkbox name="thursday" checked="{{checkedThursday}}" id="thursday">Thursday</paper-checkbox>
+              <paper-checkbox name="friday" checked="{{checkedFriday}}" id="friday">Friday</paper-checkbox>
+              <paper-checkbox name="saturday" checked="{{checkedSaturday}}" id="saturday">Saturday</paper-checkbox>
+            </div>
+
 
           </paper-item-body>
 
-          </paper-item>
+        </paper-item>
+
+
+        <paper-item>
+          <paper-item-body class="paper-item-body-0" flat>
+            <paper-dropdown-menu label="Select a docent">
+              <paper-menu id="dropdown" selected="{{selDocent}}" attr-for-selected="docent" class="dropdown-content">
+                <template is="dom-repeat" items="{{docentList}}" as="docent">
+                  <paper-item docent="{{docent.object}}">
+                    <span class="docentItem">{{docent.fullName}}</span>
+                  </paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </paper-item-body>
+
+        </paper-item>
+
+        <paper-item>
+          <paper-item-body class="pointer paper-item-body-0" on-click='handleStartClick'>
+            <paper-ripple fit></paper-ripple>
+            <h4>Start Date:</h4>
+            <p>
+              <span>{{startDate}}</span>
+            </p>
+
+          </paper-item-body>
+
+        </paper-item>
+
+
+        <paper-item>
+          <paper-item-body class="pointer paper-item-body-0" on-click='handleEndClick'>
+            <paper-ripple fit></paper-ripple>
+            <h4>End Date:</h4>
+            <p>
+              <span>{{endDate}}</span>
+            </p>
+
+
+          </paper-item-body>
+
+
+        </paper-item>
+        </hr>
+        <paper-item>
+          <paper-item-body class="pointer paper-item-body-0" on-click='handleStartTimeClick'>
+            <paper-ripple fit></paper-ripple>
+            <h4>Start Time:</h4>
+            <p>
+              <span>{{startTime}}</span>
+            </p>
+
+          </paper-item-body>
+
+        </paper-item>
+
+        <paper-item>
+          <paper-item-body class="pointer paper-item-body-0" on-click='handleEndTimeClick'>
+            <paper-ripple fit></paper-ripple>
+            <h4>End Time:</h4>
+            <p>
+              <span>{{endTime}}</span>
+            </p>
+
+          </paper-item-body>
+
+        </paper-item>
+
+
+
+
+      </paper-material>
+
+      <paper-material elevation="1">
+        <paper-item>
+
+          <paper-item-body class="paper-item-body-1">
+
+            <paper-input-container>
+              <label>Slot Duration</label>
+              <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
+            </paper-input-container>
+          </paper-item-body>
+          <span>minutes.</span>
+        </paper-item>
+
+        <paper-item>
+          <paper-item-body class="paper-item-body-1">
+            <paper-input-container>
+              <label>Break Duration</label>
+              <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
+            </paper-input-container>
+          </paper-item-body>
+          <span>minutes.</span>
+        </paper-item>
+
+
+        <div id="button">
+          <div id="button-create">
+            <paper-button id='setTime' raised on-click='createSlots'>Create Time Slots</paper-button>
+          </div>
         </div>
 
-      </template>
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
 
-      </div>
-    </paper-dialog>
-    <paper-dialog id="warningDialog" modal>
+      </paper-material>
 
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>{{errorType}}</h2>
+      <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
+        </div>
+      </paper-dialog>
+      <paper-dialog id="endDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
+        </div>
+      </paper-dialog>
+
+      <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-time-picker id="timeStartPicker"></paper-time-picker>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
+        </div>
+      </paper-dialog>
+
+      <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+
+        <paper-time-picker id="timeEndPicker"></paper-time-picker>
+
+
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
+
+        </div>
+
+      </paper-dialog>
+      <paper-dialog id="editDocentDialog" modal role="dialog" exit-animation="fade-out-animation">
+        <template is="dom-repeat" items="{{docentList}}">
+          <div id="docentbutton" on-click="pickDocent" dialog-confirm>
+
+
+            <paper-item-body class="paper-item-body-0">
+
+              <!-- <paper-button flat dialog-confirm > -->
+              <p class="docent">
+                <paper-ripple fit></paper-ripple>
+                <!-- <paper-ripple fit></paper-ripple> -->
+                <span>{{item.firstName}}</span>
+                <span>{{item.lastName}}</span>
+              </p>
+              <!-- </paper-button> -->
+
+            </paper-item-body>
+
+            </paper-item>
           </div>
-        </paper-toolbar>
-      </paper-header-panel>
 
-      <paper-item>
+        </template>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+
+        </div>
+      </paper-dialog>
+      <paper-dialog id="warningDialog" modal>
+
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>{{errorType}}</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+        <paper-item>
+
+          <div>
+            <span>{{errorMessage}}</span>
+          </div>
+
+
+        </paper-item>
+
+
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>OK</paper-button>
+        </div>
+      </paper-dialog>
+
+
+      <paper-dialog id="deleteSlot" modal>
+
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Docent already has Slots</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+
 
         <div>
-          <span>{{errorMessage}}</span>
-        </div>
+          <span>Do you want to delete the old Slots?</span>
 
 
-      </paper-item>
-
-
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>OK</paper-button>
-      </div>
-    </paper-dialog>
-
-
-    <paper-dialog id="deleteSlot" modal>
-
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Docent already has Slots</h2>
+          <div class="buttons">
+            <paper-button flat dialog-dismiss>Cancel</paper-button>
+            <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
           </div>
-        </paper-toolbar>
-      </paper-header-panel>
+      </paper-dialog>
 
 
+      <paper-dialog id="overwrite" modal>
 
-      <div>
-        <span>Do you want to delete the old Slots?</span>
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Old Slots has been deleted</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+
+        <p>Do you want to add the new Slots?</p>
 
 
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+          <paper-button flat dialog-confirm on-click="createSlots">Ok</paper-button>
         </div>
-    </paper-dialog>
-
-
-    <paper-dialog id="overwrite" modal>
-
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Old Slots has been deleted</h2>
-          </div>
-        </paper-toolbar>
-      </paper-header-panel>
-
-
-      <p>Do you want to add the new Slots?</p>
-
-
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="createSlots">Ok</paper-button>
+      </paper-dialog>
       </div>
-    </paper-dialog>
-
   </template>
 
 
@@ -380,20 +380,25 @@ paper-item{
       Polymer({
         is: 'create-time',
         properties: {
+          isAdmin: {
+            type: Boolean,
+            notify: true,
+            value: false
+          },
           selDocent: {
-            Type: Object,
+            type: Object,
             notify: true
           },
           errorType: {
-            Type: String,
+            type: String,
             notify: true
           },
           errorMessage: {
-            Type: String,
+            type: String,
             notify: true
           },
           errorEvent: {
-            Type: String,
+            type: String,
             notify: true
           },
           checkedMonday: {
@@ -480,12 +485,20 @@ paper-item{
           this.saturdayChecked = !this.saturdayChecked;
         },
         ready: function() {
-
+          var currentUser = Parse.User.current();
+          if (currentUser.get("isAdmin")) {
+            this.isAdmin = true;
+            console.log(this.isAdmin);
+          } else {
+            console.log(this.isAdmin);
+          }
           var self = this;
           var origStartDate, origEndDate;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
-          moment.tz.add("Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00");
+          moment.tz.add(
+            "Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00"
+          );
           var query = new Parse.Query(DocentQuery);
 
           var clicker;
@@ -542,7 +555,7 @@ paper-item{
             var date = new Date();
             date = date.toDateString();
           }
-              origStartDate = date;
+          origStartDate = date;
           startWeekday = date.substring(0, 4);
           var formattedDate = date.substring(4, date.length);
           this.startDate = formattedDate;
@@ -557,7 +570,7 @@ paper-item{
             var date = new Date();
             date = date.toDateString();
           }
-            origEndDate = date;
+          origEndDate = date;
           var formattedDate = date.substring(4, date.length);
           this.endDate = formattedDate;
 
@@ -577,8 +590,8 @@ paper-item{
             if (hours === 24) {
               hours = 12;
             }
-          }else if(getAMPM ==="AM"){
-            if(hours === 12){
+          } else if (getAMPM === "AM") {
+            if (hours === 12) {
               hours = 0;
             }
           }
@@ -625,11 +638,11 @@ paper-item{
           var startDate = new Date(origStartDate);
           startDate = moment(startDate);
           startDate.tz("Europe/Berlin").format();
-            console.log("start", startDate);
+          console.log("start", startDate);
           var endDate = new Date(origEndDate);
           endDate = moment(endDate);
           endDate.tz("Europe/Berlin").format();
-          console.log("end",endDate);
+          console.log("end", endDate);
           var startTime = this.startTime;
           var endTime = this.endTime;
 
@@ -792,7 +805,7 @@ paper-item{
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
                     queryDate.set('millisecond', 0);
-                      queryDate.tz("Europe/Berlin").format();
+                    queryDate.tz("Europe/Berlin").format();
                     queryDate.locale('en', {
                       months: [
                         "January", "February", "March", "April", "May", "June", "July",

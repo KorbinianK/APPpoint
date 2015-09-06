@@ -34,8 +34,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       cursor: pointer;
     }
 
-
-
     paper-button#docentbutton {
       text-align: left !important;
       text-transform: none !important;
@@ -54,275 +52,291 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-    <paper-material elevation="1">
+    <div hidden="{{!isAdmin}}">
+      <paper-material elevation="1">
 
-      <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+        <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
-      <template is="dom-repeat" items="{{roomList}}">
-        <paper-item>
-          <paper-button flat on-click="editButton">Edit</paper-button>
-          <paper-item-body three-line class="paper-item-body-0">
-            <div>
-              <h1>
-                <span>{{item.roomName}}</span>
-              </h1>
-            </div>
-            <div secondary hidden="{{!item.status}}">
-              <b class="green">Available</b>
-
-            </div>
-            <div secondary hidden="{{item.status}}">
-              <b class="red">Not available</b>
-
-            </div>
-            <div secondary><b>Docent:</b>
-              <span>{{item.docent}}</span>
-            </div>
-            <div secondary><b>Description:</b>
-              <span>{{item.roomDesc}}</span>
-            </div>
-            <div secondary><b>Building:</b>
-              <span>{{item.roomBuild}}</span>
-            </div>
-
-
-          </paper-item-body>
-
-          <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
-
-        </paper-item>
-
-      </template>
-    </paper-material>
-    <paper-dialog id="editRoomDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-      <paper-dialog-scrollable>
-        <template is="dom-repeat" items="{{docentList}}">
-
+        <template is="dom-repeat" items="{{roomList}}">
           <paper-item>
+            <paper-button flat on-click="editButton">Edit</paper-button>
+            <paper-item-body three-line class="paper-item-body-0">
+              <div>
+                <h1>
+                  <span>{{item.roomName}}</span>
+                </h1>
+              </div>
+              <div secondary hidden="{{!item.status}}">
+                <b class="green">Available</b>
 
-            <paper-item-body class="paper-item-body-0">
+              </div>
+              <div secondary hidden="{{item.status}}">
+                <b class="red">Not available</b>
 
-              <paper-button id="docentbutton" flat dialog-confirm on-click="edit">
-                <span>{{item.firstName}}</span>
-                <span>{{item.lastName}}</span>
-              </paper-button>
+              </div>
+              <div secondary><b>Docent:</b>
+                <span>{{item.docent}}</span>
+              </div>
+              <div secondary><b>Description:</b>
+                <span>{{item.roomDesc}}</span>
+              </div>
+              <div secondary><b>Building:</b>
+                <span>{{item.roomBuild}}</span>
+              </div>
+
 
             </paper-item-body>
 
+            <iron-icon icon="highlight-off" on-tap="roomDel"></iron-icon>
+
           </paper-item>
 
-
         </template>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
+      </paper-material>
+      <paper-dialog id="editRoomDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+        <paper-dialog-scrollable>
+          <template is="dom-repeat" items="{{docentList}}">
 
-      </div>
-    </paper-dialog>
+            <paper-item>
 
-    <paper-dialog id="delRoomDialog" modal>
+              <paper-item-body class="paper-item-body-0">
 
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Please confirm</h2>
-          </div>
-        </paper-toolbar>
-      </paper-header-panel>
+                <paper-button id="docentbutton" flat dialog-confirm on-click="edit">
+                  <span>{{item.firstName}}</span>
+                  <span>{{item.lastName}}</span>
+                </paper-button>
 
+              </paper-item-body>
 
-      <p>Delete the Room <b><span>{{roomName}}</span></b> ?</p>
+            </paper-item>
 
 
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="confirmRoomDel">Confirm</paper-button>
-      </div>
-    </paper-dialog>
+          </template>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
 
+        </div>
+      </paper-dialog>
+
+      <paper-dialog id="delRoomDialog" modal>
+
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Please confirm</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+
+        <p>Delete the Room <b><span>{{roomName}}</span></b> ?</p>
+
+
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="confirmRoomDel">Confirm</paper-button>
+        </div>
+      </paper-dialog>
+    </div>
   </template>
   <script>
     (function() {
       Polymer({
         is: 'rooms-list',
         properties: {
-          available: {
-            type: Boolean,
-            value: true,
-            notify: true
-          },
-          loading: {
-            type: Boolean
-          },
-          roomList: {
-            type: Array,
-          },
-          docentList: {
-            type: Array,
-          },
-          roomName: {
-            type: String,
-            value: "Default"
-          }
-
-        },
-        observers: [
-          'roomListChanged(roomList.splices)',
-          'docentListChanged(docentList.splices)'
-        ],
-        roomListChanged: function(changeRecord) {
-          if (changeRecord) {
-
-            changeRecord.indexSplices.forEach(function(s) {
-              s.removed.forEach(function(room) {
-
-              });
-              console.log("added");
-            }, this);
-          }
-        },
-        docentListChanged: function(docentListChange) {
-
-          if (docentListChange) {
-            docentListChange.indexSplices.forEach(function(s) {
-              s.removed.forEach(function(docent) {});
-            }, this);
-          }
-        },
-
-        ready: function() {
-          var self = this;
-          var clickedDelRoom, clickedRoom, clickedDocent, docentName;
-
-          Parse.Cloud.run('roomList', {}, {
-            success: function(result) {
-
-              self.loading = !self.loading;
-              self.roomList = result;
-
+          properties: {
+            isAdmin: {
+              type: Boolean,
+              notify: true,
+              value: false
             },
-            error: function(error) {}
-          });
-          Parse.Cloud.run('docentList', {status: "emptyOnly"}, {
-            success: function(result) {
-
-
-              self.docentList = result;
-
+            available: {
+              type: Boolean,
+              value: true,
+              notify: true
             },
-            error: function(error) {}
-          });
+            loading: {
+              type: Boolean
+            },
+            roomList: {
+              type: Array,
+            },
+            docentList: {
+              type: Array,
+            },
+            roomName: {
+              type: String,
+              value: "Default"
+            }
 
-        },
-        editButton: function(e) {
-          clickedRoom = e.model;
-          this.$.editRoomDialog.toggle();
-          if (clickedRoom.get("item.docent") != null) {
+          },
+          observers: [
+            'roomListChanged(roomList.splices)',
+            'docentListChanged(docentList.splices)'
+          ],
+          roomListChanged: function(changeRecord) {
+            if (changeRecord) {
 
-          }
+              changeRecord.indexSplices.forEach(function(s) {
+                s.removed.forEach(function(room) {
 
-        },
-        edit: function(e) {
+                });
+                console.log("added");
+              }, this);
+            }
+          },
+          docentListChanged: function(docentListChange) {
 
-          var self = this;
-          var model = e.model;
-          console.log("model", clickedRoom.get("item.email"));
+            if (docentListChange) {
+              docentListChange.indexSplices.forEach(function(s) {
+                s.removed.forEach(function(docent) {});
+              }, this);
+            }
+          },
+          ready: function() {
+            var currentUser = Parse.User.current();
+            if (currentUser.get("isAdmin")) {
+              this.isAdmin = true;
+              console.log(this.isAdmin);
+            } else {
+              console.log(this.isAdmin);
+            }
+            var self = this;
+            var clickedDelRoom, clickedRoom, clickedDocent, docentName;
 
-          if (model.get("item.delete") === true) {
+            Parse.Cloud.run('roomList', {}, {
+              success: function(result) {
 
-            // remDocent();
+                self.loading = !self.loading;
+                self.roomList = result;
 
-            Parse.Cloud.run('remFromRoom', {
-              status: clickedRoom.get("item.status"),
-              roomName: clickedRoom.get("item.roomName"),
-              email: clickedRoom.get("item.email"),
-              docentObject: model.get("item.docentObject"),
+              },
+              error: function(error) {}
+            });
+            Parse.Cloud.run('docentList', {
+              status: "emptyOnly"
             }, {
               success: function(result) {
-                console.log("new", result);
 
-                if (result.get("status") != "switch") {
-                  clickedRoom.set("item.status", true);
-                  clickedRoom.set("item.docent", "No Docent");
-                  var item = {};
-                  item['firstName'] = result.get('firstName');
-                  item['lastName'] = result.get('lastName');
-                  item['email'] = result.get('email');
-                  item['docentObject'] = result;
-                  self.docentList.push(item);
-                  self.splice('docentList', 1, 0, item);
-                  self.docentList.sort();
-                }
+
+                self.docentList = result;
 
               },
               error: function(error) {}
             });
 
+          },
+          editButton: function(e) {
+            clickedRoom = e.model;
+            this.$.editRoomDialog.toggle();
+            if (clickedRoom.get("item.docent") != null) {
 
-          } else {
+            }
 
-            Parse.Cloud.run('setDocentToRoom', {
-              status: clickedRoom.get("item.status"),
-              roomName: clickedRoom.get("item.roomName"),
-              email: model.get("item.email"),
-            }, {
-              success: function(result) {
-                console.log(result);
-                clickedRoom.set("item.status", false);
-                clickedRoom.set("item.email", result.get("email"));
-                clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
-                clickedRoom.set("item.docentObject", result);
-                for (var j = 0; j < self.docentList.length; j++) {
+          },
+          edit: function(e) {
 
-                  if (self.docentList[j].docent === model.get("item.docent")) {
-                    self.splice('docentList', j, 1);
-                    break;
+            var self = this;
+            var model = e.model;
+            console.log("model", clickedRoom.get("item.email"));
+
+            if (model.get("item.delete") === true) {
+
+              // remDocent();
+
+              Parse.Cloud.run('remFromRoom', {
+                status: clickedRoom.get("item.status"),
+                roomName: clickedRoom.get("item.roomName"),
+                email: clickedRoom.get("item.email"),
+                docentObject: model.get("item.docentObject"),
+              }, {
+                success: function(result) {
+                  console.log("new", result);
+
+                  if (result.get("status") != "switch") {
+                    clickedRoom.set("item.status", true);
+                    clickedRoom.set("item.docent", "No Docent");
+                    var item = {};
+                    item['firstName'] = result.get('firstName');
+                    item['lastName'] = result.get('lastName');
+                    item['email'] = result.get('email');
+                    item['docentObject'] = result;
+                    self.docentList.push(item);
+                    self.splice('docentList', 1, 0, item);
+                    self.docentList.sort();
                   }
-                }
-
-              },
-              error: function(error) {}
-            });
-
-
-
-          }
-
-        },
-        roomDel: function(e) {
-          var model = e.model;
-          clickedDelRoom = model.get("item.roomName");
-          this.roomName = clickedDelRoom;
-          console.log("clicked to del ", clickedDelRoom);
-          this.$.delRoomDialog.toggle();
-        },
-        confirmRoomDel: function(e) {
-          var model = e.model;
-
-          var clickedRoom = clickedDelRoom;
-          console.log("del ", clickedRoom);
-          for (var i = 0; i < this.roomList.length; i++) {
-
-            if (this.roomList[i].roomName === clickedRoom) {
-              this.splice('roomList', i, 1);
-
-              var Room = Parse.Object.extend("Room");
-              var User = Parse.User.extend;
-              var room = new Parse.Query(Room);
-              var query = new Parse.Query(Parse.User);
-
-              room.equalTo("roomName", clickedRoom);
-              room.first({
-                success: function(object) {
-                  object.destroy();
 
                 },
-                error: function(error) {
-                  alert("Error: " + error.code + " " + error.message);
-                }
+                error: function(error) {}
               });
 
-              break;
+
+            } else {
+
+              Parse.Cloud.run('setDocentToRoom', {
+                status: clickedRoom.get("item.status"),
+                roomName: clickedRoom.get("item.roomName"),
+                email: model.get("item.email"),
+              }, {
+                success: function(result) {
+                  console.log(result);
+                  clickedRoom.set("item.status", false);
+                  clickedRoom.set("item.email", result.get("email"));
+                  clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
+                  clickedRoom.set("item.docentObject", result);
+                  for (var j = 0; j < self.docentList.length; j++) {
+
+                    if (self.docentList[j].docent === model.get("item.docent")) {
+                      self.splice('docentList', j, 1);
+                      break;
+                    }
+                  }
+
+                },
+                error: function(error) {}
+              });
+
+
+
+            }
+
+          },
+          roomDel: function(e) {
+            var model = e.model;
+            clickedDelRoom = model.get("item.roomName");
+            this.roomName = clickedDelRoom;
+            console.log("clicked to del ", clickedDelRoom);
+            this.$.delRoomDialog.toggle();
+          },
+          confirmRoomDel: function(e) {
+            var model = e.model;
+
+            var clickedRoom = clickedDelRoom;
+            console.log("del ", clickedRoom);
+            for (var i = 0; i < this.roomList.length; i++) {
+
+              if (this.roomList[i].roomName === clickedRoom) {
+                this.splice('roomList', i, 1);
+
+                var Room = Parse.Object.extend("Room");
+                var User = Parse.User.extend;
+                var room = new Parse.Query(Room);
+                var query = new Parse.Query(Parse.User);
+
+                room.equalTo("roomName", clickedRoom);
+                room.first({
+                  success: function(object) {
+                    object.destroy();
+
+                  },
+                  error: function(error) {
+                    alert("Error: " + error.code + " " + error.message);
+                  }
+                });
+
+                break;
+              }
             }
           }
         }

@@ -153,7 +153,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ready: function() {
           var self = this;
-          var clickedDocentEmail, clickedDocentRoom, docent, clickedDelDocent, clickedDelDocent2;
+          var clickedDocentEmail,
+          clickedDocentRoom,
+          docent,
+          clickedDelDocent,
+          clickedDelDocent2,
+          clickedDocentID;
 
           // Fetch all Docents
           var DocentQuery = Parse.Object.extend("Docent");
@@ -225,76 +230,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           clickedDelDocent2 = model.get("item.lastName");
           this.docentName = clickedDelDocent + " " + clickedDelDocent2;
           this.$.delDocentDialog.toggle();
+          clickedDocentID = model.get("item.docent").id;
+          clickedDocentEmail = model.get("item.email");
 
         },
 
         confirmDocentDel: function(e){
           var model = e.model;
           var clickedDocent = clickedDelDocent + clickedDelDocent2;
+          var List = this.docentList;
+          var docentID = this.docentList.docent;
 
           for ( i in this.docentList){
 
             if(this.docentList[i].firstName+this.docentList[i].lastName === clickedDocent){
+              var docentID = clickedDocent.get
+              // //delete Slots
+              Parse.Cloud.run('removeDocentSlots', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
 
-
-              //delete Slots
-              var slots = Parse.Object.extend("Slots");
-              var slotsQuery = new Parse.Query(slots);
-              slotsQuery.include("Docent");
-              slotsQuery.equalTo("Docent",this.docentList[i].docent);
-              slotsQuery.find().then(function(results) {
-                for(i in results){
-
-                  console.log("SlotDocents",results[i]);
-                  results[i].destroy();      //destroys the rows with Docent in "slots"
-                }
-
+                  console.log(result);
+                },
+                error: function(error) {}
               });
 
-              //delete Pointer from Room
-              var room = Parse.Object.extend("Room");
-              var roomQuery = new Parse.Query(room);
-              roomQuery.include("Docent");
-              roomQuery.equalTo("Docent",this.docentList[i].docent);
-              roomQuery.first({
-                success: function(object){
-                object.set("Docent", null);
-                object.save();
-                }
+              Parse.Cloud.run('removeDocentRoom', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
               });
 
-              var appointment = Parse.Object.extend("Appointment");
-              var appointmentQuery = new Parse.Query(appointment);
-              appointmentQuery.include("docent");
-              appointmentQuery.equalTo("docent",this.docentList[i].docent);
-              appointmentQuery.find().then(function(results) {
-                for(i in results){
+              Parse.Cloud.run('removeDocentDocent', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
 
-                  console.log("AppointmentDocents",results[i]);
-                  results[i].destroy();      //destroys the rows with Docent in "Appointment"
-                }
-
+                  console.log(result);
+                },
+                error: function(error) {}
               });
 
-              var user = Parse.Object.extend("User");
-              var userQuery = new Parse.Query(user);
-              userQuery.equalTo("email",this.docentList[i].email);
-              userQuery.first({
-                success: function(object){
-                  object.destroy();   //destroys the row with Docent in "User"
-                  console.log("docent in user",object);
-                }
+
+              Parse.Cloud.run('removeDocentUser', {
+                docent: clickedDocentEmail
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
               });
 
-              var docent = Parse.Object.extend("Docent");
-              var docentQuery = new Parse.Query(docent);
-              docentQuery.equalTo("email",this.docentList[i].email);
-              docentQuery.first({
-                success: function(object){
-                  object.destroy();   //destroys the row with Docent in "User"
-                  console.log("docent in docent",object);
-                }
+              Parse.Cloud.run('removeDocentAppointments', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
               });
+              //
+              // var appointment = Parse.Object.extend("Appointment");
+
+              //
+
+
 
 
               this.splice('docentList',i, 1);

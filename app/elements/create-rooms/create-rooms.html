@@ -38,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
   </style>
+      <div class="" hidden="{{!isAdmin}}">
   <template>
     <paper-toolbar id="createDocentToolbar">
       <h2>Create a new Room</h2>
@@ -85,18 +86,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       A room needs to have a unique name.
 
     </paper-dialog>
-
+</div>
   </template>
+</template>
   <script>
     (function() {
       Polymer({
         is: 'create-rooms',
 
         properties: {
-          foo: {
-            type: String,
-            value: 'bar',
-            notify: true
+          isAdmin: {
+            type: Boolean,
+            notify: true,
+            value: false
+          }
+        },
+        ready: function(){
+          var currentUser = Parse.User.current();
+          if (currentUser.get("isAdmin")) {
+            this.isAdmin = true;
+            console.log(this.isAdmin);
+          } else {
+            console.log(this.isAdmin);
           }
         },
         handleClick: function(e) {

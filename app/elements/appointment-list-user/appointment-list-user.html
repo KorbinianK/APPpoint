@@ -76,32 +76,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
           var self = this;
           var currentUser = Parse.User.current();
+          if (currentUser != null) {
+            Parse.Cloud.run('appointmentList', {
+              id: currentUser.id
+            }, {
+              success: function(results) {
+                // var List = [];
+                for (i in results) {
+                  var object = results[i];
+                  var date = object.date;
 
-          Parse.Cloud.run('appointmentList', {
-            id: currentUser.id
-          }, {
-            success: function(results) {
-              // var List = [];
-              for (i in results) {
-                var object = results[i];
-                var date = object.date;
-
-                date = moment(date);
-                date.locale('en', {
-                  months: [
-                    "January", "February", "March", "April", "May", "June", "July",
-                    "August", "September", "October", "November", "December"
-                  ]
-                });
-                date = date.format("ddd, DD MMM YYYY");
-                results[i].date = date;
-                console.log("date", date);
-              }
-              self.appointList = results;
-              console.log(results);
-            },
-            error: function(error) {}
-          });
+                  date = moment(date);
+                  date.locale('en', {
+                    months: [
+                      "January", "February", "March", "April", "May", "June", "July",
+                      "August", "September", "October", "November", "December"
+                    ]
+                  });
+                  date = date.format("ddd, DD MMM YYYY");
+                  results[i].date = date;
+                  console.log("date", date);
+                }
+                self.appointList = results;
+                console.log(results);
+              },
+              error: function(error) {}
+            });
+          }
         },
         appointClick: function(e) {
 

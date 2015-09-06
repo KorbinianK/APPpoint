@@ -66,66 +66,77 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
+        <paper-header-panel mode="scroll" drawer>
+          <paper-toolbar id="navheader" class="tall">
+            <username-display class="bottom username"></username-display>
 
-        <!-- Drawer Content -->
-        <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="a-home" href="/">
-            <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
-          </a>
+            <iron-image id="coverimage" placeholder="images/beach.jpg" sizing="cover" preload fade class="fit"></iron-image>
 
-          <a data-route="a-overview-docent" href="/aoverviewd">
-            <iron-icon icon="icons:view-headline"></iron-icon>
-            <span>Dozenten Übersicht</span>
-          </a>
+          </paper-toolbar>
 
-          <a data-route="a-add-docent" href="/aaddd">
-            <iron-icon icon="social:person-add"></iron-icon>
-            <span>Dozenten erstellen</span>
-          </a>
+          <!-- Drawer Content -->
+          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
 
-          <a data-route="a-manage-docent" href="/amanaged">
-            <iron-icon icon="social:group"></iron-icon>
-            <span>Dozenten verwalten</span>
-          </a>
-          </hr>
-          <a data-route="a-create-room" href="/acreater">
-            <iron-icon icon="social:domain"></iron-icon>
-            <span>Create rooms</span>
-          </a>
-          <a data-route="a-manage-room" href="/amanager">
-            <iron-icon icon="social:location-city"></iron-icon>
-            <span>Manage rooms</span>
-          </a>
-          </hr>
-          <a data-route="a-overview-appointments" href="/aoverviewa">
-            <iron-icon icon="icons:perm-contact-calendar"></iron-icon>
-            <span>Sprechzeiten Übersicht</span>
-          </a>
 
-          <a data-route="a-manage-appointments" href="/amanagea">
-            <iron-icon icon="icons:today"></iron-icon>
-            <span>Sprechzeiten verwalten
-              <span>
-          </a>
+            <template is="dom-if" if="{{isAdmin(currentUser)}}" href="/alogin">
+              <a data-route="a-home" href="/">
+                <iron-icon icon="home"></iron-icon>
+                <span>Home</span>
+              </a>
 
-          </hr>
-          <!-- <a data-route="a-manage-profil" href="/amanagep">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Profil verwalten
-              <span>
-          </a> -->
-          <a data-route="a-logout" onClick="javascript:Parse.User.logOut();">
-            <iron-icon icon="exit-to-app"></iron-icon>
-            <span>Logout
-              <span>
-          </a>
+              <a data-route="a-overview-docent" href="/aoverviewd">
+                <iron-icon icon="icons:view-headline"></iron-icon>
+                <span>Dozenten Übersicht</span>
+              </a>
 
-        </paper-menu>
+              <a data-route="a-add-docent" href="/aaddd">
+                <iron-icon icon="social:person-add"></iron-icon>
+                <span>Dozenten erstellen</span>
+              </a>
+
+              <a data-route="a-manage-docent" href="/amanaged">
+                <iron-icon icon="social:group"></iron-icon>
+                <span>Dozenten verwalten</span>
+              </a>
+              </hr>
+              <a data-route="a-create-room" href="/acreater">
+                <iron-icon icon="social:domain"></iron-icon>
+                <span>Create rooms</span>
+              </a>
+              <a data-route="a-manage-room" href="/amanager">
+                <iron-icon icon="social:location-city"></iron-icon>
+                <span>Manage rooms</span>
+              </a>
+              </hr>
+              <a data-route="a-overview-appointments" href="/aoverviewa">
+                <iron-icon icon="icons:perm-contact-calendar"></iron-icon>
+                <span>Sprechzeiten Übersicht</span>
+              </a>
+
+              <a data-route="a-manage-appointments" href="/amanagea">
+                <iron-icon icon="icons:today"></iron-icon>
+                <span>Sprechzeiten verwalten
+                  <span>
+              </a>
+
+              </hr>
+
+            </template>
+            <template is="dom-if" if="{{currentUser(currentUser)}}">
+              <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
+                <iron-icon icon="power-settings-new"></iron-icon>
+                <span>Logout
+                  <span>
+
+              </a>
+            </template>
+            <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/alogin">
+              <a class="pointer" data-route="a-login">
+                <iron-icon icon="power-settings-new"></iron-icon>
+                <span>Login</span>
+              </a>
+            </template>
+          </paper-menu>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
@@ -133,12 +144,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
+          <div id="crop" class="bottom">
+            <iron-icon id="headericon" icon="polymer"></iron-icon>
+          </div>
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
           <paper-icon-button icon="refresh" onclick="javascript:location.reload();"></paper-icon-button>
-          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/';"></paper-icon-button>
+          <paper-icon-button icon="icons:power-settings-new" onClick="javascript:Parse.User.logOut(); document.location.href = '/';"></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -154,6 +168,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
+          <template is="dom-if" if="{{!isAdmin(currentUser)}}">
+            <no-rights></no-rights>
+          </template>
+          <template is="dom-if" if="{{isAdmin(currentUser)}}" href="/alogin">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="a-home">
@@ -168,7 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <template is="dom-if" if="{{isEqual(route, 'a-overview-docent')}}" restamp="true">
 
 
-                  <docent-list></docent-list>
+                <docent-list></docent-list>
 
               </template>
             </section>
@@ -199,42 +217,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </template>
             </section>
 
-
+            <section data-route="a-login">
+              <login-element></login-element>
+            </section>
 
 
           </iron-pages>
+        </template>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
-
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
-
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="networkFirst"
-                         precache-file="precache.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
 
   </template>
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/hour.js"></script>
-  <script src="scripts/date.js"></script>
-  <script src="/bower_components/moment/locale/de.js"></script>
+  <!-- <script src="scripts/hour.js"></script> -->
+  <!-- <script src="scripts/date.js"></script> -->
+  <!-- <script src="/bower_components/moment/locale/de.js"></script> -->
   <script type="text/javascript">
-    app.isEqual = function(x, y) {
-      return x === y;
-    };
+
   </script>
   <!-- endbuild-->
 </body>

@@ -115,3 +115,27 @@ function objSort() {
         return 0;
     });
 }
+
+app.isEqual = function(x, y) {
+  return x === y;
+};
+var currentUser = Parse.User.current();
+app.currentUser = function(usr) {
+    if (currentUser =! null) {
+      // console.log("admin");
+      return currentUser;
+    } else {
+
+      return null;
+
+    }
+}
+app.isAdmin = function(usr){
+  var currentUser = Parse.User.current();
+
+      if (currentUser.get("isAdmin") === true) {
+        return true;
+      }else{
+        return false;
+      }
+}

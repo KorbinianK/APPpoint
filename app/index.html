@@ -80,6 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           </paper-toolbar>
           <!-- Drawer Content -->
+
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
             <a data-route="a-home" href="/">
               <iron-icon icon="home"></iron-icon>
@@ -91,6 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span>New Appoinment</span>
             </a>
 
+            <template is="dom-if" if="{{currentUser(currentUser)}}" href="/ulogin">
 
             <a data-route="u-overview-appointments" href="/uappov">
               <iron-icon icon="perm-contact-calendar"></iron-icon>
@@ -112,12 +114,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               </a>
             </template>
+            </template>
             <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/ulogin">
               <a class="pointer" data-route="u-login">
                 <iron-icon icon="power-settings-new"></iron-icon>
                 <span>Login</span>
               </a>
             </template>
+
           </paper-menu>
       </paper-scroll-header-panel>
 
@@ -172,11 +176,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </template>
             </section>
             <section data-route="u-login">
-              <!-- <template is="dom-if" if="{{isEqual(route, 'a-home')}}" restamp="true"> -->
+
               <login-element></login-element>
-              <!-- </template> -->
-              <!-- <h1> Appointment List </h1> -->
-              <!-- <appointment-list-user></appointment-list-user> -->
+
             </section>
         </div>
 

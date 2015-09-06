@@ -47,10 +47,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="bg">
       <div id="name">
         <div hidden="{{loggedIn}}">
-          <paper-button raised on-click="loginButton">Login</paper-button>
+          <span>Not loggend in.</span>
         </div>
         <div hidden="{{!loggedIn}}">
-          <iron-icon icon="account-circle"></iron-icon>
+          <iron-icon class="usericon" icon="account-circle"></iron-icon>
           <span>{{userName}}</span>
         </div>
       </div>
@@ -74,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (currentUser != null) {
             this.loggedIn = true;
             var name = currentUser.get("firstName") + " " + currentUser.get("lastName");
-            console.log("test");
+
             this.userName = name;
 
           }
