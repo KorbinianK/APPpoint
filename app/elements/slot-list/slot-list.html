@@ -211,6 +211,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 docent: result
               }, {
                 success: function(results) {
+                  var earliestDate = moment();
+                  var latestDate = earliestDate.clone();
+                  latestDate.add(1, 'months');
 
                   var List = [];
                   for (i in results) {
@@ -219,34 +222,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var object = results[i];
                     var slots = object.get('Slots');
                     var date = object.get("date");
-                    item["date"] = moment(date).locale('en', {
+                    date = moment(date).locale('en', {
                       months: [
                         "January", "February", "March", "April", "May", "June", "July",
                         "August", "September", "October", "November", "December"
                       ]
                     }).format("ddd, DD MMM YYYY");
-                    item["month"] = moment(date).locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    }).format("MMM");
-                    item["day"] = moment(date).locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    }).format("DD");
-                    item["dateObject"] = date;
-                    item["slots"] = slots;
-                    item["slots"].date = date;
-                    item["toggle"] = false;
-                    item["toggleIcon"] = false;
-                    List.push(item);
-
+                    // console.log("date",date);
+                    if (moment(new Date(date)).isBefore(latestDate) && moment(new Date(date)).isAfter(earliestDate)) {
+                      item["date"] = date;
+                      var month = moment(new Date(date));
+                      item["month"] = month.locale('en', {
+                        months: [
+                          "January", "February", "March", "April", "May", "June", "July",
+                          "August", "September", "October", "November", "December"
+                        ]
+                      }).format("MMM");
+                      var day = moment(new Date(date));
+                      item["day"] = day.locale('en', {
+                        months: [
+                          "January", "February", "March", "April", "May", "June", "July",
+                          "August", "September", "October", "November", "December"
+                        ]
+                      }).format("DD");
+                      item["dateObject"] = date;
+                      item["slots"] = slots;
+                      item["slots"].date = date;
+                      item["toggle"] = false;
+                      item["toggleIcon"] = false;
+                      List.push(item);
+                    }
+                    if (moment(new Date(date)).isAfter(latestDate)) {
+                      break;
+                    }
                   }
 
-                  objSort(List, "month", "day");
+                  objSort(List, ["month", true], "day");
                   if (List.length === 0) {
                     if (self.slots === true) {
                       self.slots = !self.slots;
