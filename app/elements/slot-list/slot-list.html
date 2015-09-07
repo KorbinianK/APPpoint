@@ -225,12 +225,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         "August", "September", "October", "November", "December"
                       ]
                     }).format("ddd, DD MMM YYYY");
-                    item["d"] = moment(date).locale('en', {
+                    item["month"] = moment(date).locale('en', {
                       months: [
                         "January", "February", "March", "April", "May", "June", "July",
                         "August", "September", "October", "November", "December"
                       ]
-                    }).format("DD MMM YYYY");
+                    }).format("MMM");
+                    item["day"] = moment(date).locale('en', {
+                      months: [
+                        "January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October", "November", "December"
+                      ]
+                    }).format("DD");
                     item["dateObject"] = date;
                     item["slots"] = slots;
                     item["slots"].date = date;
@@ -240,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   }
 
-                  objSort(List, "d");
+                  objSort(List, "month", "day");
                   if (List.length === 0) {
                     if (self.slots === true) {
                       self.slots = !self.slots;

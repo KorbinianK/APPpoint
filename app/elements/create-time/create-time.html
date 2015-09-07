@@ -18,7 +18,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
-
+    paper-toast {
+      z-index: 10;
+      right: 50%;
+      width: 60%;
+    }
     paper-button {
       margin-bottom: 24px;
       width: 15%;
@@ -340,7 +344,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-        <div>
+
           <span>Do you want to delete the old Slots?</span>
 
 
@@ -356,7 +360,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Old Slots has been deleted</h2>
+              <h2>Old Slots have been deleted</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
@@ -370,7 +374,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-button flat dialog-confirm on-click="createSlots">Ok</paper-button>
         </div>
       </paper-dialog>
-      </div>
+
+      <paper-toast id="slotsCreatedToast" duration="4000">
+        <iron-icon icon="done"></iron-icon>
+        <span>Slots have been created</span>
+      </paper-toast>
+
   </template>
 
 
@@ -630,7 +639,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
         createSlots: function(e) {
-
+var self = this;
           var deleteSlot = this.$.deleteSlot;
           var doc = this.selDocent;
           var selected = this.selDocent;
@@ -638,11 +647,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var startDate = new Date(origStartDate);
           startDate = moment(startDate);
           startDate.tz("Europe/Berlin").format();
-          console.log("start", startDate);
+          // console.log("start", startDate);
           var endDate = new Date(origEndDate);
           endDate = moment(endDate);
           endDate.tz("Europe/Berlin").format();
-          console.log("end", endDate);
+          // console.log("end", endDate);
           var startTime = this.startTime;
           var endTime = this.endTime;
 
@@ -720,8 +729,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             if (startDate.isBefore(endDate)) {
 
-
-
               if (startDate.diff(endDate, 'days') * -1 >= 366) {
 
                 this.errorType = "Dates are set incorretly"
@@ -737,14 +744,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (docent.length > 0) {
                       deleteSlot.toggle();
                     } else {
-                      funktion();
+                      createSlots();
 
                     }
                   }
 
                 });
 
-                var funktion = function() {
+                var createSlots = function() {
                   var myDate = startDate;
                   var recurrence = myDate.recur().every(selected).daysOfWeek();
                   recurrence.startDate(startDate);
@@ -752,23 +759,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   var allDates = recurrence.all("L");
 
                   for (i in allDates) {
-
+                    var fixedStartDate = null;
+                    var fixedEndDate = null;
                     var day = allDates[i];
-                    var dayString = day.substring(0, 2);
-                    var monthString = day.substring(3, 6);
-                    var yearString = day.substring(6, day.length);
-                    var fixedStartDate = moment();
-                    fixedStartDate.set('year', yearString);
-                    fixedStartDate.set('month', monthString);
-                    fixedStartDate.set('date', dayString);
+                    var newDay = new Date(day);
+
+                    fixedStartDate = moment(newDay);
+
+
                     fixedStartDate.set('hour', hoursStart);
                     fixedStartDate.set('minute', minutesStart);
+
                     fixedStartDate.tz("Europe/Berlin").format();
                     // console.log("startdate", fixedStartDate);
-                    var fixedEndDate = moment();
-                    fixedEndDate.set('year', yearString);
-                    fixedEndDate.set('month', monthString);
-                    fixedEndDate.set('date', dayString);
+                    fixedEndDate = fixedStartDate.clone();
+
                     fixedEndDate.set('hour', hoursEnd);
                     fixedEndDate.set('minute', minutesEnd);
                     fixedEndDate.tz("Europe/Berlin").format();
@@ -776,6 +781,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
                     var sT = fixedStartDate;
                     var timeArray = [];
+                    // console.log("diff",sT,fixedEndDate,sT.diff(fixedEndDate));
                     while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
                       var slot = {};
                       var slotStart = sT.clone();
@@ -796,11 +802,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                       slot['availability'] = true;
                       timeArray.push(slot);
+                      // console.log("slot",slot);
                       sT.add(duration, "minutes").add(breakTime, "minutes");
 
                     }
                     var queryDate = fixedStartDate;
-                    // queryDate.utc();
+
                     queryDate.set('hour', 0);
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
@@ -823,10 +830,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       slotQuery.set("date", queryDate);
                       slotQuery.set("Slots", timeArray);
                       slotQuery.save();
+
                     }
 
 
                   }
+                  self.$.slotsCreatedToast.show();
                 };
 
               }
