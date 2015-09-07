@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <paper-card>
         <div class="card-content">
-          <paper-item on-tap="appointClick">
+          <paper-item>
 
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
@@ -81,6 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               id: currentUser.id
             }, {
               success: function(results) {
+                  // console.log(results);
                 // var List = [];
                 for (i in results) {
                   var object = results[i];
@@ -98,14 +99,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   console.log("date", date);
                 }
                 self.appointList = results;
-                console.log(results);
+
               },
               error: function(error) {}
             });
           }
         },
         delAppoinment: function(e) {
+          var model = e.model;
+          console.log(model);
+          var date = moment(new Date(model.get("item.date")));
+          console.log(model.get("item.docentId"));
 
+          Parse.Cloud.run('delUserAppointments', {
+            id: currentUser.id,
+            startTime: model.get("item.startTime"),
+            docentId: model.get("item.docentId"),
+            date: date
+          }, {
+            success: function(results) {
+
+              console.log(results);
+            },
+            error: function(error) {}
+          });
         }
 
 

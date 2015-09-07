@@ -272,42 +272,52 @@ Parse.Cloud.define("createAppointment", function (request, response) {
   var docentId = request.params.docentId;
   var slotStartTime = request.params.slotStartTime;
   var slotDate = request.params.slotDate;
-  var Docent = Parse.Object.extend("Docent");
-  var docentQuery = new Parse.Query("Docent");
-  // var docentQuery = new Parse.Query(Parse.User);
+  var docentQuery = new Parse.Query(Parse.User);
   var user = Parse.User.current();
-    docentQuery.include("Docent");
-  docentQuery.equalTo("objectId", docentId);
-
+  docentQuery.include("Docent");
+  docentQuery.equalTo("Docent", {
+    __type: "Pointer",
+    className: "Docent",
+    objectId: docentId
+  });
   docentQuery.first({
     success: function (docent) {
 
       var slotQuery = new Parse.Query("Slots");
       var foundDocent = docent;
-      // var foundDocentUser = docent.get("Docent");
+      var docentPointer = docent.get("Docent");
+      var id = docentPointer.id;
       slotQuery.include("Docent");
-      slotQuery.equalTo("Docent", docent);
-
+      slotQuery.equalTo("Docent", {
+        __type: "Pointer",
+        className: "Docent",
+        objectId: id
+      });
       slotQuery.find({
         success: function (slots) {
 
           var date;
           var count;
+          var resultSlots = slots;
 
-          for (var i in slots) {
-            var slot = slots[i];
+          for (i in resultSlots) {
+            var slot = resultSlots[i];
             var date = slot.get("date");
             var getSlots = slot.get("Slots");
 
+
             if (JSON.stringify(date) === JSON.stringify(slotDate)) {
+
               var arr = getSlots;
               for (j in arr) {
                 if (arr[j].startTime === slotStartTime) {
                   var app = arr[j];
+
                   break;
                 }
 
               }
+
               if (app != undefined || app != null) {
 
                 app.availability = false;
@@ -317,22 +327,21 @@ Parse.Cloud.define("createAppointment", function (request, response) {
 
                     var Appointment = Parse.Object.extend("Appointment");
                     var appointment = new Appointment();
-
                     appointment.set("date", slotDate);
                     appointment.set("startTime", app.startTime);
                     appointment.set("endTime", app.endTime);
                     appointment.set("user", user);
-                    appointment.set("docent", foundDocent);
-
+                    appointment.set("Docent", foundDocent);
                     appointment.save(null, {
-                      success: function (appointment) {
-                        response.success(slotDate);
-
+                      success: function (result) {
+                        response.success(result);
                       },
-                      error: function (appointment, error) {
-                        response.error("Something went wrong");
+                      error: function (error) {
+                        response.error("save appointment failed");
                       }
+
                     });
+
                   },
                   error: function (error) {
                     alert("Error: " + error.code + ", " + error.message);
@@ -342,15 +351,17 @@ Parse.Cloud.define("createAppointment", function (request, response) {
 
             }
           }
+          // response.success("not what we want");
+          // response.success(JSON.stringify(date));
         },
         error: function () {
-          response.error("query failed");
+          response.error("slots query failed");
         }
 
       });
     },
     error: function () {
-      response.error("query failed");
+      response.error("docent query failed");
     }
   });
 
@@ -360,7 +371,8 @@ Parse.Cloud.define("appointmentList", function (request, response) {
   var moment = require('cloud/moment.js');
   var moment = require("cloud/moment-timezone-with-data.js");
   var query = new Parse.Query("Appointment");
-  query.include("docent");
+  query.include("Docent");
+    query.include("Docent.Docent");
   query.include("user");
   query.equalTo("user", {
     __type: "Pointer",
@@ -374,14 +386,12 @@ Parse.Cloud.define("appointmentList", function (request, response) {
         var item = {};
         var object = results[i];
         var date = object.get('date');
-        console.log(date);
-
-        var docent = object.get('docent');
+        var docent = object.get('Docent');
         item["date"] = date;
         item['startTime'] = object.get('startTime');
         item['endTime'] = object.get('endTime');
-        item['docent'] = docent.get('firstName');
-
+        item['docent'] = docent;
+        item['docentId'] = docent.get("Docent").id;
         item['docentName'] = docent.get('lastName') + " " + docent.get('firstName');
         List.push(item);
 
@@ -493,7 +503,7 @@ Parse.Cloud.define("removeDocentDocent", function (request, response) {
   docentQuery.first({
     success: function (object) {
 
-        object.destroy();
+      object.destroy();
 
       response.success("Docent deleted");
     },
@@ -527,13 +537,11 @@ Parse.Cloud.define("removeDocentAppointments", function (request, response) {
   var docent = request.params.docent;
   appointmentQuery.include("docent");
   appointmentQuery.equalTo("docent", docent);
-
   appointmentQuery.find({
     success: function (results) {
 
       if (results.length = !0) {
         for (i in results) {
-
 
           results[i].destroy(); //destroys the rows with Docent in "Appointment"
         }
@@ -541,5 +549,58 @@ Parse.Cloud.define("removeDocentAppointments", function (request, response) {
       }
     },
     error: function (error) {}
+  });
+});
+
+Parse.Cloud.define("delUserAppointments", function (request, response) {
+  Parse.Cloud.useMasterKey();
+  var appointmentQuery = new Parse.Query("Appointment");
+  var startTime = request.params.startTime;
+  appointmentQuery.include("user");
+  appointmentQuery.include("Docent");
+  appointmentQuery.equalTo("user", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: request.params.id
+  });
+  appointmentQuery.equalTo("Docent", {
+    __type: "Pointer",
+    className: "_User",
+    objectId: request.params.docentId
+  });
+  appointmentQuery.find({
+      success: function (appointments) {
+
+        // appointments[i].destroy();
+        for (i in appointments) {
+          if (appointments[i].get("startTime") === startTime) {
+            // appointments[i].destroy();
+            break;
+          }
+        }
+        // response.success(startTime);
+
+        var slotQuery = new Parse.Query("Slots");
+        slotQuery.include("Docent");
+        slotQuery.equalTo("Docent", {
+          __type: "Pointer",
+          className: "_User",
+          objectId: request.params.docentId
+        });
+        // slotQuery.equalTo("date",request.params.date);
+        
+        slotQuery.find ({
+          success: function (slots) {
+            response.success(slots);
+          },
+          error: function (error) {
+
+          }
+
+      });
+    },
+    error: function (error) {
+
+    }
   });
 });

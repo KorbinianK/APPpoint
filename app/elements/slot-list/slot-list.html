@@ -344,8 +344,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.docent = docentName;
           // fixedDate = new moment(new Date(model.get("list.date")));
           this.date = model.get("list.dateObject");
-          queryDate = this.date;
-          // console.log("querydate");
+          queryDate = moment(new Date(this.date));
+      queryDate.tz("Europe/Berlin").format();;
+          console.log("querydate",queryDate);
           this.date = moment(this.date).locale('en', {
             months: [
               "January", "February", "March", "April", "May", "June", "July",
@@ -373,7 +374,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             success: function(result) {
               clickedSlot.set("slot.availability", false);
-              // console.log("result", result);
+              console.log("result", result);
             },
             error: function(error) {}
           });
