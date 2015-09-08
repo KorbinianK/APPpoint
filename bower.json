@@ -5,6 +5,7 @@
     "iron-collapse": "PolymerElements/iron-collapse#~1.0.3",
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
     "iron-image": "PolymerElements/iron-image#~1.0.2",
+    "iron-list": "PolymerElements/iron-list#~1.1.0",
     "moment": "~2.10.6",
     "moment-recur": "~1.0.5",
     "moment-timezone": "~0.4.0",

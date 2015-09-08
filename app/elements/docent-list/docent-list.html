@@ -16,16 +16,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: block;
     }
 
-    paper-dialog{
+    paper-dialog {
       min-height: 400px;
     }
 
     paper-card {
       width: 100%;
+      padding-bottom: 5px;
     }
 
     paper-progress {
       width: 100%;
+    }
+
+    iron-image {
+      float: left;
+      margin: 10px;
+      /*margin-top: 0;*/
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
     }
 
     #roomElement {
@@ -47,25 +57,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <template is="dom-repeat" items="{{docentList}}">
 
-        <paper-item>
+
+        <paper-card>
+
           <div>
-            <iron-image id="avatar" sizing="cover" style="width:50px; height:50px" ; fade src="{{item.picture}}"></iron-image>
-          </div>
-          <paper-item-body three-line class="paper-item-body-0">
-            <div>
+
+
+            <!-- <paper-item-body three-line class="paper-item-body-0"> -->
+
+            <iron-image id="avatar" sizing="cover" ; fade src="http://api.adorable.io/avatars/85/abott@adorable.io.png"></iron-image>
+
+            <h2>
               <span>{{item.lastName}}</span>
               <span>{{item.firstName}}</span>
-            </div>
+            </h2>
+          </div>
 
-            <div secondary>Room:
-              <span id="room">{{item.room}}</span>
-            </div>
-          </paper-item-body>
-          <paper-button flat on-click="roomButtonClick">Room</paper-button>
-            <iron-icon icon="highlight-off" on-tap="docentDel"></iron-icon>
-          </paper-icon-item>
+          <div secondary>Room:
+            <span id="room">{{item.room}}</span>
+          </div>
+          <!-- </paper-item-body> -->
+          <div class="card-actions">
+            <!-- <iron-icon icon="highlight-off" on-tap="docentDel"></iron-icon> -->
+            <paper-button flat on-click="docentDel">Delete</paper-button>
+            <paper-button flat on-click="editButtonClick">Edit</paper-button>
+            <paper-button flat on-click="roomButtonClick">Room</paper-button>
+          </div>
 
-
+</paper-card>
+  </paper-material>
       </template>
       <paper-dialog id="roomDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
 
@@ -102,27 +122,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </div>
 
-    </paper-dialog>
+      </paper-dialog>
 
-    <paper-dialog id="delDocentDialog" modal>
+      <paper-dialog id="delDocentDialog" modal>
 
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Please confirm</h2>
-          </div>
-        </paper-toolbar>
-      </paper-header-panel>
-
-
-      <p>Delete the Docent <b><span>{{docentName}}</span></b> ?</br>  Be Sure you will loose all timeslots and appointments</p>
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Please confirm</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
 
 
-      <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="confirmDocentDel">Confirm</paper-button>
-      </div>
-    </paper-dialog>
+        <p>Delete the Docent <b><span>{{docentName}}</span></b> ?</br> Be Sure you will loose all timeslots and appointments</p>
+
+
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="confirmDocentDel">Confirm</paper-button>
+        </div>
+      </paper-dialog>
 
   </template>
   <script>
@@ -130,10 +150,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: 'docent-list',
         properties: {
+          random: {
+            type: String,
+            value: 218
+          },
           docentList: {
             type: Array
           },
-        docentName: {
+          docentName: {
             type: String,
             value: "Default"
           }
@@ -154,11 +178,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
           var self = this;
           var clickedDocentEmail,
-          clickedDocentRoom,
-          docent,
-          clickedDelDocent,
-          clickedDelDocent2,
-          clickedDocentID;
+            clickedDocentRoom,
+            docent,
+            clickedDelDocent,
+            clickedDelDocent2,
+            clickedDocentID;
 
           // Fetch all Docents
           var DocentQuery = Parse.Object.extend("Docent");
@@ -224,7 +248,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
           this.$.roomDialog.toggle();
         },
-        docentDel: function(e){
+        docentDel: function(e) {
           var model = e.model;
           clickedDelDocent = model.get("item.firstName");
           clickedDelDocent2 = model.get("item.lastName");
@@ -235,17 +259,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
 
-        confirmDocentDel: function(e){
+        confirmDocentDel: function(e) {
           var model = e.model;
           var clickedDocent = clickedDelDocent + clickedDelDocent2;
           var List = this.docentList;
           var docentID = this.docentList.docent;
 
-          for ( i in this.docentList){
+          for (i in this.docentList) {
 
-            if(this.docentList[i].firstName+this.docentList[i].lastName === clickedDocent){
+            if (this.docentList[i].firstName + this.docentList[i].lastName === clickedDocent) {
               var docentID = clickedDocent.get
-              // //delete Slots
+                // //delete Slots
               Parse.Cloud.run('removeDocentSlots', {
                 docent: clickedDocentID
               }, {
@@ -304,7 +328,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-              this.splice('docentList',i, 1);
+              this.splice('docentList', i, 1);
             }
           }
 

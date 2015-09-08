@@ -110,16 +110,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </hr>
               <a data-route="a-overview-appointments" href="/aoverviewa">
                 <iron-icon icon="icons:perm-contact-calendar"></iron-icon>
-                <span>Sprechzeiten Übersicht</span>
+                <span>Appointments overview</span>
               </a>
 
               <a data-route="a-manage-appointments" href="/amanagea">
                 <iron-icon icon="icons:today"></iron-icon>
-                <span>Sprechzeiten verwalten
+                <span>Manage Appointments
                   <span>
               </a>
 
               </hr>
+              <a data-route="a-manage-appointments" href="/asettings">
+                <iron-icon icon="icons:settings"></iron-icon>
+                <span>Settings
+                  <span>
+              </a>
 
             </template>
             <template is="dom-if" if="{{currentUser(currentUser)}}">
@@ -216,7 +221,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <create-time></create-time>
               </template>
             </section>
-
+            <section data-route="a-settings">
+              <template is="dom-if" if="{{isEqual(route, 'a-settings')}}" restamp="true">
+                <admin-interface></admin-interface>
+              </template>
+            </section>
             <section data-route="a-login">
               <login-element></login-element>
             </section>

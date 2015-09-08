@@ -52,9 +52,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-    <div hidden="{{!isAdmin}}">
-      <paper-material elevation="1">
 
+      <paper-material elevation="1">
         <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
         <template is="dom-repeat" items="{{roomList}}">
@@ -138,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-button flat dialog-confirm on-click="confirmRoomDel">Confirm</paper-button>
         </div>
       </paper-dialog>
-    </div>
+
   </template>
   <script>
     (function() {
@@ -146,11 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'rooms-list',
         properties: {
           properties: {
-            isAdmin: {
-              type: Boolean,
-              notify: true,
-              value: false
-            },
+
             available: {
               type: Boolean,
               value: true,

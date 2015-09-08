@@ -218,10 +218,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			},
 			handleClick: function() {
 				var
-					Email = $('[name="Email"]').val(),
+					Email = $('[name="Email"]').val().replace(/\s+/g, ''),
 					password = $('[name="password"]').val(),
-					firstName = $('[name="firstName"]').val(),
-					lastName = $('[name="lastName"]').val(),
+					firstName = $('[name="firstName"]').val().replace(/\s+/g, ''),
+					lastName = $('[name="lastName"]').val().replace(/\s+/g, ''),
 
 					subject1 = $('[name="subject1"]').val(),
 					subject2 = $('[name="subject2"]').val(),
