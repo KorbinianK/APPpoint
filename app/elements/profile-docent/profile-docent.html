@@ -321,7 +321,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.Email = currentUser.get("email");
 
 
-          this.Name = currentUser.get("firstName") + " " + currentUser.get("lastName");
+          //this.Name = currentUser.get("firstName") + " " + currentUser.get("lastName");
           this.firstName = currentUser.get("firstName");
           this.lastName = currentUser.get("lastName");
           this.Subject1 = currentUser.get("subject1");
@@ -356,12 +356,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               user.set("subject3", subject3);
               user.save();
 
+
             }
 
           });
-          currentUser.fetch();
+
+
+        /*  var currentUser = Parse.user.current();
+          currentUser.set("firstName",firstName);
+          currentUser.set("lastName", lastName);
+          currentUser.set("subject1", subject1);
+          currentUser.set("subject2", subject2);
+          currentUser.set("subject3", subject3);
+         currentUser.save();
+*/
+
           var docent = Parse.Object.extend("Docent");
           var docentQuery = new Parse.Query(docent);
+          docentQuery.equalTo("email", this.Email);
           docentQuery.first({
             success: function(user) {
               user.set("firstName", firstName);
@@ -376,7 +388,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           });
 
+
+
             this.$.toast.toggle();
+
+
+            var currentUser = Parse.User.current();
+              currentUser.set("firstName",firstName);
+              currentUser.set("lastName", lastName);
+              currentUser.set("subject1", subject1);
+              currentUser.set("subject2", subject2);
+              currentUser.set("subject3", subject3);
+             currentUser.save();
 
         }
 

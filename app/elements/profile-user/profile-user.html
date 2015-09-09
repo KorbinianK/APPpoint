@@ -62,37 +62,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       </paper-header-panel>
 
+      <paper-item>
 
-      <template is="dom-repeat" items="{{profileList}}">
-
-
-        <paper-card>
-
+        <paper-item-body class="paper-item-body-0">
 
           <div secondary>
-          <span>&nbsp</span>  <span >{{item.label}}</span>
+            </br>
+            <span>First Name</span>
+            <h2>
+              <span>{{firstName}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+
+      </paper-item>
+
+
+
+
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Last Name</span>
+            <h2>
+              <span>{{lastName}}</span>
+            </h2>
           </div>
 
+        </paper-item-body>
+        </paper-icon-item>
 
-          <div>
+      </paper-item>
 
-            <h3>
-              <span>&nbsp &nbsp &nbsp</span> <span>{{item.value}}</span>
 
-            </h3>
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Email</span>
+            <h2>
+              <span>{{Email}}</span>
+            </h2>
           </div>
+        </paper-item-body>
+        </paper-icon-item>
 
-</paper-card>
+      </paper-item>
 
-  </template>
+      <paper-item>
 
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Status</span>
+            <h2>
+              <span>User</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+
+
+      </paper-item>
 
       <paper-dialog id="edit" modal>
 
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Edit name </h2>
+              <h2>Edit Name and Subjects</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
@@ -103,12 +151,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <paper-input-container>
                 <label>First Name</label>
-                <input is="iron-input" name="firstName" type="text"  required value ={{firstName::input}}>
+                <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
               </paper-input-container>
 
               <paper-input-container>
                 <label>Last Name</label>
-                <input is="iron-input" name="lastName" type="text"  required value ="{{lastName::input}}">
+                <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
               </paper-input-container>
 
 
@@ -165,9 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
 
-          profileList: {
-            type: Array
-          },
+
 
           firstName: {
             type: String,
@@ -186,66 +232,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         ready: function() {
-          var self = this;
           var currentUser = Parse.User.current();
-          var profilliste = this.profilList;
+            currentUser.fetch();
           this.Email = currentUser.get("email");
-      //    this.firstName = currentUser.get("firstName");
-          //this.lastname=currentUser.get("lastName");
-
-          var User = Parse.Object.extend("User");
-          var userQuery = new Parse.Query(User);
-          userQuery.equalTo("email", this.Email);
-          userQuery.find().then(function(result){
-
-            var List=[];
-            var profile={};
-            var profile2={};
-            var profile3={};
-            var profile4={};
-            var firstName = result[0].get("firstName");
-            var lastName = result[0].get("lastName");
-
-            profile['label']= "First Name";
-            profile['value']= firstName;
-            profile2['label']= "Last Name";
-            profile2['value']=lastName;
-            profile3['label']="Email";
-            profile3['value']=result[0].get("email");
-            profile4['label']="Status";
-            profile4['value']="User";
-            List.push(profile);
-              List.push(profile2);
-                List.push(profile3);
-                  List.push(profile4);
-
-
-                  self.profileList= List;
-          });
-
+          this.firstName = currentUser.get("firstName");
+          this.lastName = currentUser.get("lastName");
 
 
         },
 
         editButton: function() {
           this.$.edit.toggle();
-          var self = this;
-          var currentUser = Parse.User.current();
-          var profilliste = this.profilList;
-          this.Email = currentUser.get("email");
-      //    this.firstName = currentUser.get("firstName");
-          //this.lastname=currentUser.get("lastName");
-
-          var User = Parse.Object.extend("User");
-          var userQuery = new Parse.Query(User);
-          userQuery.equalTo("email", this.Email);
-          userQuery.find().then(function(result){
-
-            self.firstName = result[0].get("firstName");
-            self.lastName = result[0].get("lastName");
-
-
-          });
         },
 
         edit: function() {
@@ -270,9 +267,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
 
             this.$.toast.toggle();
-            setTimeout(function(){
-     location.reload();
-  }, 2000);
+
+
+            var currentUser = Parse.User.current();
+            currentUser.set("firstName",firstName);
+            currentUser.set("lastName", lastName);
+            currentUser.save();
+
         }
 
 
