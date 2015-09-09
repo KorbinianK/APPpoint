@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     #button {
       padding-bottom: 20px;
     }
+
     paper-button {
       width: 30%;
       display: block;
@@ -26,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-left: auto;
       margin-right: auto;
     }
+
     paper-material {
       width: 80% !important;
       margin: 0 auto;
@@ -35,60 +37,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       width: 80% !important;
       margin: 0 auto;
     }
-
-
   </style>
-      <div class="" hidden="{{!isAdmin}}">
-  <template>
-    <paper-toolbar id="createDocentToolbar">
-      <h2>Create a new Room</h2>
-    </paper-toolbar>
+  <div class="" hidden="{{!isAdmin}}">
+    <template>
+      <paper-toolbar id="createDocentToolbar">
+        <h2>Create a new Room</h2>
+      </paper-toolbar>
 
-    </paper-toolbar>
-    <paper-material>
+      </paper-toolbar>
+      <paper-material>
 
-      <paper-item>
-        <paper-item-body three-line class="paper-item-body-0">
+        <paper-item>
+          <paper-item-body three-line class="paper-item-body-0">
 
-          <paper-input-container>
-            <label>Room Name</label>
-            <input is="iron-input" name="roomName" type="text" value="{{roomName::input}}" required>
-          </paper-input-container>
+            <paper-input-container>
+              <label>Room Name</label>
+              <input is="iron-input" name="roomName" type="text" bind-value="{{roomName::input}}" required>
+            </paper-input-container>
 
-          <paper-input-container>
-            <label>Building</label>
-            <input is="iron-input" name="roomDesc" type="text" value="{{roomDesc::input}}">
-          </paper-input-container>
+            <paper-input-container>
+              <label>Building</label>
+              <input is="iron-input" name="roomDesc" type="text" bind-value="{{roomDesc::input}}">
+            </paper-input-container>
 
-          <paper-input-container>
-            <label>Description</label>
-            <input is="iron-input" name="roomBuild" type="text" value="{{roomBuild::input}}">
-          </paper-input-container>
+            <paper-input-container>
+              <label>Description</label>
+              <input is="iron-input" name="roomBuild" type="text" bind-value="{{roomBuild::input}}">
+            </paper-input-container>
 
-        </paper-item-body>
-      </paper-item>
-      <div id="button">
-        <div id="button-create">
-          <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
-        </div>
-      </div>
-    </paper-material>
-    <paper-dialog id="alertDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-
-      <paper-header-panel>
-        <paper-toolbar>
-          <div>
-            <h2>Missing Information</h2>
+          </paper-item-body>
+        </paper-item>
+        <div id="button">
+          <div id="button-create">
+            <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
           </div>
-        </paper-toolbar>
-      </paper-header-panel>
+        </div>
+      </paper-material>
+      <paper-dialog id="alertDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
 
-      A room needs to have a unique name.
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Missing Information</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
 
-    </paper-dialog>
-</div>
+        A room needs to have a unique name.
+
+      </paper-dialog>
+  </div>
   </template>
-</template>
+  </template>
   <script>
     (function() {
       Polymer({
@@ -99,9 +99,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             notify: true,
             value: false
+          },
+          roomName: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          roomDesc: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          roomBuild: {
+            type: String,
+            value: '',
+            notify: true
           }
         },
-        ready: function(){
+        ready: function() {
           var currentUser = Parse.User.current();
           if (currentUser.get("isAdmin")) {
             this.isAdmin = true;
@@ -134,17 +149,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.set("roomDesc", roomDesc);
             room.set("roomBuild", roomBuild);
             room.set("available", true);
-
+            this.roomName = "";
+            this.roomBuild = "";
+            this.roomDesc = "";
             room.save(null, {
               success: function(room) {
                 // Execute any logic that should take place after the object is saved.
                 alert('New room created with objectId: ' + room.id);
-                var inputs, index;
 
-                inputs = document.getElementsByTagName('paper-input');
-                for (index = 0; index < inputs.length; ++index) {
-                  inputs[index].val = '';
-                }
               },
               error: function(room, error) {
                 // Execute any logic that should take place if the save fails.

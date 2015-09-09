@@ -18,11 +18,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
     paper-toast {
       z-index: 10;
       right: 50%;
       width: 60%;
     }
+
     paper-button {
       margin-bottom: 24px;
       width: 15%;
@@ -345,13 +347,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-          <span>Do you want to delete the old Slots?</span>
+        <span>Do you want to delete the old Slots?</span>
 
 
-          <div class="buttons">
-            <paper-button flat dialog-dismiss>Cancel</paper-button>
-            <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
-          </div>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+        </div>
       </paper-dialog>
 
 
@@ -639,58 +641,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
         createSlots: function(e) {
+
+
           var self = this;
           var deleteSlot = this.$.deleteSlot;
           var doc = this.selDocent;
           var selected = this.selDocent;
+          // console.log();
+          if (this.origStartDate != undefined && this.origEndDate != undefined) {
+            var startDate = new Date(origStartDate);
+            startDate = moment(startDate);
+            startDate.tz("Europe/Berlin").format();
+            // console.log("start", startDate);
+            var endDate = new Date(origEndDate);
+            endDate = moment(endDate);
+            endDate.tz("Europe/Berlin").format();
+            // console.log("end", endDate);
+            var startTime = this.startTime;
+            var endTime = this.endTime;
 
-          var startDate = new Date(origStartDate);
-          startDate = moment(startDate);
-          startDate.tz("Europe/Berlin").format();
-          // console.log("start", startDate);
-          var endDate = new Date(origEndDate);
-          endDate = moment(endDate);
-          endDate.tz("Europe/Berlin").format();
-          // console.log("end", endDate);
-          var startTime = this.startTime;
-          var endTime = this.endTime;
+            var breakTime = this.break;
+            var duration = this.duration;
+            var monday = !this.mondayChecked;
+            var tuesday = !this.tuesdayChecked;
+            var wednesday = !this.wednesdayChecked;
+            var thursday = !this.thursdayChecked;
+            var friday = !this.fridayChecked;
+            var saturday = !this.saturdayChecked;
 
-          var breakTime = this.break;
-          var duration = this.duration;
-          var monday = !this.mondayChecked;
-          var tuesday = !this.tuesdayChecked;
-          var wednesday = !this.wednesdayChecked;
-          var thursday = !this.thursdayChecked;
-          var friday = !this.fridayChecked;
-          var saturday = !this.saturdayChecked;
-
-          var endWeekday;
-          var selected = [];
-          if (monday) {
-            endWeekday = 1;
-            selected.push(endWeekday);
+            var endWeekday;
+            var selected = [];
+            if (monday) {
+              endWeekday = 1;
+              selected.push(endWeekday);
+            }
+            if (tuesday) {
+              endWeekday = 2;
+              selected.push(endWeekday);
+            }
+            if (wednesday) {
+              endWeekday = 3;
+              selected.push(endWeekday);
+            }
+            if (thursday) {
+              endWeekday = 4;
+              selected.push(endWeekday);
+            }
+            if (friday) {
+              friday = 5;
+              selected.push(endWeekday);
+            }
+            if (saturday) {
+              endWeekday = 6;
+              selected.push(endWeekday);
+            }
           }
-          if (tuesday) {
-            endWeekday = 2;
-            selected.push(endWeekday);
-          }
-          if (wednesday) {
-            endWeekday = 3;
-            selected.push(endWeekday);
-          }
-          if (thursday) {
-            endWeekday = 4;
-            selected.push(endWeekday);
-          }
-          if (friday) {
-            friday = 5;
-            selected.push(endWeekday);
-          }
-          if (saturday) {
-            endWeekday = 6;
-            selected.push(endWeekday);
-          }
-
           if (startTime === undefined || endTime === undefined || startDate === undefined || endDate === undefined || selected.length === 0) {
             this.errorType = "Empty fields"
             this.errorMessage = "Please fill out everything";
@@ -837,6 +842,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   }
                   self.$.slotsCreatedToast.show();
+
+                  this.break = 5;
+                  this.duration = 10;
+                  this.endTime = "";
+                  this.startTime = "";
+                  this.startDate = "";
+                  this.endDate = "";
+                  this.mondayChecked = true;
+                  this.tuesdayChecked = true;
+                  this.wednesdayChecked = true;
+                  this.thursdayChecked = true;
+                  this.fridayChecked = true;
+                  this.saturdayChecked = true;
                 };
 
               }
