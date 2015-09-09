@@ -82,6 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Appointments</span>
           </a>
 
+          <a data-route="d-profile" href="/dprof">
+            <iron-icon icon="account-box"></iron-icon>
+            <span>My Profile</span>
+          </a>
+
 
 
         </paper-menu>
@@ -122,10 +127,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- <user-element></user-element> -->
                 <appointment-list-docent></appointment-list-docent>
 
-    
+
             </template>
             </section>
 
+
+            <section data-route="d-profile">
+              <template is="dom-if" if="{{isEqual(route, 'd-profile')}}" restamp="true">
+
+                <profile-docent></qent>
+              </template>
+            </section>
 
           </iron-pages>
         </div>

@@ -1,0 +1,389 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="profile-docent">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-dialog {
+      min-height: 400px;
+    }
+
+    paper-card {
+      width: 100%;
+      padding-bottom: 5px;
+    }
+
+    paper-progress {
+      width: 100%;
+    }
+
+    iron-image {
+      float: left;
+      margin: 10px;
+      /*margin-top: 0;*/
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    paper-toast {
+      z-index: 1000;
+      bottom: 40px;
+    }
+
+
+    #roomElement {
+      cursor: pointer;
+    }
+  </style>
+  <template>
+    <paper-material elevation="1">
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>My Profile &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
+          </div>
+          <div class="card-actions">
+            <paper-button flat on-click="editButton">Edit</paper-button>
+          </div>
+        </paper-toolbar>
+
+      </paper-header-panel>
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>First Name </span>
+            <h2>
+              <span>{{firstName}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+
+      </paper-item>
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Last Name </span>
+            <h2>
+              <span>{{lastName}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+
+      </paper-item>
+
+
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>First Subject</span>
+            <h2>
+              <span>{{Subject1}}</span>
+            </h2>
+          </div>
+
+        </paper-item-body>
+        </paper-icon-item>
+
+      </paper-item>
+
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Second Subject</span>
+            <h2>
+              <span>{{Subject2}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+      </paper-item>
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Third Subject</span>
+            <h2>
+              <span>{{Subject3}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+      </paper-item>
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Email</span>
+            <h2>
+              <span>{{Email}}</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+      </paper-item>
+
+      <paper-item>
+
+        <paper-item-body class="paper-item-body-0">
+
+          <div secondary>
+            </br>
+            <span>Status</span>
+            <h2>
+              <span>Docent</span>
+            </h2>
+          </div>
+        </paper-item-body>
+        </paper-icon-item>
+
+
+
+      </paper-item>
+
+      <paper-dialog id="edit" modal>
+
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Edit Name and Subjects</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+        <div id="inputs">
+          <paper-item>
+            <paper-item-body three-line class="paper-item-body-0">
+
+              <paper-input-container>
+                <label>First Name</label>
+                <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
+              </paper-input-container>
+
+              <paper-input-container>
+                <label>Last Name</label>
+                <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
+              </paper-input-container>
+
+
+
+            </paper-item-body>
+          </paper-item>
+
+          <paper-item>
+            <paper-item-body three-line class="paper-item-body-0">
+
+              <paper-input-container>
+                <label>Subject 1</label>
+                <input is="iron-input" name="subject1" type="text" required value="{{Subject1::input}}">
+              </paper-input-container>
+
+              <paper-input-container>
+                <label>Subject 2</label>
+                <input is="iron-input" name="subject2" type="text" value="{{Subject2::input}}">
+              </paper-input-container>
+
+
+              <paper-input-container>
+                <label>Subject 3</label>
+                <input is="iron-input" name="subject3" type="text" value="{{Subject3::input}}">
+              </paper-input-container>
+
+
+
+            </paper-item-body>
+          </paper-item>
+        </div>
+
+
+
+
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click=edit>Change</paper-button>
+        </div>
+      </paper-dialog>
+
+
+      <paper-dialog id="comfirmEdit" modal>
+
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Please comfirm your changes</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+
+
+
+        <span>Are you sure you want to change these attributes?</span>
+
+
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="editParse">Comfirm</paper-button>
+        </div>
+
+
+      </paper-dialog>
+
+      <div>   <paper-toast id = "toast" text="The datas were changed successfully">  </paper-toast> </div>
+
+  </template>
+
+
+
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'profile-docent',
+
+        properties: {
+          Name: {
+            type: String,
+            notify: true
+          },
+          firstName: {
+            type: String,
+            notify: true
+          },
+          lastName: {
+            type: String,
+            notify: true
+          },
+          Email: {
+            type: String,
+            notify: true
+          },
+          Subject1: {
+            type: String,
+            notify: true
+          },
+          Subject2: {
+            type: String,
+            notify: true
+          },
+          Subject3: {
+            type: String,
+            notify: true
+          }
+
+
+        },
+
+        ready: function() {
+          var currentUser = Parse.User.current();
+          currentUser.fetch();
+
+          this.Email = currentUser.get("email");
+
+
+          this.Name = currentUser.get("firstName") + " " + currentUser.get("lastName");
+          this.firstName = currentUser.get("firstName");
+          this.lastName = currentUser.get("lastName");
+          this.Subject1 = currentUser.get("subject1");
+          this.Subject2 = currentUser.get("subject2");
+          this.Subject3 = currentUser.get("subject3");
+
+        },
+
+        editButton: function() {
+          this.$.edit.toggle();
+        },
+
+        edit: function() {
+          this.$.comfirmEdit.toggle();
+        },
+        editParse: function() {
+          var
+            firstName = $('[name="firstName"]').val().replace(/\s+/g, ''),
+            lastName = $('[name="lastName"]').val().replace(/\s+/g, ''),
+            subject1 = $('[name="subject1"]').val(),
+            subject2 = $('[name="subject2"]').val(),
+            subject3 = $('[name="subject3"]').val();
+
+          var query = new Parse.Query(Parse.User);
+          query.equalTo("email", this.Email);
+          query.first({
+            success: function(user) {
+              user.set("firstName", firstName);
+              user.set("lastName", lastName);
+              user.set("subject1", subject1);
+              user.set("subject2", subject2);
+              user.set("subject3", subject3);
+              user.save();
+
+            }
+
+          });
+          currentUser.fetch();
+          var docent = Parse.Object.extend("Docent");
+          var docentQuery = new Parse.Query(docent);
+          docentQuery.first({
+            success: function(user) {
+              user.set("firstName", firstName);
+              user.set("lastName", lastName);
+              user.set("subject1", subject1);
+              user.set("subject2", subject2);
+              user.set("subject3", subject3);
+              user.save();
+
+
+            }
+
+          });
+
+            this.$.toast.toggle();
+
+        }
+
+
+
+
+      });
+    })();
+  </script>
+</dom-module>

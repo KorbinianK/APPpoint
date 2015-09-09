@@ -101,9 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </a>
 
             </hr>
-            <a data-route="a-manage-profil" href="/amanagep">
-              <iron-icon icon="mail"></iron-icon>
-              <span>Profil verwalten
+            <a data-route="u-manage-profil" href="/umanagep">
+              <iron-icon icon="account-box"></iron-icon>
+              <span>My Profile
                 <span>
             </a>
             <template is="dom-if" if="{{currentUser(currentUser)}}">
@@ -175,6 +175,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               </template>
             </section>
+
+            <section data-route="u-manage-profil">
+
+              <template is="dom-if" if="{{isEqual(route, 'u-manage-profil')}}" restamp="true">
+                <profile-user></profile-user>
+
+              </template>
+            </section>
+
             <section data-route="u-login">
 
               <login-element></login-element>
