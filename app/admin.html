@@ -221,6 +221,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <create-time></create-time>
               </template>
             </section>
+            <section data-route="a-manage-docent">
+              <template is="dom-if" if="{{isEqual(route, 'a-manage-appointments')}}" restamp="true">
+                <docent-list-edit></docent-list-edit>
+              </template>
+            </section>
             <section data-route="a-settings">
               <template is="dom-if" if="{{isEqual(route, 'a-settings')}}" restamp="true">
                 <admin-interface></admin-interface>
