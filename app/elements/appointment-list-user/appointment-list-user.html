@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-card {
       width: 100%;
       position: relative;
-      padding: 5px;
+      /*padding: 5px;*/
     }
 
     paper-item:hover {
@@ -37,8 +37,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       fill: rgb(157, 157, 157);
       cursor: pointer;
     }
+
+    #print {
+      fill: rgb(255, 255, 255);
+      width: 30px;
+      height: 30px;
+    }
+    #printdiv{
+
+    }
   </style>
   <template>
+    <paper-header-panel>
+      <paper-toolbar justify>
+        <div>
+          <h2>Your Appointments</h2>
+
+        </div>
+        <span class="flex"></span>
+
+          <paper-button flat  on-click="print">
+
+            Print
+            <iron-icon id="print" icon="icons:print"></iron-icon>
+          </paper-button>
+
+      </paper-toolbar>
+    </paper-header-panel>
     <template is="dom-repeat" items="{{appointList}}">
 
 
@@ -49,15 +74,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
               <div>
-                <span>{{item.docentName}}</span>
+                <h3><span>{{item.docentName}}</span></h3>
               </div>
               <div secondary>
-                Date:
+                <b>Date:</b>
                 <span>{{item.date}}</span>
               </div>
               <div secondary>
-                From:
-                <span>{{item.startTime}}</span> Until:
+                <b>Time:</b>
+                <span>{{item.startTime}}</span> -
                 <span>{{item.endTime}}</span>
               </div>
 
@@ -67,12 +92,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-card>
     </template>
+
   </template>
   <script>
     (function() {
       Polymer({
         is: 'appointment-list-user',
+        print: function() {
 
+          document.getElementById('paperDrawerPanel').forceNarrow = true;
+          window.print();
+          $(this).ready(function() {
+            setTimeout(function() {
+              document.getElementById('paperDrawerPanel').forceNarrow = false;
+            }, 100);
+
+          });
+
+
+        },
         ready: function() {
           var self = this;
           var currentUser = Parse.User.current();
@@ -81,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               id: currentUser.id
             }, {
               success: function(results) {
-                  // console.log(results);
+                // console.log(results);
                 // var List = [];
                 for (i in results) {
                   var object = results[i];
