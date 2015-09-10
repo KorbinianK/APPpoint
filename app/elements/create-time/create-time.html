@@ -247,13 +247,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-material>
 
       <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+          <paper-header-panel>
+            <paper-toolbar>
+              <div>
+                <h2>Select a start date</h2>
+              </div>
+            </paper-toolbar>
+          </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
           <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
         </div>
       </paper-dialog>
+
       <paper-dialog id="endDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select an end date</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
@@ -262,6 +277,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog>
 
       <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select a start time</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-time-picker hour="15" id="timeStartPicker"></paper-time-picker>
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
@@ -270,10 +292,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog>
 
       <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select an end time</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-time-picker hour="16" id="timeEndPicker"></paper-time-picker>
-
-
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
           <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>

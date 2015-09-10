@@ -7,6 +7,61 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
+@media all and (min-width: 640px){
+  #startDialog.create-time, #endDialog.create-time, #startTimeDialog.create-time, #endTimeDialog.create-time{
+      position: absolute !important;
+        top: 25% !important;
+    }
+    .paper-time-picker-0 #selectors.paper-time-picker{
+      top: 0 !important;
+    }
+
+}
+@media all and (min-width: 150px){
+
+.paper-time-picker-0 #selectors.paper-time-picker{
+  top: 96px;
+}
+paper-time-picker[narrow] #heading.paper-time-picker {
+    height: 96px;
+    width: 100% !important;
+    position: absolute;
+}
+
+#heading.paper-time-picker {
+  color: white !important;
+}
+  #timePicker#heading{
+    width: 100%;
+  }
+#startDialog.create-time, #endDialog.create-time, #startTimeDialog.create-time, #endTimeDialog.create-time{
+    position: absolute !important;
+      top: 0px;
+  }
+  paper-date-picker#dateStartPicker{
+    width: 100% !important;
+  }
+  paper-date-picker#dateEndPicker{
+    width: 100% !important;
+  }
+  paper-date-picker[narrow] #datePicker.paper-date-picker{
+    width: 100% !important;
+  }
+  #pages.paper-date-picker{
+    width: 100% !important;
+  }
+  paper-date-picker[narrow] #heading.paper-date-picker{
+    width: 100% !important;
+  }
+}
+
+paper-dialog > *:last-child {
+    margin-bottom: 0px !important;
+}
+paper-dialog > *:first-child {
+    margin-top: 0px !important;
+}
+
 body {
   background: #fafafa;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
