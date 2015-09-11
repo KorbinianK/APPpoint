@@ -418,7 +418,7 @@ Parse.Cloud.define("appointmentListDocent", function (request, response) {
 
   query.include("docent");
   query.include("user");
-  query.equalTo("docent", {
+  query.equalTo("Docent", {
     __type: "Pointer",
     className: "_User",
     objectId: request.params.id
@@ -436,6 +436,7 @@ Parse.Cloud.define("appointmentListDocent", function (request, response) {
         item['startTime'] = object.get('startTime');
         item['endTime'] = object.get('endTime');
         item['user'] = user;
+        item['userEmail'] = user.get('email');
         item['userName'] = user.get('lastName') + " " + user.get('firstName');
         List.push(item);
       }

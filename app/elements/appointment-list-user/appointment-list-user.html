@@ -43,9 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       width: 30px;
       height: 30px;
     }
-    #printdiv{
 
-    }
   </style>
   <template>
     <paper-header-panel>
@@ -140,9 +138,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         print: function() {
 
           document.getElementById('paperDrawerPanel').forceNarrow = true;
-          window.print();
+
           $(this).ready(function() {
             setTimeout(function() {
+                    window.print();
               document.getElementById('paperDrawerPanel').forceNarrow = false;
             }, 100);
 
