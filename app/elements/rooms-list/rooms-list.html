@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       text-transform: none !important;
     }
 
-    
+
   </style>
   <template>
     <paper-material elevation="1">
@@ -160,17 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'roomListChanged(roomList.splices)',
           'docentListChanged(docentList.splices)'
         ],
-        roomListChanged: function(changeRecord) {
-          if (changeRecord) {
-
-            changeRecord.indexSplices.forEach(function(s) {
-              s.removed.forEach(function(room) {
-
-              });
-              console.log("added");
-            }, this);
-          }
-        },
+         
         docentListChanged: function(docentListChange) {
 
           if (docentListChange) {

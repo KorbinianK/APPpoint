@@ -64,9 +64,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       </paper-toolbar>
     </paper-header-panel>
+    <div id="noappointments" hidden="{{noAppointments}}">
+      <paper-card>
+        <div class="card-content">
+          <paper-item>
+
+            <paper-item-body two-line class="paper-item-body-0">
+              <paper-ripple fit></paper-ripple>
+              <div>
+                <h3><span>You have currently no appointment scheduled</span></h3>
+              </div>
+
+
+            </paper-item-body>
+
+          </paper-item>
+        </div>
+      </paper-card>
+    </div>
     <template is="dom-repeat" items="{{appointList}}">
-
-
       <paper-card>
         <div class="card-content">
           <paper-item>
@@ -98,6 +114,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function() {
       Polymer({
         is: 'appointment-list-user',
+        properties: {
+          appointList: {
+            type: Array
+          },
+          noAppointments:{
+            type: Boolean,
+            value: true
+          }
+        },
+        observers: [
+          'appointListChanged(roomList.splices)'
+        ],
+        appointListChanged: function(changeRecord) {
+          if (changeRecord) {
+
+            changeRecord.indexSplices.forEach(function(s) {
+              s.removed.forEach(function(room) {
+
+              });
+
+            }, this);
+          }
+        },
         print: function() {
 
           document.getElementById('paperDrawerPanel').forceNarrow = true;
@@ -137,6 +176,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   console.log("date", date);
                 }
                 self.appointList = results;
+                if(results.length === 0){
+                  console.log("empty");
+                  self.noAppointments = !self.noAppointments;
+                }
 
               },
               error: function(error) {}
@@ -144,19 +187,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         delAppoinment: function(e) {
+          var self = this;
           var model = e.model;
           console.log(model);
+          var clickedDate = model.get("item.date");
           var date = moment(new Date(model.get("item.date")));
-          console.log(model.get("item.docentId"));
 
+          date.tz("Europe/Berlin").format();
+
+          console.log("Clicked Date",clickedDate);
+          console.log("CurrentUser",currentUser.id);
+          console.log("Start Time",model.get("item.startTime"));
+          console.log("Docent",model.get("item.docent").id);
+          console.log("DoUs",model.get("item.docentId"));
           Parse.Cloud.run('delUserAppointments', {
             id: currentUser.id,
             startTime: model.get("item.startTime"),
             docentId: model.get("item.docentId"),
+            docentUserId: model.get("item.docent").id,
             date: date
           }, {
             success: function(results) {
+              for (var i = 0; i < self.appointList.length; i++) {
 
+                if (self.appointList[i].date === clickedDate) {
+                  self.splice('appointList', i, 1);
+                }
+              }
+              if(self.appointList.length === 0){
+                console.log("empty");
+                self.noAppointments = !self.noAppointments;
+              }
               console.log(results);
             },
             error: function(error) {}

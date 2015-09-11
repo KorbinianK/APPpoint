@@ -533,9 +533,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var origStartDate, origEndDate;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
-          moment.tz.add(
-            "Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00"
-          );
+
           var query = new Parse.Query(DocentQuery);
 
           var clicker;
@@ -616,6 +614,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setStartTime: function() {
 
           origStartTime = this.$.timeStartPicker.time;
+          console.log("orig",origStartTime);
           var all = origStartTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -637,6 +636,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         setEndTime: function() {
           origEndTime = this.$.timeEndPicker.time;
+          console.log(origEndTime);
           var all = origEndTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -667,22 +667,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
         createSlots: function(e) {
-
-
           var self = this;
           var deleteSlot = this.$.deleteSlot;
           var doc = this.selDocent;
           var selected = this.selDocent;
-          // console.log();
-          if (this.origStartDate != undefined && this.origEndDate != undefined) {
+          // console.log(origStartDate,origEndDate);
+          if (origStartDate != undefined && origEndDate != undefined) {
             var startDate = new Date(origStartDate);
             startDate = moment(startDate);
             startDate.tz("Europe/Berlin").format();
-            // console.log("start", startDate);
+            console.log("start", startDate);
             var endDate = new Date(origEndDate);
             endDate = moment(endDate);
             endDate.tz("Europe/Berlin").format();
-            // console.log("end", endDate);
+            console.log("end", endDate);
             var startTime = this.startTime;
             var endTime = this.endTime;
 
@@ -722,6 +720,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected.push(endWeekday);
             }
           }
+          console.log(startTime, endTime, startDate,endDate,selected);
           if (startTime === undefined || endTime === undefined || startDate === undefined || endDate === undefined || selected.length === 0) {
             this.errorType = "Empty fields"
             this.errorMessage = "Please fill out everything";
@@ -803,17 +802,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     fixedStartDate.set('minute', minutesStart);
 
                     fixedStartDate.tz("Europe/Berlin").format();
-                    // console.log("startdate", fixedStartDate);
+                    console.log("startdate", fixedStartDate);
                     fixedEndDate = fixedStartDate.clone();
 
                     fixedEndDate.set('hour', hoursEnd);
                     fixedEndDate.set('minute', minutesEnd);
-                    fixedEndDate.tz("Europe/Berlin").format();
-                    // console.log("enddate", fixedEndDate);
+                    // fixedEndDate.tz("Europe/Berlin").format();
+
                     var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
-                    var sT = fixedStartDate;
+                    var sT = fixedStartDate.clone();
                     var timeArray = [];
-                    // console.log("diff",sT,fixedEndDate,sT.diff(fixedEndDate));
+
                     while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
                       var slot = {};
                       var slotStart = sT.clone();
@@ -834,25 +833,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                       slot['availability'] = true;
                       timeArray.push(slot);
-                      // console.log("slot",slot);
+
                       sT.add(duration, "minutes").add(breakTime, "minutes");
 
                     }
-                    var queryDate = fixedStartDate;
-
+                    var queryDate = fixedStartDate.clone();
+                    console.log("stringify",JSON.stringify(queryDate));
                     queryDate.set('hour', 0);
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
                     queryDate.set('millisecond', 0);
-                    queryDate.tz("Europe/Berlin").format();
-                    queryDate.locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    });
 
-                    console.log("queryDate", queryDate);
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();
                     if (doc.status === "all") {
@@ -868,19 +859,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   }
                   self.$.slotsCreatedToast.show();
-
-                  this.break = 5;
-                  this.duration = 10;
-                  this.endTime = "";
-                  this.startTime = "";
-                  this.startDate = "";
-                  this.endDate = "";
-                  this.mondayChecked = true;
-                  this.tuesdayChecked = true;
-                  this.wednesdayChecked = true;
-                  this.thursdayChecked = true;
-                  this.fridayChecked = true;
-                  this.saturdayChecked = true;
+                  // self.break = 5;
+                  // self.duration = 10;
+                  // self.endTime = "";
+                  // self.startTime = "";
+                  // self.startDate = "";
+                  // self.endDate = "";
+                  // self.mondayChecked = true;
+                  // self.tuesdayChecked = true;
+                  // self.wednesdayChecked = true;
+                  // self.thursdayChecked = true;
+                  // self.fridayChecked = true;
+                  // self.saturdayChecked = true;
                 };
 
               }

@@ -65,10 +65,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
+
+            <paper-toolbar id="navheader" class="tall">
+              <username-display class="bottom username"></username-display>
+
+              <iron-image id="coverimage" placeholder="images/beach.jpg" sizing="cover" preload fade class="fit"></iron-image>
+
+            </paper-toolbar>
+
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
@@ -81,7 +85,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="info"></iron-icon>
             <span>Appointments</span>
           </a>
+          <template is="dom-if" if="{{currentUser(currentUser)}}">
+            <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
+              <iron-icon icon="power-settings-new"></iron-icon>
+              <span>Logout
+                <span>
 
+            </a>
+          </template>
+          <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/alogin">
+            <a class="pointer" data-route="a-login">
+              <iron-icon icon="power-settings-new"></iron-icon>
+              <span>Login</span>
+            </a>
+          </template>
 
 
         </paper-menu>
@@ -122,7 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- <user-element></user-element> -->
                 <appointment-list-docent></appointment-list-docent>
 
-    
+
             </template>
             </section>
 
