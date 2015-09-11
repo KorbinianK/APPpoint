@@ -18,11 +18,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+
     paper-toast {
       z-index: 10;
       right: 50%;
       width: 60%;
     }
+
     paper-button {
       margin-bottom: 24px;
       width: 15%;
@@ -245,13 +247,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-material>
 
       <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+          <paper-header-panel>
+            <paper-toolbar>
+              <div>
+                <h2>Select a start date</h2>
+              </div>
+            </paper-toolbar>
+          </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
           <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
         </div>
       </paper-dialog>
+
       <paper-dialog id="endDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select an end date</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
         <div class="buttons">
           <paper-button flat dialog-dismiss>Cancel</paper-button>
@@ -260,6 +277,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog>
 
       <paper-dialog id="startTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select a start time</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-time-picker hour="15" id="timeStartPicker"></paper-time-picker>
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
@@ -268,10 +292,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog>
 
       <paper-dialog id="endTimeDialog" modal class="paper-time-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Select an end time</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-time-picker hour="16" id="timeEndPicker"></paper-time-picker>
-
-
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
           <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
@@ -345,13 +373,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-          <span>Do you want to delete the old Slots?</span>
+        <span>Do you want to delete the old Slots?</span>
 
 
-          <div class="buttons">
-            <paper-button flat dialog-dismiss>Cancel</paper-button>
-            <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
-          </div>
+        <div class="buttons">
+          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+        </div>
       </paper-dialog>
 
 
@@ -505,9 +533,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var origStartDate, origEndDate;
           var startWeekday, origEndTime, origStartTime;
           var DocentQuery = Parse.Object.extend("Docent");
-          moment.tz.add(
-            "Europe/Berlin|CET CEST CEMT|-10 -20 -30|01010101010101210101210101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-2aFe0 11d0 1iO0 11A0 1o00 11A0 Qrc0 6i00 WM0 1fA0 1cM0 1cM0 1cM0 kL0 Nc0 m10 WM0 1ao0 1cp0 dX0 jz0 Dd0 1io0 17c0 1fA0 1a00 1ehA0 1a00 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00"
-          );
+
           var query = new Parse.Query(DocentQuery);
 
           var clicker;
@@ -588,6 +614,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setStartTime: function() {
 
           origStartTime = this.$.timeStartPicker.time;
+          console.log("orig",origStartTime);
           var all = origStartTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -609,6 +636,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         setEndTime: function() {
           origEndTime = this.$.timeEndPicker.time;
+          console.log(origEndTime);
           var all = origEndTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -643,54 +671,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var deleteSlot = this.$.deleteSlot;
           var doc = this.selDocent;
           var selected = this.selDocent;
+          // console.log(origStartDate,origEndDate);
+          if (origStartDate != undefined && origEndDate != undefined) {
+            var startDate = new Date(origStartDate);
+            startDate = moment(startDate);
+            startDate.tz("Europe/Berlin").format();
+            console.log("start", startDate);
+            var endDate = new Date(origEndDate);
+            endDate = moment(endDate);
+            endDate.tz("Europe/Berlin").format();
+            console.log("end", endDate);
+            var startTime = this.startTime;
+            var endTime = this.endTime;
 
-          var startDate = new Date(origStartDate);
-          startDate = moment(startDate);
-          startDate.tz("Europe/Berlin").format();
-          // console.log("start", startDate);
-          var endDate = new Date(origEndDate);
-          endDate = moment(endDate);
-          endDate.tz("Europe/Berlin").format();
-          // console.log("end", endDate);
-          var startTime = this.startTime;
-          var endTime = this.endTime;
+            var breakTime = this.break;
+            var duration = this.duration;
+            var monday = !this.mondayChecked;
+            var tuesday = !this.tuesdayChecked;
+            var wednesday = !this.wednesdayChecked;
+            var thursday = !this.thursdayChecked;
+            var friday = !this.fridayChecked;
+            var saturday = !this.saturdayChecked;
 
-          var breakTime = this.break;
-          var duration = this.duration;
-          var monday = !this.mondayChecked;
-          var tuesday = !this.tuesdayChecked;
-          var wednesday = !this.wednesdayChecked;
-          var thursday = !this.thursdayChecked;
-          var friday = !this.fridayChecked;
-          var saturday = !this.saturdayChecked;
-
-          var endWeekday;
-          var selected = [];
-          if (monday) {
-            endWeekday = 1;
-            selected.push(endWeekday);
+            var endWeekday;
+            var selected = [];
+            if (monday) {
+              endWeekday = 1;
+              selected.push(endWeekday);
+            }
+            if (tuesday) {
+              endWeekday = 2;
+              selected.push(endWeekday);
+            }
+            if (wednesday) {
+              endWeekday = 3;
+              selected.push(endWeekday);
+            }
+            if (thursday) {
+              endWeekday = 4;
+              selected.push(endWeekday);
+            }
+            if (friday) {
+              friday = 5;
+              selected.push(endWeekday);
+            }
+            if (saturday) {
+              endWeekday = 6;
+              selected.push(endWeekday);
+            }
           }
-          if (tuesday) {
-            endWeekday = 2;
-            selected.push(endWeekday);
-          }
-          if (wednesday) {
-            endWeekday = 3;
-            selected.push(endWeekday);
-          }
-          if (thursday) {
-            endWeekday = 4;
-            selected.push(endWeekday);
-          }
-          if (friday) {
-            friday = 5;
-            selected.push(endWeekday);
-          }
-          if (saturday) {
-            endWeekday = 6;
-            selected.push(endWeekday);
-          }
-
+          console.log(startTime, endTime, startDate,endDate,selected);
           if (startTime === undefined || endTime === undefined || startDate === undefined || endDate === undefined || selected.length === 0) {
             this.errorType = "Empty fields"
             this.errorMessage = "Please fill out everything";
@@ -772,17 +802,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     fixedStartDate.set('minute', minutesStart);
 
                     fixedStartDate.tz("Europe/Berlin").format();
-                    // console.log("startdate", fixedStartDate);
+                    console.log("startdate", fixedStartDate);
                     fixedEndDate = fixedStartDate.clone();
 
                     fixedEndDate.set('hour', hoursEnd);
                     fixedEndDate.set('minute', minutesEnd);
-                    fixedEndDate.tz("Europe/Berlin").format();
-                    // console.log("enddate", fixedEndDate);
+                    // fixedEndDate.tz("Europe/Berlin").format();
+
                     var timeSpan = fixedStartDate.diff(fixedEndDate, "minute") * -1;
-                    var sT = fixedStartDate;
+                    var sT = fixedStartDate.clone();
                     var timeArray = [];
-                    // console.log("diff",sT,fixedEndDate,sT.diff(fixedEndDate));
+
                     while (sT.diff(fixedEndDate, "minute") * -1 >= 0 + duration + breakTime) {
                       var slot = {};
                       var slotStart = sT.clone();
@@ -803,25 +833,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                       slot['availability'] = true;
                       timeArray.push(slot);
-                      // console.log("slot",slot);
+
                       sT.add(duration, "minutes").add(breakTime, "minutes");
 
                     }
-                    var queryDate = fixedStartDate;
-
+                    var queryDate = fixedStartDate.clone();
+                    console.log("stringify",JSON.stringify(queryDate));
                     queryDate.set('hour', 0);
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
                     queryDate.set('millisecond', 0);
-                    queryDate.tz("Europe/Berlin").format();
-                    queryDate.locale('en', {
-                      months: [
-                        "January", "February", "March", "April", "May", "June", "July",
-                        "August", "September", "October", "November", "December"
-                      ]
-                    });
 
-                    console.log("queryDate", queryDate);
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();
                     if (doc.status === "all") {
@@ -837,6 +859,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   }
                   self.$.slotsCreatedToast.show();
+                  // self.break = 5;
+                  // self.duration = 10;
+                  // self.endTime = "";
+                  // self.startTime = "";
+                  // self.startDate = "";
+                  // self.endDate = "";
+                  // self.mondayChecked = true;
+                  // self.tuesdayChecked = true;
+                  // self.wednesdayChecked = true;
+                  // self.thursdayChecked = true;
+                  // self.fridayChecked = true;
+                  // self.saturdayChecked = true;
                 };
 
               }

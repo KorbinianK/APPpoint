@@ -7,95 +7,182 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-body {
-  background: #fafafa;
-  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #333;
+@media print {
+  paper-item-body {
+    border: 0px;
+  }
+  #mainContainer.paper-scroll-header-panel {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+  #mainToolbar .middle-container:not([style-scope]):not(.style-scope) {
+    height: 100%;
+    margin: 0 auto !important;
+  }
+  #mainToolbar .bottom:not([style-scope]):not(.style-scope) {
+    margin: 0 auto !important;
+  }
+  #drawer {
+    display: none;
+  }
+  .app-name, .bottom-title {
+    color: black;
+  }
+  #main {
+    left: 0px !important;
+  }
+  #shadow {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0.2);
+  }
+  paper-button {
+    display: none;
+  }
+  iron-icon {
+    display: none !important;
+  }
+  paper-card.appointment-list-user {
+    padding: 0px !important;
+  }
 }
 
-.hidden {
-  display: none;
+@media all and (min-width: 640px) {
+  #startDialog.create-time, #endDialog.create-time, #startTimeDialog.create-time, #endTimeDialog.create-time {
+    position: absolute !important;
+    top: 25% !important;
+  }
+  .paper-time-picker-0 #selectors.paper-time-picker {
+    top: 0 !important;
+  }
 }
 
-.red {
-  color: rgb(162, 19, 0);
+@media all and (min-width: 150px) {
+  .paper-time-picker-0 #selectors.paper-time-picker {
+    top: 96px;
+  }
+  paper-time-picker[narrow] #heading.paper-time-picker {
+    height: 96px;
+    width: 100% !important;
+    position: absolute;
+  }
+#headericon, .usericon{
+  fill: rgb(255, 255, 255);
 }
 
-.pointer {
-  cursor: pointer;
+  #heading.paper-time-picker {
+    color: white !important;
+  }
+  #timePicker#heading {
+    width: 100%;
+  }
+  #startDialog.create-time, #endDialog.create-time, #startTimeDialog.create-time, #endTimeDialog.create-time {
+    position: absolute !important;
+    top: 0px;
+  }
+  paper-date-picker#dateStartPicker {
+    width: 100% !important;
+  }
+  paper-date-picker#dateEndPicker {
+    width: 100% !important;
+  }
+  paper-date-picker[narrow] #datePicker.paper-date-picker {
+    width: 100% !important;
+  }
+  #pages.paper-date-picker {
+    width: 100% !important;
+  }
+  paper-date-picker[narrow] #heading.paper-date-picker {
+    width: 100% !important;
+  }
 }
 
-.green {
-  color: rgb(0, 140, 6);
-}
+@media screen {
+  paper-dialog > *:last-child {
+    margin-bottom: 0px !important;
+  }
+  paper-dialog > *:first-child {
+    margin-top: 0px !important;
+  }
+  body {
+    background: #fafafa;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #333;
+  }
+  .hidden {
+    display: none;
+  }
+  .red {
+    color: rgb(162, 19, 0);
+  }
+  .pointer {
+    cursor: pointer;
+  }
+  .green {
+    color: rgb(0, 140, 6);
+  }
+  #coverimage {
+    height: 192px;
+    top: 0;
+  }
+  #headericon {
+    width: 250px;
+    height: 250px;
+  }
+  #crop {
+    width: 250px;
+    height: 125px;
+    overflow: hidden;
+    position: absolute;
+    right: 32px;
+    top: -61px;
+  }
+  .username {
+    font-size: 100%;
+  }
+  paper-item-body {
+    border-bottom: 1px solid lightgray;
+  }
+  paper-item-body.paper-item-body-0 {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -ms-flex: 1 1 0.000000001px;
+    -webkit-flex: 1;
+    flex: 1;
+    -webkit-flex-basis: 0.000000001px;
+    flex-basis: 0.000000001px;
+  }
+  paper-item-body.paper-item-body-0[two-line] {
+    min-height: 72px;
+  }
+  paper-dialog {
+    background-color: rgb(255, 255, 255);
+    max-width: 540px;
 
-#coverimage {
-  height: 192px;
-  top: 0;
-}
-
-#headericon{
-  width: 250px;
-height: 250px;
-}
-
-#crop{
-  width: 250px;
-   height: 125px;
-   overflow: hidden;
-   position: absolute;
-   right: 32px;
-   top: -61px;
-
-}
-
-.username{
-  font-size: 100%;
-}
-paper-item-body {
-  border-bottom: 1px solid lightgray;
-}
-
-paper-item-body.paper-item-body-0 {
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -ms-flex: 1 1 0.000000001px;
-  -webkit-flex: 1;
-  flex: 1;
-  -webkit-flex-basis: 0.000000001px;
-  flex-basis: 0.000000001px;
-}
-
-paper-item-body.paper-item-body-0[two-line] {
-  min-height: 72px;
-}
-
-paper-dialog {
-  background-color: rgb(255, 255, 255);
-  max-width: 80%;
-  /*width: 60%;*/
-  /*height: 50% !important;*/
-  max-height: 100%;
-  position: fixed !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: 10% !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-paper-item-body.paper-item-body-0 [secondary] {
-  color: #757575;
-  font-family: 'Roboto', 'Noto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
+    padding-bottom: 0px;
+    max-height: 100%;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 30% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  paper-header-panel {
+    margin-top: 0px !important;
+    padding: 0 !important;
+  }
+  paper-item-body.paper-item-body-0 [secondary] {
+    color: #757575;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+  }
 }

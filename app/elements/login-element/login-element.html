@@ -12,22 +12,33 @@
       padding: 0 20px 0 20px !important;
     }
 
-    paper-button {
+    /*paper-button {
       width: 90%;
       display: block;
       margin-top: 30px;
       margin-left: auto;
       margin-right: auto;
-    }
+    }*/
 
     #login {
       margin-top: 30px;
     }
-
+    paper-button {
+      width: 30%;
+      display: block;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }
     paper-toast {
       z-index: 10;
       right: 50%;
       width: 60%;
+    }
+    paper-material {
+      width: 70%;
+      margin: 0 auto;
+      padding: 0 0 20px;
     }
   </style>
   <template>
@@ -63,7 +74,11 @@
     </paper-material>
     <!-- <paper-button raised on-click="test">toast</paper-button> -->
     <div id="signup" hidden="{{hidden}}">
+      <paper-material elevation="1">
       <signup-element></signup-element>
+
+        <paper-button raised id="backButton" on-click="backToLogin">Back</paper-button>
+      </paper-material>
     </div>
     <paper-toast id="loggedInToast" duration="6000">
       <iron-icon icon="done"></iron-icon>
@@ -103,6 +118,9 @@
       registerClick: function() {
         this.hidden = !this.hidden;
       },
+      backToLogin: function() {
+        this.hidden = !this.hidden;
+      },
       ready: function() {
 
       },
@@ -112,23 +130,17 @@
 
       handleClick: function() {
         var self = this;
-        // console.log('click', this);
         var
           username = $('[name="name"]').val().toLowerCase(),
           password = $('[name="password"]').val();
-
-
-        // Call Parse Login function with those variables
         Parse.User.logIn(username, password, {
-          // If the username and password matches
+
           success:
 
             function(user) {
 
 
             var currentUser = Parse.User.current();
-
-            // if(currentUser.get("emailVerified")){
             if (currentUser) {
               (function() {
 
@@ -149,7 +161,6 @@
                 } else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false) {
                   document.location.href = "/user.html";
                 } else {
-                  // document.location.href = "/#!";
                   self.$.loggedInToast.show();
 
                   $(self).ready(function() {

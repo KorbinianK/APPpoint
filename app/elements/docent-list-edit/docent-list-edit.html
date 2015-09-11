@@ -1,0 +1,413 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+
+<dom-module id="docent-list-edit">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-dialog {
+      min-height: 400px;
+    }
+
+    paper-card {
+      width: 100%;
+      padding-bottom: 5px;
+    }
+
+    paper-progress {
+      width: 100%;
+    }
+
+    iron-image {
+      float: left;
+      margin: 10px;
+      /*margin-top: 0;*/
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    #roomElement {
+      cursor: pointer;
+    }
+  </style>
+  <template>
+
+    <paper-material elevation="1">
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Docent List</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+      <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
+
+      <template is="dom-repeat" items="{{docentList}}">
+
+
+        <paper-item>
+
+
+
+
+            <paper-item-body three-line class="paper-item-body-0">
+
+
+<div>
+              <!-- <h2> -->
+                <span>{{item.lastName}}</span>
+                <span>{{item.firstName}}</span>
+              <!-- </h2> -->
+          </div>
+
+          <div secondary>Room:
+            <span id="room">{{item.room}}</span>
+          </div>
+          </paper-item-body>
+          <!-- <div class="card-actions"> -->
+          <iron-icon icon="highlight-off" on-tap="docentDel"></iron-icon>
+          <!-- <paper-button flat on-click="docentDel">Delete</paper-button> -->
+          <paper-button flat on-click="editButtonClick">Edit</paper-button>
+          <paper-button flat on-click="roomButtonClick">Room</paper-button>
+          <!-- </div> -->
+
+        </paper-item>
+    </paper-material>
+    </template>
+    <paper-dialog id="roomDialog" modal role="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Available Rooms</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+
+      <paper-dialog-scrollable>
+        <template is="dom-repeat" items="{{roomList}}">
+
+          <paper-item>
+
+            <paper-item-body class="paper-item-body-0">
+
+              <div id="roomElement" on-click="roomClick" dialog-dismiss>
+                <span>{{item.roomName}}</span>
+              </div>
+
+            </paper-item-body>
+
+            </paper-icon-item>
+
+
+        </template>
+      </paper-dialog-scrollable>
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+
+      </div>
+
+    </paper-dialog>
+
+    <paper-dialog id="delDocentDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Please confirm</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+
+      <p>Delete the Docent <b><span>{{docentName}}</span></b> ?</br> Be Sure you will loose all timeslots and appointments</p>
+
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-confirm on-click="confirmDocentDel">Confirm</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'docent-list-edit',
+        properties: {
+          random: {
+            type: String,
+            value: 218
+          },
+          docentList: {
+            type: Array
+          },
+          docentName: {
+            type: String,
+            value: "Default"
+          }
+        },
+        observers: [
+          'docentListChanged(item.*)'
+        ],
+        docentListChanged: function(changeRecord) {
+
+          if (changeRecord.path == 'users.splices') {
+            // a user was added or removed
+          } else {
+            // an individual user or its sub-properties changed
+            // check "changeRecord.path" to determine what changed
+          }
+        },editButtonClick: function(e){
+          var model = e.model;
+          console.log(model);
+          var docent1 = model.get("item.docent");
+          var docent2 = docent1.get("Docent");
+          console.log(docent2);
+        },
+
+        ready: function() {
+          var self = this;
+          var clickedDocentEmail,
+            clickedDocentRoom,
+            docent,
+            clickedDelDocent,
+            clickedDelDocent2,
+            clickedDocentID;
+
+          // Fetch all Docents
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          query.equalTo("isTeacher", true);
+          query.include("Room");
+          query.find().then(function(results) {
+            var List = [];
+
+            for (i in results) {
+              var docent = {};
+              var object = results[i];
+              var room = object.get("Room");
+              if (room != null) {
+                docent['room'] = room.get('roomName')
+              }
+
+              docent['firstName'] = object.get('firstName');
+              docent['lastName'] = object.get('lastName');
+              docent['email'] = object.get('email');
+              docent['docent'] = object;
+
+
+              List.push(docent);
+            }
+            self.docentList = List;
+            self.loading = !self.loading;
+          });
+
+
+
+        },
+        roomButtonClick: function(e) {
+          docent = e.model;
+          clickedDocentEmail = docent.get("item.email");
+          //clickedDocent = docent.get("item.email");
+          clickedDocentRoom = docent.get("item.room");
+          clickedDocent = docent.get("item.docent");
+
+          var self = this;
+
+          // Get all available rooms
+          var Room = Parse.Object.extend("Room");
+          var roomQuery = new Parse.Query(Room);
+          roomQuery.include("Docent");
+          roomQuery.equalTo("available", true);
+          roomQuery.find().then(function(results) {
+            var List = [];
+            var emptyItem = {};
+            emptyItem['roomName'] = "Remove Room";
+            emptyItem['delete'] = true;
+            List.push(emptyItem);
+            for (i in results) {
+              var item = {};
+              var object = results[i];
+              object.set("available", false);
+              item['roomName'] = object.get('roomName');
+              item['docent'] = object.get("Docent");
+              List.push(item);
+            }
+
+            self.roomList = List;
+          });
+          this.$.roomDialog.toggle();
+        },
+        docentDel: function(e) {
+          var model = e.model;
+          clickedDelDocent = model.get("item.firstName");
+          clickedDelDocent2 = model.get("item.lastName");
+          this.docentName = clickedDelDocent + " " + clickedDelDocent2;
+          this.$.delDocentDialog.toggle();
+          clickedDocentID = model.get("item.docent").id;
+          clickedDocentEmail = model.get("item.email");
+
+        },
+
+        confirmDocentDel: function(e) {
+          var model = e.model;
+          var clickedDocent = clickedDelDocent + clickedDelDocent2;
+          var List = this.docentList;
+          var docentID = this.docentList.docent;
+
+          for (i in this.docentList) {
+
+            if (this.docentList[i].firstName + this.docentList[i].lastName === clickedDocent) {
+              var docentID = clickedDocent.get
+                // //delete Slots
+              Parse.Cloud.run('removeDocentSlots', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
+              });
+
+              Parse.Cloud.run('removeDocentRoom', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
+              });
+
+              Parse.Cloud.run('removeDocentDocent', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
+              });
+
+
+              Parse.Cloud.run('removeDocentUser', {
+                docent: clickedDocentEmail
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
+              });
+
+              Parse.Cloud.run('removeDocentAppointments', {
+                docent: clickedDocentID
+              }, {
+                success: function(result) {
+
+                  console.log(result);
+                },
+                error: function(error) {}
+              });
+
+              this.splice('docentList', i, 1);
+            }
+          }
+
+        },
+        roomClick: function(e) {
+          var model = e.model;
+          var clickedRoom = model.get("item.roomName");
+
+          var DocentQuery = Parse.Object.extend("Docent");
+          var query = new Parse.Query(DocentQuery);
+          if (model.get("item.delete") === true) {
+            var DocentQuery = Parse.Object.extend("Docent");
+            var query = new Parse.Query(DocentQuery);
+            query.equalTo("email", clickedDocentEmail);
+            query.include("Room");
+            query.first({
+              success: function(object) {
+
+                object.set("Room", null)
+                object.save();
+
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+            });
+            var Room = Parse.Object.extend("Room");
+            var room = new Parse.Query(Room);
+            room.include("Docent");
+            room.equalTo("Docent", clickedDocent);
+            room.first({
+              success: function(foundRoom) {
+                docent.set("item.room", " ");
+                if (foundRoom != undefined) {
+                  foundRoom.set("available", true);
+                  foundRoom.set("Docent", null);
+                  foundRoom.save();
+
+                }
+
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+
+            });
+          } else {
+            var Room = Parse.Object.extend("Room");
+            var room = new Parse.Query(Room);
+            room.equalTo("roomName", clickedRoom);
+            room.first({
+              success: function(foundRoom) {
+                foundRoom.set("available", false);
+                docent.set("item.room", foundRoom.get("roomName"));
+                query.equalTo("email", clickedDocentEmail);
+                query.first({
+                  success: function(user) {
+                    user.set("Room", foundRoom);
+                    foundRoom.set("available", false);
+                    foundRoom.set("Docent", user);
+                    foundRoom.save();
+                    user.save();
+
+                  },
+                  error: function(error) {
+                    alert("Error: " + error.code + " " + error.message);
+                  }
+                });
+
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+
+            });
+
+
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

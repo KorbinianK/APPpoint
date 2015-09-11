@@ -22,6 +22,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			margin: 0 auto;
 		}
 
+		paper-toolbar#dialog{
+			width: 100% !important;
+			margin: 0;
+		}
+
 		paper-item-body.paper-item-body-0 {
 			display: -ms-flexbox;
 			display: -webkit-flex;
@@ -108,12 +113,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 							<paper-input-container>
 								<label>First Name</label>
-								<input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
+								<input is="iron-input" name="firstName" type="text" bind-value="{{firstName::input}}" required>
 							</paper-input-container>
 
 							<paper-input-container>
 								<label>Last Name</label>
-								<input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
+								<input is="iron-input" name="lastName" type="text" bind-value="{{lastName::input}}" required>
 							</paper-input-container>
 
 
@@ -126,29 +131,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 							<paper-input-container>
 								<label>Subject 1</label>
-								<input is="iron-input" name="subject1" type="text" required value="{{subject1::input}}">
+								<input is="iron-input" name="subject1" type="text" required bind-value="{{subject1::input}}">
 							</paper-input-container>
 
 							<paper-input-container>
 								<label>Subject 2</label>
-								<input is="iron-input" name="subject2" type="text" value="{{subject2::input}}">
+								<input is="iron-input" name="subject2" type="text" bind-value="{{subject2::input}}">
 							</paper-input-container>
 
 
 							<paper-input-container>
 								<label>Subject 3</label>
-								<input is="iron-input" name="subject3" type="text" value="{{subject3::input}}">
+								<input is="iron-input" name="subject3" type="text" bind-value="{{subject3::input}}">
 							</paper-input-container>
 
 
 							<paper-input-container>
 								<label>Password</label>
-								<input is="iron-input" name="password" type="password" required>
+								<input is="iron-input" name="password" type="password" required bind-value="{{password::input}}">
 							</paper-input-container>
 
 							<paper-input-container>
 								<label>E-Mail</label>
-								<input is="iron-input" name="Email" type="Email">
+								<input is="iron-input" name="Email" type="Email" bind-value="{{Email::input}}">
 							</paper-input-container>
 
 						</paper-item-body>
@@ -159,6 +164,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				</div>
 			</paper-material>
 		</div>
+		<paper-dialog id="warningDialog" modal>
+
+			<paper-header-panel>
+				<paper-toolbar id="dialog">
+					<div>
+						<h2>{{errorType}}</h2>
+					</div>
+				</paper-toolbar>
+			</paper-header-panel>
+
+			<paper-item>
+
+				<div>
+					<span>{{errorMessage}}</span>
+				</div>
+
+			</paper-item>
+
+			<div class="buttons">
+				<paper-button flat dialog-dismiss>OK</paper-button>
+			</div>
+		</paper-dialog>
 	</template>
 </dom-module>
 <script>
@@ -178,6 +205,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					notify: true
 				},
 				lastName: {
+					type: String,
+					value: '',
+					notify: true
+				},
+				Email: {
+					type: String,
+					value: '',
+					notify: true
+				},
+				password: {
 					type: String,
 					value: '',
 					notify: true
@@ -204,16 +241,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			},
 			computeSubjects: function(subject1, subject2, subject3) {
 
-
+				if(subject1 === "" && subject2 === "" && subject3 === ""){
+					return "";
+				}else if(subject2 === "" && subject3 === ""){
+					return subject1;
+				}else if(subject3 === ""){
+				return subject1 + ', ' + subject2;
+			}else{
 				return subject1 + ', ' + subject2 + ', ' + subject3;
+			}
 			},
 			ready: function() {
 				var currentUser = Parse.User.current();
 				if (currentUser.get("isAdmin")) {
 					this.isAdmin = true;
-					console.log(this.isAdmin);
+					// console.log(this.isAdmin);
 				} else {
-					console.log(this.isAdmin);
+					// console.log(this.isAdmin);
 				}
 			},
 			handleClick: function() {
@@ -236,12 +280,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					subject1 === ''
 				) {
-					console.log(Email + password + firstName + lastName + subject1)
+					console.log(Email + password + firstName + lastName + subject1);
 
-					alert("Error: Alle Felder müssen ausgefüllt werden");
+					// alert("Error: Alle Felder müssen ausgefüllt werden");
+					this.errorType = "Input missing";
+					this.errorMessage = "Please fill out everything";
+					this.$.warningDialog.toggle();
 
 				} else {
-
 
 					username = Email;
 					var user = new Parse.User();
@@ -260,21 +306,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					user.signUp(null, {
 						success: function(user) {
 
-							var inputs, index;
-
-							$('[name="Email"]').val('');
-							$('[name="password"]').val('');
-							$('[name="firstName"]').val('');
-							$('[name="lastName"]').val('');
-
-							$('[name="subject1"]').val('');
-							$('[name="subject2"]').val('');
-							$('[name="subject3"]').val('');
-							this.firstName = '';
-							this.lastName = '';
-							this.subject1 = '';
-							this.subject2 = '';
-							this.subject3 = '';
+							this.firstName = "";
+							this.lastName = "";
+							this.Email = "";
+							this.password = "";
+							this.subject1	= "";
+							this.subject2	= "";
+							this.subject3	= "";
 
 							var query = new Parse.Query(Parse.User);
 							query.equalTo("email", Email);
