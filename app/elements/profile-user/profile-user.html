@@ -53,10 +53,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>My Profile &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
+            <h2>Mein Profil</h2>
           </div>
           <div class="card-actions">
-            <paper-button flat on-click="editButton">Edit</paper-button>
+            <paper-button flat on-click="editButton">Ändern</paper-button>
           </div>
         </paper-toolbar>
 
@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>First Name</span>
+            <span>Vorname</span>
             <h2>
               <span>{{firstName}}</span>
             </h2>
@@ -89,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Last Name</span>
+            <span>Nachname</span>
             <h2>
               <span>{{lastName}}</span>
             </h2>
@@ -107,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Email</span>
+            <span>E-Mail</span>
             <h2>
               <span>{{Email}}</span>
             </h2>
@@ -123,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Status</span>
+            <span>Benutzerrolle</span>
             <h2>
               <span>User</span>
             </h2>
@@ -140,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Edit Name and Subjects</h2>
+              <h2>Namen ändern</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
@@ -150,12 +150,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body three-line class="paper-item-body-0">
 
               <paper-input-container>
-                <label>First Name</label>
+                <label>Vorname</label>
                 <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
               </paper-input-container>
 
               <paper-input-container>
-                <label>Last Name</label>
+                <label>Nachname</label>
                 <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
               </paper-input-container>
 
@@ -170,36 +170,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click=edit>Change</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
+          <paper-button flat dialog-confirm on-click=edit>Ändern</paper-button>
         </div>
       </paper-dialog>
 
 
-      <paper-dialog id="comfirmEdit" modal>
+      <paper-dialog id="confirmEdit" modal>
 
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Please comfirm your changes</h2>
+              <h2>Änderungen bestätigen</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
 
 
 
-        <span>Are you sure you want to change these attributes?</span>
+        <span>Sind Sie sich sicher, dass Sie die Änderungen übernehmen wollen?</span>
 
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click="editParse">Comfirm</paper-button>
+          <paper-button flat dialog-dismiss>Nein</paper-button>
+          <paper-button flat dialog-confirm on-click="editParse">Ja</paper-button>
         </div>
 
 
       </paper-dialog>
 
-      <div>   <paper-toast id = "toast" text="The datas were changed successfully">  </paper-toast> </div>
+      <div>
+        <paper-toast id="toast" text="Die Änderungen wurden erfolgreich übernommen"> </paper-toast>
+      </div>
+
 
   </template>
 
@@ -246,7 +249,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         edit: function() {
-          this.$.comfirmEdit.toggle();
+          this.$.confirmEdit.toggle();
         },
         editParse: function() {
           var

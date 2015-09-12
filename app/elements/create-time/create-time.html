@@ -125,15 +125,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-material elevation="1">
         <paper-item>
           <paper-item-body class="paper-item-body-0">
-            <h4>Pick the days:</h4>
+            <h4>Tage auswählen:</h4>
             <div class="checkboxes">
 
-              <paper-checkbox name="monday" checked="{{checkedMonday}}" id="monday">Monday</paper-checkbox>
-              <paper-checkbox name="tuesday" checked="{{checkedTuesday}}" id="tuesday">Tuesday</paper-checkbox>
-              <paper-checkbox name="wednesday" checked="{{checkedWednesday}}" id="wednesday">Wednesday</paper-checkbox>
-              <paper-checkbox name="thursday" checked="{{checkedThursday}}" id="thursday">Thursday</paper-checkbox>
-              <paper-checkbox name="friday" checked="{{checkedFriday}}" id="friday">Friday</paper-checkbox>
-              <paper-checkbox name="saturday" checked="{{checkedSaturday}}" id="saturday">Saturday</paper-checkbox>
+              <paper-checkbox name="monday" checked="{{checkedMonday}}" id="monday">Montag</paper-checkbox>
+              <paper-checkbox name="tuesday" checked="{{checkedTuesday}}" id="tuesday">Dienstag</paper-checkbox>
+              <paper-checkbox name="wednesday" checked="{{checkedWednesday}}" id="wednesday">Mittwoch</paper-checkbox>
+              <paper-checkbox name="thursday" checked="{{checkedThursday}}" id="thursday">Donnerstag</paper-checkbox>
+              <paper-checkbox name="friday" checked="{{checkedFriday}}" id="friday">Freitag</paper-checkbox>
+              <paper-checkbox name="saturday" checked="{{checkedSaturday}}" id="saturday">Samstag</paper-checkbox>
             </div>
 
 
@@ -160,7 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-item>
           <paper-item-body class="pointer paper-item-body-0" on-click='handleStartClick'>
             <paper-ripple fit></paper-ripple>
-            <h4>Start Date:</h4>
+            <h4>Datum Beginn:</h4>
             <p>
               <span>{{startDate}}</span>
             </p>
@@ -173,7 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-item>
           <paper-item-body class="pointer paper-item-body-0" on-click='handleEndClick'>
             <paper-ripple fit></paper-ripple>
-            <h4>End Date:</h4>
+            <h4>Datum Ende:</h4>
             <p>
               <span>{{endDate}}</span>
             </p>
@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-item>
           <paper-item-body class="pointer paper-item-body-0" on-click='handleStartTimeClick'>
             <paper-ripple fit></paper-ripple>
-            <h4>Start Time:</h4>
+            <h4>Start Uhrzeit:</h4>
             <p>
               <span>{{startTime}}</span>
             </p>
@@ -199,7 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-item>
           <paper-item-body class="pointer paper-item-body-0" on-click='handleEndTimeClick'>
             <paper-ripple fit></paper-ripple>
-            <h4>End Time:</h4>
+            <h4>End Uhrzeit:</h4>
             <p>
               <span>{{endTime}}</span>
             </p>
@@ -219,27 +219,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-item-body class="paper-item-body-1">
 
             <paper-input-container>
-              <label>Slot Duration</label>
+              <label>Besprechungsdauer</label>
               <input is="iron-input" name="duration" type="number" value="{{duration::input}}" required>
             </paper-input-container>
           </paper-item-body>
-          <span>minutes.</span>
+          <span>minuten.</span>
         </paper-item>
 
         <paper-item>
           <paper-item-body class="paper-item-body-1">
             <paper-input-container>
-              <label>Break Duration</label>
+              <label>Pause zwischen den Terminen</label>
               <input is="iron-input" name="break" type="number" value="{{break::input}}" required>
             </paper-input-container>
           </paper-item-body>
-          <span>minutes.</span>
+          <span>minuten.</span>
         </paper-item>
 
 
         <div id="button">
           <div id="button-create">
-            <paper-button id='setTime' raised on-click='createSlots'>Create Time Slots</paper-button>
+            <paper-button id='setTime' raised on-click='createSlots'>Erstellen</paper-button>
           </div>
         </div>
 
@@ -247,16 +247,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-material>
 
       <paper-dialog id="startDialog" modal class="paper-date-picker-dialog" role="dialog" exit-animation="fade-out-animation">
-          <paper-header-panel>
-            <paper-toolbar>
-              <div>
-                <h2>Select a start date</h2>
-              </div>
-            </paper-toolbar>
-          </paper-header-panel>
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>
+              <h2>Startdatum auswählen</h2>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateStartPicker"></paper-date-picker>
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
           <paper-button flat dialog-confirm on-click="setStart">OK</paper-button>
         </div>
       </paper-dialog>
@@ -265,13 +265,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Select an end date</h2>
+              <h2>Enddatum auswählen</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
         <paper-date-picker locale='de-DE' id="dateEndPicker"></paper-date-picker>
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
           <paper-button flat dialog-confirm on-click="setEnd">OK</paper-button>
         </div>
       </paper-dialog>
@@ -280,13 +280,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Select a start time</h2>
+              <h2>Uhrzeit Beginn</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
         <paper-time-picker hour="15" id="timeStartPicker"></paper-time-picker>
         <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-dismiss>Abbrechen</paper-button>
           <paper-button dialog-confirm on-click="setStartTime">OK</paper-button>
         </div>
       </paper-dialog>
@@ -295,13 +295,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Select an end time</h2>
+              <h2>Uhrzeit Ende</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
         <paper-time-picker hour="16" id="timeEndPicker"></paper-time-picker>
         <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-dismiss>Abbrechen</paper-button>
           <paper-button dialog-confirm on-click="setEndTime"> OK</paper-button>
 
         </div>
@@ -313,15 +313,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
             <paper-item-body class="paper-item-body-0">
-
-              <!-- <paper-button flat dialog-confirm > -->
               <p class="docent">
                 <paper-ripple fit></paper-ripple>
-                <!-- <paper-ripple fit></paper-ripple> -->
                 <span>{{item.firstName}}</span>
                 <span>{{item.lastName}}</span>
               </p>
-              <!-- </paper-button> -->
 
             </paper-item-body>
 
@@ -330,7 +326,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </template>
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
 
         </div>
       </paper-dialog>
@@ -365,20 +361,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Docent already has Slots</h2>
+              <h2>Lehrkraft hat bereits Terminslots</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
 
-
-
-
-        <span>Do you want to delete the old Slots?</span>
-
+        <span>Wollen Sie die Slots löschen?</span>
+        <br/>
+        <span><b>Warnung:</b> Dabei gehen alle Termine verloren!</span>
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click="deleteOldSlot">Confirm</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
+          <paper-button flat dialog-confirm on-click="deleteOldSlot">Bestätigen</paper-button>
         </div>
       </paper-dialog>
 
@@ -388,24 +382,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Old Slots have been deleted</h2>
+              <h2>Die alten Termine wurden gelöscht.</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
 
 
-        <p>Do you want to add the new Slots?</p>
+        <p>Wollen Sie jetzt die neuen hinzufügen?</p>
 
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click="createSlots">Ok</paper-button>
+          <paper-button flat dialog-dismiss>Nein</paper-button>
+          <paper-button flat dialog-confirm on-click="createSlots">Ja</paper-button>
         </div>
       </paper-dialog>
 
       <paper-toast id="slotsCreatedToast" duration="4000">
         <iron-icon icon="done"></iron-icon>
-        <span>Slots have been created</span>
+        <span>Slots wurden erstellt</span>
       </paper-toast>
 
   </template>
@@ -525,9 +519,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var currentUser = Parse.User.current();
           if (currentUser.get("isAdmin")) {
             this.isAdmin = true;
-            console.log(this.isAdmin);
+            // console.log(this.isAdmin);
           } else {
-            console.log(this.isAdmin);
+            // console.log(this.isAdmin);
           }
           var self = this;
           var origStartDate, origEndDate;
@@ -614,7 +608,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setStartTime: function() {
 
           origStartTime = this.$.timeStartPicker.time;
-          console.log("orig",origStartTime);
+          // console.log("orig",origStartTime);
           var all = origStartTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -636,7 +630,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         setEndTime: function() {
           origEndTime = this.$.timeEndPicker.time;
-          console.log(origEndTime);
+          // console.log(origEndTime);
           var all = origEndTime.split(":");
 
           var hours = parseInt(all[0]);
@@ -676,11 +670,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var startDate = new Date(origStartDate);
             startDate = moment(startDate);
             startDate.tz("Europe/Berlin").format();
-            console.log("start", startDate);
+            // console.log("start", startDate);
             var endDate = new Date(origEndDate);
             endDate = moment(endDate);
             endDate.tz("Europe/Berlin").format();
-            console.log("end", endDate);
+            // console.log("end", endDate);
             var startTime = this.startTime;
             var endTime = this.endTime;
 
@@ -720,14 +714,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected.push(endWeekday);
             }
           }
-          console.log(startTime, endTime, startDate,endDate,selected);
+          // console.log(startTime, endTime, startDate,endDate,selected);
           if (startTime === undefined || endTime === undefined || startDate === undefined || endDate === undefined || selected.length === 0) {
-            this.errorType = "Empty fields"
-            this.errorMessage = "Please fill out everything";
+            this.errorType = "Fehlende Eingaben"
+            this.errorMessage = "Bitte füllen Sie alle Felder aus";
             this.$.warningDialog.toggle();
           } else if (duration === 0) {
-            this.errorType = "Duration wrong"
-            this.errorMessage = "An appointment cannot be 0 minutes long";
+            this.errorType = "Zeit falsch"
+            this.errorMessage = "Eine Besprechung kann nicht 0 minuten lang sein.";
             this.$.warningDialog.toggle();
           } else {
 
@@ -743,15 +737,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (hoursStart >= hoursEnd) {
               if (hoursStart === hoursEnd) {
                 if (minutesStart >= minutesEnd) {
-                  this.errorType = "Times are set incorrectly"
-                  this.errorMessage = "Please check the time settings";
+                  this.errorType = "Zeiten sind nicht korrekt"
+                  this.errorMessage = "Bitte überprüfen Sie ihre Eingaben";
                   this.$.warningDialog.toggle();
                   return;
                 }
               }
               if (hoursStart > hoursEnd) {
-                this.errorType = "Times are set incorretly"
-                this.errorMessage = "Please check the time settings";
+                this.errorType = "Zeiten sind nicht korrekt"
+                this.errorMessage = "Bitte überprüfen Sie ihre Eingaben";
                 this.$.warningDialog.toggle();
                 return;
               }
@@ -761,8 +755,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               if (startDate.diff(endDate, 'days') * -1 >= 366) {
 
-                this.errorType = "Dates are set incorretly"
-                this.errorMessage = "The time span is longer than one year";
+                this.errorType = "Datum Fehler"
+                this.errorMessage = "Termine können nur über einen Zeitraum von einem Jahr erstellt werden.";
                 this.$.warningDialog.toggle();
               } else {
 
@@ -802,7 +796,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     fixedStartDate.set('minute', minutesStart);
 
                     fixedStartDate.tz("Europe/Berlin").format();
-                    console.log("startdate", fixedStartDate);
+                    // console.log("startdate", fixedStartDate);
                     fixedEndDate = fixedStartDate.clone();
 
                     fixedEndDate.set('hour', hoursEnd);
@@ -838,7 +832,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     }
                     var queryDate = fixedStartDate.clone();
-                    console.log("stringify",JSON.stringify(queryDate));
+                    // console.log("stringify",JSON.stringify(queryDate));
                     queryDate.set('hour', 0);
                     queryDate.set('minute', 0);
                     queryDate.set('second', 0);
@@ -847,7 +841,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var Slots = Parse.Object.extend("Slots");
                     var slotQuery = new Slots();
                     if (doc.status === "all") {
-                      console.log("all docents");
+                      // console.log("all docents");
                     } else {
                       slotQuery.set("Docent", doc);
                       slotQuery.set("date", queryDate);
@@ -859,24 +853,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   }
                   self.$.slotsCreatedToast.show();
-                  // self.break = 5;
-                  // self.duration = 10;
-                  // self.endTime = "";
-                  // self.startTime = "";
-                  // self.startDate = "";
-                  // self.endDate = "";
-                  // self.mondayChecked = true;
-                  // self.tuesdayChecked = true;
-                  // self.wednesdayChecked = true;
-                  // self.thursdayChecked = true;
-                  // self.fridayChecked = true;
-                  // self.saturdayChecked = true;
+
                 };
 
               }
             } else {
-              this.errorType = "Dates are set incorretly"
-              this.errorMessage = "The Start Date needs to be before the End Date";
+              this.errorType = "Datum nicht korrekt"
+              this.errorMessage = "Das Startdatum darf nicht vor dem Enddatum liegen";
               this.$.warningDialog.toggle();
             }
 

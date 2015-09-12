@@ -35,10 +35,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       width: 100%;
       padding: 10px;
     }
-    iron-icon{
+
+    iron-icon {
       width: 50px;
       height: 50px;
     }
+
     span {
       font-size: 100%;
     }
@@ -47,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="bg">
       <div id="name">
         <div hidden="{{loggedIn}}">
-          <span>Not loggend in.</span>
+          <span>Nicht eingeloggt.</span>
         </div>
         <div hidden="{{!loggedIn}}">
           <iron-icon class="usericon" icon="account-circle"></iron-icon>
@@ -69,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         ready: function() {
-
+          var currentUser = Parse.User.current();
           this.currentUser = currentUser;
           if (currentUser != null) {
             this.loggedIn = true;
@@ -78,7 +80,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.userName = name;
 
           }
-        },loginButton: function(e){
+        },
+        loginButton: function(e) {
 
         }
       });

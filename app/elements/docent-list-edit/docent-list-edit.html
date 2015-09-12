@@ -48,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Docent List</h2>
+            <h2>Lehrkräfte bearbeiten</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
@@ -63,25 +63,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-            <paper-item-body three-line class="paper-item-body-0">
+          <paper-item-body three-line class="paper-item-body-0">
 
 
-<div>
-              <!-- <h2> -->
-                <span>{{item.lastName}}</span>
-                <span>{{item.firstName}}</span>
-              <!-- </h2> -->
-          </div>
+            <div>
 
-          <div secondary>Room:
-            <span id="room">{{item.room}}</span>
-          </div>
+              <span>{{item.lastName}}</span>
+              <span>{{item.firstName}}</span>
+
+            </div>
+
+            <div secondary>Raum:
+              <span id="room">{{item.room}}</span>
+            </div>
           </paper-item-body>
           <!-- <div class="card-actions"> -->
           <iron-icon icon="highlight-off" on-tap="docentDel"></iron-icon>
           <!-- <paper-button flat on-click="docentDel">Delete</paper-button> -->
-          <paper-button flat on-click="editButtonClick">Edit</paper-button>
-          <paper-button flat on-click="roomButtonClick">Room</paper-button>
+          <!-- <paper-button flat on-click="editButtonClick">Edit</paper-button> -->
+          <paper-button flat on-click="roomButtonClick">Raum</paper-button>
           <!-- </div> -->
 
         </paper-item>
@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Available Rooms</h2>
+            <h2>Verfügbare Räume</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
@@ -118,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog-scrollable>
 
       <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-dismiss>Abbrechen</paper-button>
 
       </div>
 
@@ -129,18 +129,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Please confirm</h2>
+            <h2>Bitte bestätigen</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
 
 
-      <p>Delete the Docent <b><span>{{docentName}}</span></b> ?</br> Be Sure you will loose all timeslots and appointments</p>
+      <p>Lehrkraft <b><span>{{docentName}}</span></b> endgültig löschen?</br> Dabei werden alle Termine und Zeitslots gelöscht!</p>
 
 
       <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="confirmDocentDel">Confirm</paper-button>
+        <paper-button flat dialog-dismiss>Abbrechen</paper-button>
+        <paper-button flat dialog-confirm on-click="confirmDocentDel">Bestätigen</paper-button>
       </div>
     </paper-dialog>
 
@@ -173,12 +173,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             // an individual user or its sub-properties changed
             // check "changeRecord.path" to determine what changed
           }
-        },editButtonClick: function(e){
+        },
+        editButtonClick: function(e) {
           var model = e.model;
-          console.log(model);
+          // console.log(model);
           var docent1 = model.get("item.docent");
           var docent2 = docent1.get("Docent");
-          console.log(docent2);
+          // console.log(docent2);
         },
 
         ready: function() {
@@ -281,7 +282,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }, {
                 success: function(result) {
 
-                  console.log(result);
+                  // console.log(result);
                 },
                 error: function(error) {}
               });
@@ -291,7 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }, {
                 success: function(result) {
 
-                  console.log(result);
+                  // console.log(result);
                 },
                 error: function(error) {}
               });
@@ -301,7 +302,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }, {
                 success: function(result) {
 
-                  console.log(result);
+                  // console.log(result);
                 },
                 error: function(error) {}
               });
@@ -312,7 +313,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }, {
                 success: function(result) {
 
-                  console.log(result);
+                  // console.log(result);
                 },
                 error: function(error) {}
               });
@@ -322,7 +323,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }, {
                 success: function(result) {
 
-                  console.log(result);
+                  // console.log(result);
                 },
                 error: function(error) {}
               });
@@ -370,7 +371,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               },
               error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
+                // alert("Error: " + error.code + " " + error.message);
               }
 
             });
@@ -393,13 +394,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                   },
                   error: function(error) {
-                    alert("Error: " + error.code + " " + error.message);
+                    // alert("Error: " + error.code + " " + error.message);
                   }
                 });
 
               },
               error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
+                // alert("Error: " + error.code + " " + error.message);
               }
 
             });

@@ -34,14 +34,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       cursor: pointer;
     }
 
-
-
     paper-button#docentbutton {
       text-align: left !important;
       text-transform: none !important;
     }
-
-
   </style>
   <template>
     <paper-material elevation="1">
@@ -58,20 +54,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </h1>
             </div>
             <div secondary hidden="{{!item.status}}">
-              <b class="green">Available</b>
+              <b class="green">Verfügbar</b>
 
             </div>
             <div secondary hidden="{{item.status}}">
-              <b class="red">Not available</b>
+              <b class="red">Belegt</b>
 
             </div>
-            <div secondary><b>Docent:</b>
+            <div secondary><b>Lehrkraft:</b>
               <span>{{item.docent}}</span>
             </div>
-            <div secondary><b>Description:</b>
+            <div secondary><b>Beschreibung:</b>
               <span>{{item.roomDesc}}</span>
             </div>
-            <div secondary><b>Building:</b>
+            <div secondary><b>Gebäude:</b>
               <span>{{item.roomBuild}}</span>
             </div>
 
@@ -105,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
       </paper-dialog-scrollable>
       <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
+        <paper-button flat dialog-dismiss>Abbrechen</paper-button>
 
       </div>
     </paper-dialog>
@@ -115,18 +111,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Please confirm</h2>
+            <h2>Bitte bestätigen</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
 
 
-      <p>Delete the Room <b><span>{{roomName}}</span></b> ?</p>
+      <p>Den Raum <b><span>{{roomName}}</span></b> endgültig löschen?</p>
 
 
       <div class="buttons">
-        <paper-button flat dialog-dismiss>Cancel</paper-button>
-        <paper-button flat dialog-confirm on-click="confirmRoomDel">Confirm</paper-button>
+        <paper-button flat dialog-dismiss>Nein</paper-button>
+        <paper-button flat dialog-confirm on-click="confirmRoomDel">Ja</paper-button>
       </div>
     </paper-dialog>
 
@@ -160,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'roomListChanged(roomList.splices)',
           'docentListChanged(docentList.splices)'
         ],
-         
+
         docentListChanged: function(docentListChange) {
 
           if (docentListChange) {
@@ -183,7 +179,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             error: function(error) {}
           });
-          Parse.Cloud.run('docentList', {status: "emptyOnly"}, {
+          Parse.Cloud.run('docentList', {
+            status: "emptyOnly"
+          }, {
             success: function(result) {
 
 
@@ -210,7 +208,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           if (model.get("item.delete") === true) {
 
-            // remDocent();
 
             Parse.Cloud.run('remFromRoom', {
               status: clickedRoom.get("item.status"),
@@ -247,7 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               email: model.get("item.email"),
             }, {
               success: function(result) {
-                console.log(result);
+                // console.log(result);
                 clickedRoom.set("item.status", false);
                 clickedRoom.set("item.email", result.get("email"));
                 clickedRoom.set("item.docent", result.get("lastName") + " " + result.get("firstName"));
@@ -273,14 +270,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var model = e.model;
           clickedDelRoom = model.get("item.roomName");
           this.roomName = clickedDelRoom;
-          console.log("clicked to del ", clickedDelRoom);
+          // console.log("clicked to del ", clickedDelRoom);
           this.$.delRoomDialog.toggle();
         },
         confirmRoomDel: function(e) {
           var model = e.model;
 
           var clickedRoom = clickedDelRoom;
-          console.log("del ", clickedRoom);
+          // console.log("del ", clickedRoom);
           for (var i = 0; i < this.roomList.length; i++) {
 
             if (this.roomList[i].roomName === clickedRoom) {
@@ -298,7 +295,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 },
                 error: function(error) {
-                  alert("Error: " + error.code + " " + error.message);
+                  // alert("Error: " + error.code + " " + error.message);
                 }
               });
 

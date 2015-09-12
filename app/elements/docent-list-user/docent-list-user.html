@@ -63,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Select a docent</h2>
+              <h2>Lehrkraft auswählen</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
@@ -89,10 +89,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </h3>
 
               </div>
-              <div secondary><b>Email:</b>
+              <div secondary><b>E-Mail:</b>
                 <span>{{item.email}}</span>
               </div>
-              <div secondary><b>Subjects:</b>
+              <div secondary><b>Fächer:</b>
                 <span>{{computeSubjects(item.subject1,item.subject2,item.subject3)}}</span>
               </div>
               <div>
@@ -274,8 +274,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               self.loading = !self.loading;
 
-
-
               self.docentList = result;
               // console.log(result);
             },
@@ -285,10 +283,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         dismissUser: function(e) {
           this.dismissed = !this.dismissed;
-        },
-
-        docentClick: function(e) {
-          console.log("docentClicked");
         }
       });
     })();

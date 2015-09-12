@@ -49,14 +49,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-header-panel>
       <paper-toolbar justify>
         <div>
-          <h2>Your Appointments</h2>
+          <h2>Ihre Termine</h2>
 
         </div>
         <span class="flex"></span>
 
           <paper-button flat  on-click="print">
 
-            Print
+            Drucken
             <iron-icon id="print" icon="icons:print"></iron-icon>
           </paper-button>
 
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
               <div>
-                <h3><span>You have currently no appointment scheduled</span></h3>
+                <h3><span>Sie haben keine aktuellen Termine</span></h3>
               </div>
 
 
@@ -91,11 +91,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h3><span>{{item.docentName}}</span></h3>
               </div>
               <div secondary>
-                <b>Date:</b>
+                <b>Datum:</b>
                 <span>{{item.date}}</span>
               </div>
               <div secondary>
-                <b>Time:</b>
+                <b>Zeit:</b>
                 <span>{{item.startTime}}</span> -
                 <span>{{item.endTime}}</span>
               </div>
@@ -172,11 +172,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   });
                   date = date.format("ddd, DD MMM YYYY");
                   results[i].date = date;
-                  console.log("date", date);
+                  // console.log("date", date);
                 }
                 self.appointList = results;
                 if(results.length === 0){
-                  console.log("empty");
+                  // console.log("empty");
                   self.noAppointments = !self.noAppointments;
                 }
 
@@ -188,17 +188,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         delAppoinment: function(e) {
           var self = this;
           var model = e.model;
-          console.log(model);
+          // console.log(model);
           var clickedDate = model.get("item.date");
           var date = moment(new Date(model.get("item.date")));
 
           date.tz("Europe/Berlin").format();
 
-          console.log("Clicked Date",clickedDate);
-          console.log("CurrentUser",currentUser.id);
-          console.log("Start Time",model.get("item.startTime"));
-          console.log("Docent",model.get("item.docent").id);
-          console.log("DoUs",model.get("item.docentId"));
+          // console.log("Clicked Date",clickedDate);
+          // console.log("CurrentUser",currentUser.id);
+          // console.log("Start Time",model.get("item.startTime"));
+          // console.log("Docent",model.get("item.docent").id);
+          // console.log("DoUs",model.get("item.docentId"));
           Parse.Cloud.run('delUserAppointments', {
             id: currentUser.id,
             startTime: model.get("item.startTime"),
@@ -214,10 +214,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
               }
               if(self.appointList.length === 0){
-                console.log("empty");
+                // console.log("empty");
                 self.noAppointments = !self.noAppointments;
               }
-              console.log(results);
+              // console.log(results);
             },
             error: function(error) {}
           });

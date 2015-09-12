@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <div class="" hidden="{{!isAdmin}}">
     <template>
       <paper-toolbar id="createDocentToolbar">
-        <h2>Create a new Room</h2>
+        <h2>Neuen Raum erstellen</h2>
       </paper-toolbar>
 
       </paper-toolbar>
@@ -51,17 +51,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-item-body three-line class="paper-item-body-0">
 
             <paper-input-container>
-              <label>Room Name</label>
+              <label>Raum Name</label>
               <input is="iron-input" name="roomName" type="text" bind-value="{{roomName::input}}" required>
             </paper-input-container>
 
             <paper-input-container>
-              <label>Building</label>
+              <label>Gebäude</label>
               <input is="iron-input" name="roomDesc" type="text" bind-value="{{roomDesc::input}}">
             </paper-input-container>
 
             <paper-input-container>
-              <label>Description</label>
+              <label>Beschreibung</label>
               <input is="iron-input" name="roomBuild" type="text" bind-value="{{roomBuild::input}}">
             </paper-input-container>
 
@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-item>
         <div id="button">
           <div id="button-create">
-            <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Create</paper-button>
+            <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick">Erstellen</paper-button>
           </div>
         </div>
       </paper-material>
@@ -78,12 +78,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Missing Information</h2>
+              <h2>Fehlende Informationen</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
 
-        A room needs to have a unique name.
+      Ein Raum braucht einen einzigartigen Namen.
 
       </paper-dialog>
   </div>
@@ -120,14 +120,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var currentUser = Parse.User.current();
           if (currentUser.get("isAdmin")) {
             this.isAdmin = true;
-            console.log(this.isAdmin);
+            // console.log(this.isAdmin);
           } else {
-            console.log(this.isAdmin);
+            // console.log(this.isAdmin);
           }
         },
         handleClick: function(e) {
           var model = e.model;
-          console.log(model);
+          // console.log(model);
           var
             roomName = $('[name="roomName"]').val(),
             roomDesc = $('[name="roomDesc"]').val(),
@@ -155,13 +155,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             room.save(null, {
               success: function(room) {
                 // Execute any logic that should take place after the object is saved.
-                alert('New room created with objectId: ' + room.id);
+                // alert('New room created with objectId: ' + room.id);
 
               },
               error: function(room, error) {
                 // Execute any logic that should take place if the save fails.
                 // error is a Parse.Error with an error code and message.
-                alert('Failed to create new object, with error code: ' + error.message);
+                // alert('Failed to create new object, with error code: ' + error.message);
               }
             });
 

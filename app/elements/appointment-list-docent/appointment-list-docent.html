@@ -47,14 +47,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-header-panel>
       <paper-toolbar justify>
         <div>
-          <h2>Your Appointments</h2>
+          <h2>Ihre Termine</h2>
 
         </div>
         <span class="flex"></span>
 
           <paper-button flat  on-click="print">
 
-            Print
+            Drucken
             <iron-icon id="print" icon="icons:print"></iron-icon>
           </paper-button>
 
@@ -71,14 +71,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <h2>{{item.date}}</h2>
                 <b>Name:</b> <span>{{item.userName}}</span>
               <br/>
-                  <b>Time</b>
+                  <b>Zeit</b>
                     <span>{{item.startTime}}</span> -
                     <span>{{item.endTime}}</span>
 
               </div>
               <div secondary>
                 <br/>
-                <b>Email:</b> <span>{{item.userEmail}}</span>
+                <b>E-Mail:</b> <span>{{item.userEmail}}</span>
               </div>
               <div secondary>
 
@@ -115,28 +115,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ready: function(){
         var self = this;
         var currentUser = Parse.User.current();
-        console.log(currentUser.id);
+        // console.log(currentUser.id);
 
         Parse.Cloud.run('appointmentListDocent', {
           id:  currentUser.id
         }, {
           success: function(results) {
-              console.log("result",results);
-            // var List = [];
+              // console.log("result",results);
+
           for(i in results){
             var object = results[i];
             var date = object.date;
 
             date = moment(date);
-            date.locale('en', {
+            date.locale('de', {
               months: [
-                "January", "February", "March", "April", "May", "June", "July",
-                "August", "September", "October", "November", "December"
+                "Januar", "Februar", "März", "April", "Mai", "Juni", "July",
+                "August", "September", "Oktober", "November", "Dezember"
               ]
             });
             date = date.format("ddd, DD MMM YYYY");
             results[i].date = date;
-            console.log("date",date);
+            // console.log("date",date);
           }
             self.appointList = results;
 

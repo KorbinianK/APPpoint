@@ -36,24 +36,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel class="">
         <paper-toolbar>
           <div>
-            <h2>Register a new </h2>
+            <h2>Neu registrieren</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
       <paper-input-container>
-        <label>First Name</label>
+        <label>Vorname</label>
         <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
       </paper-input-container>
 
       <paper-input-container>
-        <label>Last Name</label>
+        <label>Nachname</label>
         <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
       </paper-input-container>
 
       </paper-item-body>
 
       <paper-input-container>
-        <label>Password</label>
+        <label>Passwort</label>
         <input is="iron-input" name="create-password" type="password" required>
       </paper-input-container>
 
@@ -130,8 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               },
               error: function(user, error) {
-                // Show the error message somewhere and let the user try again.
-                alert("Error: " + error.code + " " + error.message);
+                
               }
             });
           }

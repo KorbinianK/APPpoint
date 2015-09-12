@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <meta name="apple-mobile-web-app-title" content="APPoint">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
@@ -66,27 +66,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-scroll-header-panel drawer fixed>
 
         <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
+        <paper-header-panel mode="scroll" drawer>
+          <paper-toolbar id="navheader" class="tall">
+            <username-display class="bottom username"></username-display>
 
+            <iron-image id="coverimage" placeholder="images/beach.jpg" sizing="cover" preload fade class="fit"></iron-image>
+
+          </paper-toolbar>
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
           <a data-route="d-home" href="/">
-            <iron-icon icon="d-home"></iron-icon>
-            <span>Home</span>
+            <iron-icon icon="home"></iron-icon>
+            <span>Start</span>
           </a>
 
           <a data-route="d-appointments-overview" href="/dappov">
             <iron-icon icon="info"></iron-icon>
-            <span>Appointments</span>
+            <span>Termine</span>
           </a>
 
           <a data-route="d-profile" href="/dprof">
             <iron-icon icon="account-box"></iron-icon>
-            <span>My Profile</span>
+            <span>Profil</span>
           </a>
+          <template is="dom-if" if="{{currentUser(currentUser)}}">
+            <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
+              <iron-icon icon="power-settings-new"></iron-icon>
+              <span>Log out<span>
 
+            </a>
+          </template>
+          <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/alogin">
+            <a class="pointer" data-route="a-login">
+              <iron-icon icon="power-settings-new"></iron-icon>
+              <span>Login</span>
+            </a>
+          </template>
 
 
         </paper-menu>
@@ -97,12 +112,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
+          <div id="crop" class="bottom">
+            <iron-icon id="headericon" icon="polymer"></iron-icon>
+          </div>
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
           <paper-icon-button icon="refresh" onclick="javascript:location.reload();"></paper-icon-button>
-          <paper-icon-button icon="exit-to-app" onClick="javascript:Parse.User.logOut(); document.location.href = '/';" ></paper-icon-button>
+          <paper-icon-button icon="icons:power-settings-new" onClick="javascript:Parse.User.logOut(); document.location.href = '/';"></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -124,7 +142,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="d-appointments-overview">
                 <template is="dom-if" if="{{isEqual(route, 'd-appointments-overview')}}" restamp="true">
 
-                <!-- <user-element></user-element> -->
                 <appointment-list-docent></appointment-list-docent>
 
 
@@ -144,22 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
     </paper-drawer-panel>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="networkFirst"
-                         precache-file="precache.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
 
   </template>
 

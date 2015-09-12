@@ -10,21 +10,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
-<dom-module id="page-importer">
+<dom-module id="homescreen-element">
   <style>
     :host {
       display: block;
     }
   </style>
   <template>
-
-  <page-admin></page-admin>
-
+    <div>Hello from <span>{{foo}}</span></div>
   </template>
   <script>
   (function() {
     Polymer({
-      is: 'page-importer',
+      is: 'homescreen-element',
 
       properties: {
         foo: {

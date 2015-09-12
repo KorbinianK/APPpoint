@@ -59,6 +59,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   .paper-time-picker-0 #selectors.paper-time-picker {
     top: 96px;
   }
+  #placeholder.iron-image{
+    max-height: 168px;
+  }
   paper-time-picker[narrow] #heading.paper-time-picker {
     height: 96px;
     width: 100% !important;
@@ -94,8 +97,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     width: 100% !important;
   }
 }
-
+@media all and (min-width: 600px){
+#placeholder.iron-image{
+  max-height: 100% !important;
+}
+}
 @media screen {
+
   paper-dialog > *:last-child {
     margin-bottom: 0px !important;
   }

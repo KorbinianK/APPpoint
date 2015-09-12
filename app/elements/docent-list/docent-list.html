@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Docent List</h2>
+            <h2>Lehrkräfte</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
@@ -54,8 +54,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <template is="dom-repeat" items="{{docentList}}">
         <paper-card heading="{{computeFullName(item.lastName,item.firstName)}}">
           <div class="card-content">
-            <p><b>Room: </b><span id="room">{{item.room}}</span></p>
-          <p><b>Subjects: </b><span>{{computeSubjects(item.subject1,item.subject2,item.subject3)}}</span></p>
+            <p><b>Raum: </b><span id="room">{{item.room}}</span></p>
+          <p><b>Fächer: </b><span>{{computeSubjects(item.subject1,item.subject2,item.subject3)}}</span></p>
           </div>
 
         </paper-card>
@@ -119,17 +119,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         computeFullName: function(last,first) {
-          console.log("test");
+          // console.log("test");
 
           return last + ' ' + first;
 
         },
         editButtonClick: function(e) {
           var model = e.model;
-          console.log(model);
+          // console.log(model);
           var docent1 = model.get("item.docent");
           var docent2 = docent1.get("Docent");
-          console.log(docent2);
+          // console.log(docent2);
         },
 
         ready: function() {

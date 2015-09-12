@@ -43,7 +43,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom: 40px;
     }
 
-
     #roomElement {
       cursor: pointer;
     }
@@ -53,10 +52,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>My Profile &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
+            <h2>Mein Profil</h2>
           </div>
           <div class="card-actions">
-            <paper-button flat on-click="editButton">Edit</paper-button>
+            <paper-button flat on-click="editButton">Anpassen</paper-button>
           </div>
         </paper-toolbar>
 
@@ -68,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>First Name </span>
+            <span>Vorname</span>
             <h2>
               <span>{{firstName}}</span>
             </h2>
@@ -85,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Last Name </span>
+            <span>Nachname</span>
             <h2>
               <span>{{lastName}}</span>
             </h2>
@@ -104,7 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>First Subject</span>
+            <span>Erstes Fach</span>
             <h2>
               <span>{{Subject1}}</span>
             </h2>
@@ -122,7 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Second Subject</span>
+            <span>Zweites Fach</span>
             <h2>
               <span>{{Subject2}}</span>
             </h2>
@@ -138,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Third Subject</span>
+            <span>Drittes Fach</span>
             <h2>
               <span>{{Subject3}}</span>
             </h2>
@@ -154,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Email</span>
+            <span>E-Mail</span>
             <h2>
               <span>{{Email}}</span>
             </h2>
@@ -170,9 +169,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div secondary>
             </br>
-            <span>Status</span>
+            <span>Benutzer Rolle</span>
             <h2>
-              <span>Docent</span>
+              <span>Lehrkraft</span>
+
             </h2>
           </div>
         </paper-item-body>
@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Edit Name and Subjects</h2>
+              <h2>Name und Fächer ändern</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
@@ -197,12 +197,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body three-line class="paper-item-body-0">
 
               <paper-input-container>
-                <label>First Name</label>
+                <label>Vorname</label>
                 <input is="iron-input" name="firstName" type="text" value="{{firstName::input}}" required>
               </paper-input-container>
 
               <paper-input-container>
-                <label>Last Name</label>
+                <label>Nachname</label>
                 <input is="iron-input" name="lastName" type="text" value="{{lastName::input}}" required>
               </paper-input-container>
 
@@ -215,18 +215,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body three-line class="paper-item-body-0">
 
               <paper-input-container>
-                <label>Subject 1</label>
+                <label>Fach 1</label>
                 <input is="iron-input" name="subject1" type="text" required value="{{Subject1::input}}">
               </paper-input-container>
 
               <paper-input-container>
-                <label>Subject 2</label>
+                <label>Fach 2</label>
                 <input is="iron-input" name="subject2" type="text" value="{{Subject2::input}}">
               </paper-input-container>
 
 
               <paper-input-container>
-                <label>Subject 3</label>
+                <label>Fach 3</label>
                 <input is="iron-input" name="subject3" type="text" value="{{Subject3::input}}">
               </paper-input-container>
 
@@ -240,36 +240,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click=edit>Change</paper-button>
+          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
+          <paper-button flat dialog-confirm on-click=edit>Ändern</paper-button>
         </div>
       </paper-dialog>
 
 
-      <paper-dialog id="comfirmEdit" modal>
+      <paper-dialog id="confirmEdit" modal>
 
         <paper-header-panel>
           <paper-toolbar>
             <div>
-              <h2>Please comfirm your changes</h2>
+              <h2>Änderungen bestätigen</h2>
             </div>
           </paper-toolbar>
         </paper-header-panel>
 
 
 
-        <span>Are you sure you want to change these attributes?</span>
+        <span>Sind Sie sich sicher, dass Sie die Änderungen übernehmen wollen?</span>
 
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Cancel</paper-button>
-          <paper-button flat dialog-confirm on-click="editParse">Comfirm</paper-button>
+          <paper-button flat dialog-dismiss>Nein</paper-button>
+          <paper-button flat dialog-confirm on-click="editParse">Ja</paper-button>
         </div>
 
 
       </paper-dialog>
 
-      <div>   <paper-toast id = "toast" text="The datas were changed successfully">  </paper-toast> </div>
+      <div>
+        <paper-toast id="toast" text="Die Änderungen wurden erfolgreich übernommen"> </paper-toast>
+      </div>
 
   </template>
 
@@ -335,7 +337,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         edit: function() {
-          this.$.comfirmEdit.toggle();
+          this.$.confirmEdit.toggle();
         },
         editParse: function() {
           var
@@ -362,15 +364,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
 
 
-        /*  var currentUser = Parse.user.current();
-          currentUser.set("firstName",firstName);
-          currentUser.set("lastName", lastName);
-          currentUser.set("subject1", subject1);
-          currentUser.set("subject2", subject2);
-          currentUser.set("subject3", subject3);
-         currentUser.save();
-*/
-
           var docent = Parse.Object.extend("Docent");
           var docentQuery = new Parse.Query(docent);
           docentQuery.equalTo("email", this.Email);
@@ -382,29 +375,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               user.set("subject2", subject2);
               user.set("subject3", subject3);
               user.save();
-
-
             }
-
           });
 
 
+          this.$.toast.toggle();
 
-            this.$.toast.toggle();
-
-
-            var currentUser = Parse.User.current();
-              currentUser.set("firstName",firstName);
-              currentUser.set("lastName", lastName);
-              currentUser.set("subject1", subject1);
-              currentUser.set("subject2", subject2);
-              currentUser.set("subject3", subject3);
-             currentUser.save();
-
+          var currentUser = Parse.User.current();
+          currentUser.set("firstName", firstName);
+          currentUser.set("lastName", lastName);
+          currentUser.set("subject1", subject1);
+          currentUser.set("subject2", subject2);
+          currentUser.set("subject3", subject3);
+          currentUser.save();
         }
-
-
-
 
       });
     })();

@@ -16,17 +16,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit" />
-  <title>Admin Spdrechstundenverwaltung</title>
+  <title>Sprechstundenverwaltung</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#303F9F">
+  <meta name="theme-color" content="rgb(210, 28, 9)">
 
   <!-- Web Application Manifest -->
   <link rel="manifest" href="manifest.json">
 
   <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-TileColor" content="rgb(210, 28, 9)">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -81,57 +81,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{isAdmin(currentUser)}}" href="/alogin">
               <a data-route="a-home" href="/">
                 <iron-icon icon="home"></iron-icon>
-                <span>Home</span>
+                <span>Start</span>
               </a>
 
               <a data-route="a-overview-docent" href="/aoverviewd">
                 <iron-icon icon="icons:view-headline"></iron-icon>
-                <span>Dozenten Übersicht</span>
+                <span>Lehrkräfte Übersicht</span>
               </a>
 
               <a data-route="a-add-docent" href="/aaddd">
                 <iron-icon icon="social:person-add"></iron-icon>
-                <span>New Docent</span>
+                <span>Neue Lehrkraft</span>
               </a>
 
               <a data-route="a-manage-docent" href="/amanaged">
                 <iron-icon icon="social:group"></iron-icon>
-                <span>Manage Docents</span>
+                <span>Lehrkräfte verwalten</span>
               </a>
               </hr>
-              <a data-route="a-create-room" href="/acreater">
-                <iron-icon icon="social:domain"></iron-icon>
-                <span>Create rooms</span>
-              </a>
+
               <a data-route="a-manage-room" href="/amanager">
                 <iron-icon icon="social:location-city"></iron-icon>
-                <span>Manage rooms</span>
+                <span>Räume verwalten</span>
+              </a>
+              <a data-route="a-create-room" href="/acreater">
+                <iron-icon icon="social:domain"></iron-icon>
+                <span>Raum erstellen</span>
               </a>
               </hr>
               <a data-route="a-overview-appointments" href="/aoverviewa">
                 <iron-icon icon="icons:perm-contact-calendar"></iron-icon>
-                <span>Appointments overview</span>
+                <span>Termin Übersicht</span>
               </a>
 
               <a data-route="a-manage-appointments" href="/amanagea">
                 <iron-icon icon="icons:today"></iron-icon>
-                <span>Create Timeslots
-                  <span>
+                <span>Zeitslots erstellen<span>
               </a>
 
               </hr>
-              <a data-route="a-manage-appointments" href="/asettings">
-                <iron-icon icon="icons:settings"></iron-icon>
-                <span>Settings
-                  <span>
-              </a>
 
             </template>
             <template is="dom-if" if="{{currentUser(currentUser)}}">
               <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
                 <iron-icon icon="power-settings-new"></iron-icon>
-                <span>Logout
-                  <span>
+                <span>Log out<span>
 
               </a>
             </template>
@@ -246,9 +240,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <!-- <script src="scripts/hour.js"></script> -->
-  <!-- <script src="scripts/date.js"></script> -->
-  <!-- <script src="/bower_components/moment/locale/de.js"></script> -->
+
   <script type="text/javascript">
 
   </script>
