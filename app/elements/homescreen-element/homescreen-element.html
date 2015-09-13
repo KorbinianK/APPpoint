@@ -15,27 +15,97 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
     }
+    paper-icon-item{
+      padding: 10px;
+      padding-left: 30px;
+    }
+    iron-icon{
+      padding-right: 5px;
+    }
+    paper-toolbar.paper-toolbar-0{
+      background-image: url("/images/regensburg.png");
+      background-color: rgb(139, 166, 196);
+      background-repeat: no-repeat;
+      background-position: right;
+      height: 163px;
+    }
   </style>
   <template>
-    <paper-icon-item>
-<iron-icon icon="communication:phone"></iron-icon>
-+49 1234/56789
-</paper-icon-item>
-<paper-icon-item>
-  <div class="avatar" item-icon></div>
-  Avatar
-</paper-icon-item>
-  
+    <paper-material elevation="1" class="layout vertical">
+      <paper-header-panel class="coverheader" cover>
+        <paper-toolbar>
+          <div class="bottom">
+            <h2>
+              <span>{{greeting}}</span>
+              <span>{{user}}</span>!
+            </h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+      <paper-item><h3>Willkommen bei der Sprechstundenverwaltung der Privaten Schulen Breitschaft Regensburg</h3></paper-item>
+
+      <paper-icon-item>
+
+        Private Schulen Breitschaft gemeinnützige GmbH <br/>
+        Salzburger Gasse 1<br/>
+        93047 Regensburg<br/>
+      </paper-icon-item>
+      <paper-icon-item>
+        <iron-icon icon="communication:phone"></iron-icon>
+      (0) 941 59571-30
+
+      </paper-icon-item>
+      <paper-icon-item>
+        <iron-icon icon="print"></iron-icon>
+
+      (0) 941 59571-58
+      </paper-icon-item>
+      <paper-icon-item>
+        <iron-icon icon="mail"></iron-icon>
+        sekretariat (at) schulen-breitschaft.de
+      </paper-icon-item>
+    </paper-material>
+
+
   </template>
   <script>
-  (function() {
-    Polymer({
-      is: 'homescreen-element',
+    (function() {
+      Polymer({
+        is: 'homescreen-element',
 
-      properties: {
+        properties: {
+          greeting: {
+            type: String,
+            value: "Hallo",
+            notify: true
+          },
+          user:{
+            type:String,
+            value:"",
+            notify:true
+          }
+        },
+        ready: function() {
+          var current = Parse.User.current();
+          if(current != null){
+            this.user = current.get("firstName") + " " +current.get("lastName");
+          }
+          var now = moment();
 
-      }
-    });
-  })();
+          var afternoon = 12
+          var evening = 17
+          var currentHour = parseFloat(now.format("HH"));
+
+          if (currentHour >= afternoon && currentHour <= evening) {
+            this.greeting = "Guten Tag";
+          } else if (currentHour >= evening) {
+              this.greeting = "Guten Abend";
+          } else {
+              this.greeting = "Guten Morgen";
+          }
+
+        }
+      });
+    })();
   </script>
 </dom-module>

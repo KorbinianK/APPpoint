@@ -22,7 +22,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-card {
       width: 100%;
       position: relative;
-      padding: 5px;
+      /*padding: 5px;*/
+    }
+
+    h3 {
+      margin-top: 0;
     }
 
     paper-item:hover {
@@ -37,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       fill: rgb(157, 157, 157);
       cursor: pointer;
     }
+
     #print {
       fill: rgb(255, 255, 255);
       width: 30px;
@@ -52,14 +57,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <span class="flex"></span>
 
-          <paper-button flat  on-click="print">
+        <paper-button flat on-click="print">
 
-            Drucken
-            <iron-icon id="print" icon="icons:print"></iron-icon>
-          </paper-button>
+          Drucken
+          <iron-icon id="print" icon="icons:print"></iron-icon>
+        </paper-button>
 
       </paper-toolbar>
     </paper-header-panel>
+    <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
     <template is="dom-repeat" items="{{appointList}}">
       <paper-card>
         <div class="card-content">
@@ -68,17 +74,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-item-body two-line class="paper-item-body-0">
               <paper-ripple fit></paper-ripple>
               <div>
-              <h2>{{item.date}}</h2>
-                <b>Name:</b> <span>{{item.userName}}</span>
-              <br/>
-                  <b>Zeit</b>
-                    <span>{{item.startTime}}</span> -
-                    <span>{{item.endTime}}</span>
+                <h3>{{item.date}}</h3>
+                <b>Name:</b>
+                <span>{{item.userName}}</span>
+                <br/>
+                <b>Zeit</b>
+                <span>{{item.startTime}}</span> -
+                <span>{{item.endTime}}</span>
 
               </div>
               <div secondary>
-                <br/>
-                <b>E-Mail:</b> <span>{{item.userEmail}}</span>
+
+                <b>E-Mail:</b>
+                <span>{{item.userEmail}}</span>
               </div>
               <div secondary>
 
@@ -90,61 +98,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-card>
     </template>
+
   </template>
   <script>
-  (function() {
-    Polymer({
-      is: 'appointment-list-docent',
+    (function() {
+      Polymer({
+        is: 'appointment-list-docent',
 
-      properties: {
+        properties: {
 
-      },print: function() {
+        },
+        print: function() {
 
-        document.getElementById('paperDrawerPanel').forceNarrow = true;
+          document.getElementById('paperDrawerPanel').forceNarrow = true;
 
-        $(this).ready(function() {
-          setTimeout(function() {
+          $(this).ready(function() {
+            setTimeout(function() {
               window.print();
-            document.getElementById('paperDrawerPanel').forceNarrow = false;
-          }, 300);
+              document.getElementById('paperDrawerPanel').forceNarrow = false;
+            }, 300);
 
-        });
+          });
 
 
-      },
-      ready: function(){
-        var self = this;
-        var currentUser = Parse.User.current();
-        // console.log(currentUser.id);
+        },
+        ready: function() {
+          var self = this;
+          var currentUser = Parse.User.current();
+          // console.log(currentUser.id);
 
-        Parse.Cloud.run('appointmentListDocent', {
-          id:  currentUser.id
-        }, {
-          success: function(results) {
+          Parse.Cloud.run('appointmentListDocent', {
+            id: currentUser.id
+          }, {
+            success: function(results) {
               // console.log("result",results);
 
-          for(i in results){
-            var object = results[i];
-            var date = object.date;
+              for (i in results) {
+                var object = results[i];
+                var date = object.date;
 
-            date = moment(date);
-            date.locale('de', {
-              months: [
-                "Januar", "Februar", "März", "April", "Mai", "Juni", "July",
-                "August", "September", "Oktober", "November", "Dezember"
-              ]
-            });
-            date = date.format("ddd, DD MMM YYYY");
-            results[i].date = date;
-            // console.log("date",date);
-          }
-            self.appointList = results;
+                date = moment(date);
+                date.locale('en', {
+                  months: [
+                    "Januar", "Februar", "März", "April", "Mai", "Juni", "July",
+                    "August", "September", "Oktober", "November", "Dezember"
+                  ]
+                });
+                date = date.format("ddd, DD MMM YYYY");
+                results[i].date = date;
+                // console.log("date",date);
+              }
+              self.loading = !self.loading;
+              self.appointList = results;
 
-          },
-          error: function(error) {}
-        });
-      }
-    });
-  })();
+            },
+            error: function(error) {}
+          });
+        }
+      });
+    })();
   </script>
 </dom-module>

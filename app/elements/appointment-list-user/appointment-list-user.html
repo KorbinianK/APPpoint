@@ -80,6 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-card>
     </div>
+      <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
     <template is="dom-repeat" items="{{appointList}}">
       <paper-card>
         <div class="card-content">
@@ -174,6 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   // console.log("date", date);
                 }
                 self.appointList = results;
+                self.loading = !self.loading;
                 if(results.length === 0){
                   self.noAppointments = !self.noAppointments;
                 }
@@ -215,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 // console.log("empty");
                 self.noAppointments = !self.noAppointments;
               }
-      
+
             },
             error: function(error) {}
           });

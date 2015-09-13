@@ -79,39 +79,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- Drawer Content -->
 
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
+
             <a data-route="u-home" href="/">
               <iron-icon icon="home"></iron-icon>
               <span>Start</span>
             </a>
+            <template is="dom-if" if="{{!isDocent(currentUser)}}" href="/ulogin">
 
-            <a data-route="u-create-appointment" href="/uappc">
-              <iron-icon icon="social:group-add"></iron-icon>
-              <span>Neuen Termin</span>
-            </a>
+              <a data-route="u-create-appointment" href="/uappc">
+                <iron-icon icon="icons:event"></iron-icon>
+                <span>Neuer Termin</span>
+              </a>
 
-            <template is="dom-if" if="{{currentUser(currentUser)}}" href="/ulogin">
+              <template is="dom-if" if="{{currentUser(currentUser)}}" href="/ulogin">
 
-            <a data-route="u-overview-appointments" href="/uappov">
-              <iron-icon icon="perm-contact-calendar"></iron-icon>
-              <span>Meine Termine
-                <span>
-            </a>
+                <a data-route="u-overview-appointments" href="/uappov">
+                  <iron-icon icon="icons:list"></iron-icon>
+                  <span>Meine Termine
+                    <span>
+                </a>
 
-            </hr>
-            <a data-route="u-manage-profil" href="/umanagep">
-              <iron-icon icon="account-box"></iron-icon>
-              <span>Profil
-                <span>
-            </a>
-            <template is="dom-if" if="{{currentUser(currentUser)}}">
-              <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
-                <iron-icon icon="power-settings-new"></iron-icon>
-                <span>Logout
+                </hr>
+                <a data-route="u-manage-profil" href="/umanagep">
+                  <iron-icon icon="account-box"></iron-icon>
+                  <span>Profil
+                    <span>
+                </a>
+              </template>
+              <template is="dom-if" if="{{currentUser(currentUser)}}">
+                <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
+                  <iron-icon icon="power-settings-new"></iron-icon>
+                  <span>Logout
+                    <span>
+
+                </a>
+              </template>
+            </template>
+
+            <template is="dom-if" if="{{isDocent(currentUser)}}" href="/ulogin">
+              <a class="pointer" onClick="document.location.href = 'dozent.html#!/dhome';">
+                <iron-icon icon="forward"></iron-icon>
+                <span>Zum Dozenten Bereich
                   <span>
 
               </a>
             </template>
-            </template>
+
+
             <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/ulogin">
               <a class="pointer" data-route="u-login">
                 <iron-icon icon="power-settings-new"></iron-icon>
@@ -127,9 +141,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
-          <div id="crop" class="bottom" >
-          <iron-icon id="headericon" icon="polymer"></iron-icon>
-        </div>
+          <div id="crop" class="bottom">
+            <iron-icon id="headericon" icon="polymer"></iron-icon>
+          </div>
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
@@ -186,8 +200,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             </section>
         </div>
-
-
 
 
         </iron-pages>

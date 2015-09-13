@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <html lang="">
+
 <head>
   <meta charset="utf-8">
   <meta name="description" content="">
@@ -73,38 +74,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-image id="coverimage" placeholder="images/beach.jpg" sizing="cover" preload fade class="fit"></iron-image>
 
           </paper-toolbar>
-        <!-- Drawer Content -->
-        <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="d-home" href="/">
-            <iron-icon icon="home"></iron-icon>
-            <span>Start</span>
-          </a>
+          <!-- Drawer Content -->
+          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
+            <template is="dom-if" if="{{isDocent(currentUser)}}" href="/ulogin">
+              <a data-route="d-home" href="/dhome">
+                <iron-icon icon="home"></iron-icon>
+                <span>Start</span>
+              </a>
 
-          <a data-route="d-appointments-overview" href="/dappov">
-            <iron-icon icon="info"></iron-icon>
-            <span>Termine</span>
-          </a>
+              <a data-route="d-appointments-overview" href="/dappov">
+                <iron-icon icon="event"></iron-icon>
+                <span>Termine</span>
+              </a>
 
-          <a data-route="d-profile" href="/dprof">
-            <iron-icon icon="account-box"></iron-icon>
-            <span>Profil</span>
-          </a>
-          <template is="dom-if" if="{{currentUser(currentUser)}}">
-            <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
-              <iron-icon icon="power-settings-new"></iron-icon>
-              <span>Log out<span>
+              <a data-route="d-profile" href="/dprof">
+                <iron-icon icon="account-box"></iron-icon>
+                <span>Profil</span>
+              </a>
+            </template>
+            <template is="dom-if" if="{{currentUser(currentUser)}}">
+              <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
+                <iron-icon icon="power-settings-new"></iron-icon>
+                <span>Log out
+                  <span>
 
-            </a>
-          </template>
-          <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/alogin">
-            <a class="pointer" data-route="a-login">
-              <iron-icon icon="power-settings-new"></iron-icon>
-              <span>Login</span>
-            </a>
-          </template>
+              </a>
+            </template>
+            <template is="dom-if" if="{{!currentUser(currentUser)}}" href="/alogin">
+              <a class="pointer" data-route="a-login">
+                <iron-icon icon="power-settings-new"></iron-icon>
+                <span>Login</span>
+              </a>
+            </template>
 
 
-        </paper-menu>
+          </paper-menu>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
@@ -136,30 +140,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="d-home">
+          <template is="dom-if" if="{{!isDocent(currentUser)}}">
+            <no-rights></no-rights>
+          </template>
+          <template is="dom-if" if="{{isDocent(currentUser)}}" href="/ulogin">
+            <iron-pages attr-for-selected="data-route" selected="{{route}}">
+              <section data-route="d-home">
+                <homescreen-element></homescreen-element>
+              </section>
 
-              <homescreen-element></homescreen-element>
-            </section>
-
-            <section data-route="d-appointments-overview">
+              <section data-route="d-appointments-overview">
                 <template is="dom-if" if="{{isEqual(route, 'd-appointments-overview')}}" restamp="true">
 
-                <appointment-list-docent></appointment-list-docent>
+                  <appointment-list-docent></appointment-list-docent>
 
 
-            </template>
-            </section>
+                </template>
+              </section>
 
 
-            <section data-route="d-profile">
-              <template is="dom-if" if="{{isEqual(route, 'd-profile')}}" restamp="true">
+              <section data-route="d-profile">
+                <template is="dom-if" if="{{isEqual(route, 'd-profile')}}" restamp="true">
 
-                <profile-docent></qent>
-              </template>
-            </section>
+                  <profile-docent>
+                    </qent>
+                </template>
+              </section>
 
-          </iron-pages>
+            </iron-pages>
+          </template>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>

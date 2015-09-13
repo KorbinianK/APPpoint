@@ -30,7 +30,7 @@
       right: 50%;
       width: 60%;
     }
-    
+
   </style>
   <template>
 
@@ -143,12 +143,11 @@
                 }
 
                 if (currentUser.get("isTeacher")) {
-                  document.location.href = "/dozent.html";
+                  document.location.href = "dozent.html#!/dhome";
                 }
                 if (currentUser.get("isAdmin")) {
-                  document.location.href = "/admin.html";
-                } else if (currentUser.get("isAdmin") === false && currentUser.get("isTeacher") === false) {
-                  document.location.href = "/user.html";
+                  document.location.href = "admin.html#!/ahome";
+
                 } else {
                   self.$.loggedInToast.show();
 
