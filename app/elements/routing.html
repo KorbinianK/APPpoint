@@ -14,9 +14,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     page('/', function() {
-      app.route = 'a-home';
+      app.route = 'u-home';
     });
 
+    page('/dhome', function() {
+      app.route = 'd-home';
+    });
 
     page('/uappc', function() {
       app.route = 'u-create-appointment';

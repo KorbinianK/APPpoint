@@ -2,8 +2,11 @@
 
 
   <style type="text/css">
+  :host {
+    display: block;
+  }
     paper-material {
-      width: 70%;
+      max-width: 720px;
       margin: 0 auto;
       padding: 0 0 20px;
     }
@@ -27,11 +30,7 @@
       right: 50%;
       width: 60%;
     }
-    paper-material {
-      width: 70%;
-      margin: 0 auto;
-      padding: 0 0 20px;
-    }
+    
   </style>
   <template>
 
@@ -56,13 +55,11 @@
 
 
 
-      <div id="center">
-        <paper-button class="submitButton" raised on-click="handleClick">Anmelden</paper-button>
+      <div  class="vertical layout ">
+        <paper-button  raised on-click="handleClick">Anmelden</paper-button>
+        <paper-button  raised on-click="registerClick">Registrieren</paper-button>
       </div>
 
-      <div id="center1">
-        <paper-button class="submitButton" raised on-click="registerClick">Registrieren</paper-button>
-      </div>
     </paper-material>
     <!-- <paper-button raised on-click="test">toast</paper-button> -->
     <div id="signup" hidden="{{hidden}}">

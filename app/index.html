@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <meta name="apple-mobile-web-app-title" content="APPoint">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
@@ -79,28 +79,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- Drawer Content -->
 
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-            <a data-route="a-home" href="/">
+            <a data-route="u-home" href="/">
               <iron-icon icon="home"></iron-icon>
-              <span>Home</span>
+              <span>Start</span>
             </a>
 
             <a data-route="u-create-appointment" href="/uappc">
               <iron-icon icon="social:group-add"></iron-icon>
-              <span>New Appoinment</span>
+              <span>Neuen Termin</span>
             </a>
 
             <template is="dom-if" if="{{currentUser(currentUser)}}" href="/ulogin">
 
             <a data-route="u-overview-appointments" href="/uappov">
               <iron-icon icon="perm-contact-calendar"></iron-icon>
-              <span>Appoinment overview
+              <span>Meine Termine
                 <span>
             </a>
 
             </hr>
             <a data-route="u-manage-profil" href="/umanagep">
               <iron-icon icon="account-box"></iron-icon>
-              <span>My Profile
+              <span>Profil
                 <span>
             </a>
             <template is="dom-if" if="{{currentUser(currentUser)}}">
@@ -153,10 +153,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-            <section data-route="a-home">
+            <section data-route="u-home">
 
-              <!-- <h1> Appointment List </h1> -->
-              <!-- <appointment-list-user></appointment-list-user> -->
+              <homescreen-element></homescreen-element>
             </section>
 
             <section data-route="u-create-appointment">
@@ -200,7 +199,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/hour.js"></script>
   <script type="text/javascript">
     app.isEqual = function(x, y) {
       return x === y;

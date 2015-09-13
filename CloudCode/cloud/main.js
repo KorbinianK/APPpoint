@@ -283,83 +283,77 @@ Parse.Cloud.define("createAppointment", function (request, response) {
   docentQuery.first({
     success: function (docent) {
 
-      var slotQuery = new Parse.Query("Slots");
+      var createAppointmentSlot = new Parse.Query("Slots");
       var foundDocent = docent;
       var docentPointer = docent.get("Docent");
       var id = docentPointer.id;
-      slotQuery.include("Docent");
-      slotQuery.equalTo("Docent", {
+      createAppointmentSlot.include("Docent");
+      createAppointmentSlot.equalTo("Docent", {
         __type: "Pointer",
         className: "Docent",
         objectId: id
       });
-      slotQuery.find({
+      createAppointmentSlot.find({
         success: function (slots) {
 
           var date;
           var count;
+          var app;
           var resultSlots = slots;
-
-          for (i in resultSlots) {
-            var slot = resultSlots[i];
-            var date = slot.get("date");
-            var getSlots = slot.get("Slots");
-            var comp1 = JSON.stringify(date)
-              .substring(0, 90);
-            var comp2 = JSON.stringify(slotDate)
-              .substring(0, 90);
-            if (comp1 === comp2) {
-
-              var arr = getSlots;
-              for (j in arr) {
-                if (arr[j].startTime === slotStartTime) {
-                  var app = arr[j];
-
-                  break;
-                }
-
+          slotloop1:
+            for (i in resultSlots) {
+              var slot = resultSlots[i];
+              var date = slot.get("date");
+              var getSlots = slot.get("Slots");
+              var comp1 = JSON.stringify(date)
+                .substring(0, 90);
+              var comp2 = JSON.stringify(slotDate)
+                .substring(0, 90);
+              if (comp1 === comp2) {
+                var arr = getSlots;
+                break slotloop1;
               }
-
-              if (app != undefined || app != null) {
-
-                app.availability = false;
-
-                slot.save(null, {
-                  success: function (result) {
-
-                    var Appointment = Parse.Object.extend("Appointment");
-                    var appointment = new Appointment();
-                    appointment.set("date", slotDate);
-                    appointment.set("startTime", app.startTime);
-                    appointment.set("endTime", app.endTime);
-                    appointment.set("user", user);
-                    appointment.set("Docent", foundDocent);
-                    appointment.save(null, {
-                      success: function (result) {
-                        response.success(result);
-                      },
-                      error: function (error) {
-                        response.error("save appointment failed");
-                      }
-
-                    });
-
-                  },
-                  error: function (error) {
-                    alert("Error: " + error.code + ", " + error.message);
-                  }
-                });
-              }
-
             }
+          slotloop2:
+            for (j in arr) {
+              if (arr[j].startTime === slotStartTime) {
+                app = arr[j];
+                break slotloop2;
+              }
+            }
+
+          if (app != undefined || app != null) {
+            app.availability = false;
+            slot.save(null, {
+              success: function (result) {
+
+              },
+              error: function (error) {}
+            });
+
+            var Appointment = Parse.Object.extend("Appointment");
+            var newApp = new Appointment();
+            newApp.set("date", slotDate);
+            newApp.set("startTime", app.startTime);
+            newApp.set("endTime", app.endTime);
+            newApp.set("user", user);
+            newApp.set("Docent", foundDocent);
+            newApp.save(null, {
+              success: function (object) {
+                response.success(object);
+              },
+              error: function (object, error) {
+                response.error(error);
+              }
+            });
+
           }
-          console.log(JSON.stringify(date));
-          console.log(JSON.stringify(slotDate));
-          // response.error("save appointment failed");
         },
         error: function () {
           response.error("slots query failed");
         }
+
+
 
       });
     },

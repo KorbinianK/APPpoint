@@ -157,8 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               id: currentUser.id
             }, {
               success: function(results) {
-                // console.log(results);
-                // var List = [];
+                var List = [];
                 for (i in results) {
                   var object = results[i];
                   var date = object.date;
@@ -176,7 +175,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 self.appointList = results;
                 if(results.length === 0){
-                  // console.log("empty");
                   self.noAppointments = !self.noAppointments;
                 }
 
@@ -188,17 +186,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         delAppoinment: function(e) {
           var self = this;
           var model = e.model;
-          // console.log(model);
+          var dId = model.get("item.docentId");
+          var sT = model.get("item.startTime");
           var clickedDate = model.get("item.date");
           var date = moment(new Date(model.get("item.date")));
 
           date.tz("Europe/Berlin").format();
 
-          // console.log("Clicked Date",clickedDate);
-          // console.log("CurrentUser",currentUser.id);
-          // console.log("Start Time",model.get("item.startTime"));
-          // console.log("Docent",model.get("item.docent").id);
-          // console.log("DoUs",model.get("item.docentId"));
+
           Parse.Cloud.run('delUserAppointments', {
             id: currentUser.id,
             startTime: model.get("item.startTime"),
@@ -209,7 +204,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             success: function(results) {
               for (var i = 0; i < self.appointList.length; i++) {
 
-                if (self.appointList[i].date === clickedDate) {
+                if (self.appointList[i].date === clickedDate
+                  && self.appointList[i].docentId === dId
+                  && self.appointList[i].startTime === sT ) {
+
                   self.splice('appointList', i, 1);
                 }
               }
@@ -217,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 // console.log("empty");
                 self.noAppointments = !self.noAppointments;
               }
-              // console.log(results);
+      
             },
             error: function(error) {}
           });

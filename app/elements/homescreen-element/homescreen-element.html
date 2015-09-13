@@ -17,7 +17,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-    <div>Hello from <span>{{foo}}</span></div>
+    <paper-icon-item>
+<iron-icon icon="communication:phone"></iron-icon>
++49 1234/56789
+</paper-icon-item>
+<paper-icon-item>
+  <div class="avatar" item-icon></div>
+  Avatar
+</paper-icon-item>
+  
   </template>
   <script>
   (function() {
@@ -25,11 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'homescreen-element',
 
       properties: {
-        foo: {
-          type: String,
-          value: 'bar',
-          notify: true
-        }
+
       }
     });
   })();

@@ -88,6 +88,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-dialog>
   </div>
   </template>
+  <paper-toast id="roomCreatedToast" duration="4000">
+    <iron-icon icon="done"></iron-icon>
+    <span>Raum erfolgreich erstellt</span>
+  </paper-toast>
   </template>
   <script>
     (function() {
@@ -131,7 +135,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var
             roomName = $('[name="roomName"]').val(),
             roomDesc = $('[name="roomDesc"]').val(),
-            roomBuild = $('[name="roomBuild"]').val()
+            roomBuild = $('[name="roomBuild"]').val(),
+            self = this;
 
           if (
             roomName === ''
@@ -154,8 +159,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.roomDesc = "";
             room.save(null, {
               success: function(room) {
-                // Execute any logic that should take place after the object is saved.
-                // alert('New room created with objectId: ' + room.id);
+              self.$.roomCreatedToast.show();
 
               },
               error: function(room, error) {

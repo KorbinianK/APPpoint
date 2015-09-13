@@ -352,10 +352,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         confirmClick: function(e) {
+          console.log("click");
           var self = this;
           var model = e.model;
           var user = Parse.User.current();
-
 
           Parse.Cloud.run('createAppointment', {
             docentId: retrievedDocentId,
@@ -365,7 +365,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             success: function(result) {
               clickedSlot.set("slot.availability", false);
-              // console.log("result", result);
+              console.log("result", result);
             },
             error: function(error) {}
           });

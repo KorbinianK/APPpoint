@@ -137,7 +137,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
+            <section data-route="d-home">
 
+              <homescreen-element></homescreen-element>
+            </section>
 
             <section data-route="d-appointments-overview">
                 <template is="dom-if" if="{{isEqual(route, 'd-appointments-overview')}}" restamp="true">

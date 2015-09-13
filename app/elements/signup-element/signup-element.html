@@ -12,8 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="signup-element">
   <style>
-
-
+  :host {
+    display: block;
+  }
     paper-input-container {
       padding: 0 20px 0 20px !important;
     }
@@ -31,42 +32,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-    <!-- <paper-material> -->
 
-      <paper-header-panel class="">
+
+    <paper-header-panel class="">
+      <paper-toolbar>
+        <div>
+          <h2>Neu registrieren</h2>
+        </div>
+      </paper-toolbar>
+    </paper-header-panel>
+    <paper-input-container>
+      <label>Vorname</label>
+      <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
+    </paper-input-container>
+
+    <paper-input-container>
+      <label>Nachname</label>
+      <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
+    </paper-input-container>
+
+    </paper-item-body>
+
+    <paper-input-container>
+      <label>Passwort</label>
+      <input is="iron-input" name="create-password" type="password" required>
+    </paper-input-container>
+
+    <paper-input-container>
+      <label>E-Mail</label>
+      <input is="iron-input" name="email" type="email">
+    </paper-input-container>
+
+
+    <div id="button-create">
+      <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" disabled="{{disabledButton}}">Erstellen</paper-button>
+    </div>
+
+    <paper-dialog id="warningDialog" modal>
+
+      <paper-header-panel>
         <paper-toolbar>
           <div>
-            <h2>Neu registrieren</h2>
+            <h2>{{errorType}}</h2>
           </div>
         </paper-toolbar>
       </paper-header-panel>
-      <paper-input-container>
-        <label>Vorname</label>
-        <input is="iron-input" name="first" type="text" value="{{first::input}}" required>
-      </paper-input-container>
 
-      <paper-input-container>
-        <label>Nachname</label>
-        <input is="iron-input" name="last" type="text" value="{{last::input}}" required>
-      </paper-input-container>
+      <paper-item>
 
-      </paper-item-body>
-
-      <paper-input-container>
-        <label>Passwort</label>
-        <input is="iron-input" name="create-password" type="password" required>
-      </paper-input-container>
-
-      <paper-input-container>
-        <label>E-Mail</label>
-        <input is="iron-input" name="email" type="email">
-      </paper-input-container>
+        <div>
+          <span>{{errorMessage}}</span>
+        </div>
 
 
-      <div id="button-create">
-        <paper-button class="submitButton" autovalidate center-center raised on-click="handleClick" disabled="{{disabledButton}}" >Erstellen</paper-button>
+      </paper-item>
+
+
+      <div class="buttons">
+        <paper-button flat dialog-dismiss>OK</paper-button>
       </div>
-    <!-- </paper-material> -->
+    </paper-dialog>
   </template>
   <script>
     (function() {
@@ -93,6 +118,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: '',
             notify: true
+          },
+          disabledButton: {
+            type: Boolean,
+            value: false,
+            notify: true
           }
         },
         handleClick: function() {
@@ -101,7 +131,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             email = $('[name="email"]').val(),
             password = $('[name="create-password"]').val(),
             firstName = $('[name="first"]').val(),
-            lastName = $('[name="last"]').val();
+            lastName = $('[name="last"]').val(),
+            self = this;
 
 
           if (
@@ -110,8 +141,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             firstName === '' ||
             lastName === ''
           ) {
-
-            alert("Error: Alle Felder müssen ausgefüllt werden");
+            self.errorType = "Fehler in den Eingaben";
+            self.errorMessage = "Bitte überprüfen Sie Ihre Eingaben";
+            this.$.warningDialog.toggle();
 
           } else {
             this.disabledButton = !this.disabledButton;
@@ -130,7 +162,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               },
               error: function(user, error) {
-                
+                console.log(error);
+                self.errorType = "Fehler in den Eingaben";
+                if (error.code === Parse.Error.INVALID_EMAIL_ADDRESS) {
+                  self.errorMessage = "Diese E-mail Adresse ist ungültig";
+                  self.$.warningDialog.toggle();
+                } else if (error.code === Parse.Error.USERNAME_TAKEN) {
+                  self.errorMessage = "Für diese E-mail Adresse gibt es bereits einen Account";
+                  self.$.warningDialog.toggle();
+                } else {
+                  self.errorMessage = "Bitte überprüfen Sie Ihre Eingaben";
+                  self.$.warningDialog.toggle();
+                }
+
+                self.disabledButton = false;
               }
             });
           }
