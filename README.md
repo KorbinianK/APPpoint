@@ -1,4 +1,4 @@
-![](https://cloud.githubusercontent.com/assets/110953/7877439/6a69d03e-0590-11e5-9fac-c614246606de.png)
+
 ## APPoint
 
 
@@ -49,7 +49,7 @@ cd polymer-starter-kit && npm install && bower install
 
 This installs the element sets (Paper, Iron, Platinum) and tools the starter kit requires to build and serve apps.
 
-### Development workflow
+### Preview the app
 
 #### Serve / watch
 
