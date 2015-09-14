@@ -17,6 +17,7 @@
     "paper-elements": "PolymerElements/paper-elements#1.0.1",
     "paper-spinner": "PolymerElements/paper-spinner#~1.0.2",
     "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
+    "paper-tooltip": "PolymerElements/paper-tooltip#~1.1.0",
     "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
     "polymer-date-picker": "~0.0.11",
     "polymer-themes": "~1.0.1"

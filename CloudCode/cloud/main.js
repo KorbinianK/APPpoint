@@ -445,6 +445,50 @@ Parse.Cloud.define("appointmentListDocent", function (request, response) {
   });
 });
 
+Parse.Cloud.define("appointmentListAdmin", function (request, response) {
+  var moment = require('cloud/moment.js');
+  var moment = require("cloud/moment-timezone-with-data.js");
+  var query = new Parse.Query("Appointment");
+
+  query.include("Docent");
+  query.include("user");
+  query.find({
+    success: function (results) {
+      var List = [];
+      for (i in results) {
+        var item = {};
+        var object = results[i];
+        var date = object.get('date');
+        var user = object.get('user');
+        var docent = object.get('Docent');
+
+        // var dateStringMonth = date.substring(6,8);
+        var dateStringDay = JSON.stringify(date);
+        item["date"] = date;
+        // item["month"] = dateStringMonth;
+        item["day"] = dateStringDay;
+        item['startTime'] = object.get('startTime');
+        item['endTime'] = object.get('endTime');
+        item['user'] = user;
+        item['docent'] = docent;
+        item['docentName'] = docent.get('lastName') + " " + docent.get('firstName');
+        item['userEmail'] = user.get('email');
+        item['userName'] = user.get('lastName') + " " + user.get('firstName');
+        item['id']=user.get('lastName') + user.get('firstName')+i;
+        List.push(item);
+      }
+
+
+      objSort(List, 'month', 'day', 'docentName', 'endTime');
+      response.success(List);
+    },
+    error: function () {
+
+      response.error("query failed");
+    }
+  });
+});
+
 
 Parse.Cloud.define("removeDocentSlots", function (request, response) {
   Parse.Cloud.useMasterKey();

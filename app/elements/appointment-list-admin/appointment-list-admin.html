@@ -13,11 +13,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../../bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
 <script src="../../bower_components/moment-recur/moment-recur.js"></script>
 
-<dom-module id="appointment-list-docent">
+<dom-module id="appointment-list-admin">
   <style>
     :host {
       display: block;
     }
+
+    paper-tooltip{
+      max-width: 270px !important;
+      left:30px !important;
+  font-size: 13px !important;
+    }
+
 
     paper-card {
       width: 100%;
@@ -29,17 +36,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 0;
     }
 
-    paper-item:hover {
-      cursor: pointer;
-    }
-
     iron-icon {
       fill: rgb(80, 80, 80);
     }
 
     iron-icon:hover {
       fill: rgb(157, 157, 157);
-      cursor: pointer;
+      /*cursor: pointer;*/
     }
 
     #print {
@@ -52,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-header-panel>
       <paper-toolbar justify>
         <div>
-          <h2>Ihre Termine</h2>
+          <h2>Alle Termine</h2>
 
         </div>
         <span class="flex"></span>
@@ -69,31 +72,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-repeat" items="{{appointList}}">
       <paper-card>
         <div class="card-content">
-          <paper-item on-tap="appointClick">
+          <paper-item>
 
             <paper-item-body two-line class="paper-item-body-0">
-              <paper-ripple fit></paper-ripple>
+
               <div>
                 <h3>{{item.date}}</h3>
-                <b>Name:</b>
-                <span>{{item.userName}}</span>
+                <b>Lehrkraft:</b>
+                <span>{{item.docentName}}</span>
+                <br/>
+                <div class="pointer" id="{{item.id}}"><b>User:</b>
+
+                  <span>{{item.userName}}</span>
+
+                </div>
+                <paper-tooltip offset="0" for="{{item.id}}" ><span>E-Mail: </span>{{item.userEmail}}</paper-tooltip>
                 <br/>
                 <b>Zeit</b>
                 <span>{{item.startTime}}</span> -
                 <span>{{item.endTime}}</span>
 
               </div>
-              <div secondary>
 
-                <b>E-Mail:</b>
-                <span>{{item.userEmail}}</span>
-              </div>
-              <div secondary>
-
-              </div>
 
             </paper-item-body>
-        
+
           </paper-item>
         </div>
       </paper-card>
@@ -103,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     (function() {
       Polymer({
-        is: 'appointment-list-docent',
+        is: 'appointment-list-admin',
 
         properties: {
 
@@ -127,11 +130,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var currentUser = Parse.User.current();
           // console.log(currentUser.id);
 
-          Parse.Cloud.run('appointmentListDocent', {
+          Parse.Cloud.run('appointmentListAdmin', {
             id: currentUser.id
           }, {
             success: function(results) {
-              // console.log("result",results);
+
 
               for (i in results) {
                 var object = results[i];

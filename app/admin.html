@@ -209,6 +209,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
 
+    <section data-route="a-overview-appointments" >
+      <template is="dom-if" if="{{isEqual(route, 'a-overview-appointments')}}" restamp="true">
+        <appointment-list-admin></appointment-list-admin>
+      </template>
+    </section>
+
             <section data-route="a-add-docent">
               <template is="dom-if" if="{{isEqual(route, 'a-add-docent')}}" restamp="true">
                 <create-docent></create-docent>

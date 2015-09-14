@@ -6,7 +6,7 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-
+  var currentUser = Parse.User.current();
 (function (document) {
   'use strict';
 
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.isEqual = function (x, y) {
     return x === y;
   };
-  var currentUser = Parse.User.current();
+
   app.currentUser = function (usr) {
     if (currentUser = !null) {
       // console.log("admin");

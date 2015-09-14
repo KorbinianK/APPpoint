@@ -17,7 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     paper-material.paper-material-0 {
-      width: 70%;
+      width: 100%;
+      max-width: 700px;
       margin: 0 auto;
     }
 
@@ -41,7 +42,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
   <template>
     <paper-material elevation="1">
-
+      <paper-header-panel>
+        <paper-toolbar>
+          <div>
+            <h2>Räume</h2>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
       <loading-placeholder loading-status="{{loading}}"></loading-placeholder>
 
       <template is="dom-repeat" items="{{roomList}}">
