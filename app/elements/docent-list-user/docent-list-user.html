@@ -74,11 +74,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div id="dlist">
           <template is="dom-repeat" items="{{docentList}}">
 
-            <paper-item-body three-line class="paper-item-body-0">
+            <paper-item-body three-line class="paper-item-body-0" on-tap="toggleDocent">
               <!-- <paper-ripple fit></paper-ripple> -->
               <div>
                 <paper-item>
-                  <paper-button on-click="toggleDocent">
+                  <paper-button on-tap="toggleDocent">
                     <iron-icon id="{{computeID1(item.firstName, item.lastName)}}" icon="{{icon}}"></iron-icon>
 
                   </paper-button>

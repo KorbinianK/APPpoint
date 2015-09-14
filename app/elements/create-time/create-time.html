@@ -355,7 +355,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-dialog>
 
-
       <paper-dialog id="deleteSlot" modal>
 
         <paper-header-panel>
@@ -366,17 +365,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-toolbar>
         </paper-header-panel>
 
+
         <span>Wollen Sie die Slots löschen?</span>
-        <br/>
-        <span><b>Warnung:</b> Dabei gehen alle Termine verloren!</span>
+
 
         <div class="buttons">
-          <paper-button flat dialog-dismiss>Abbrechen</paper-button>
-          <paper-button flat dialog-confirm on-click="deleteOldSlot">Bestätigen</paper-button>
+          <paper-button flat dialog-dismiss>Nein</paper-button>
+          <paper-button flat dialog-confirm on-click="deleteOldSlot">Ja</paper-button>
         </div>
       </paper-dialog>
-
-
       <paper-dialog id="overwrite" modal>
 
         <paper-header-panel>
@@ -388,7 +385,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-header-panel>
 
 
-        <p>Wollen Sie jetzt die neuen hinzufügen?</p>
+        <span>Wollen Sie jetzt die neuen hinzufügen?</span>
 
 
         <div class="buttons">

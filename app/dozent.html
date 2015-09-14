@@ -30,8 +30,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PSK">
+  <meta name="application-name" content="APPoint">
   <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/touch//favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="images/touch//favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/touch//favicon-16x16.png">
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -95,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{currentUser(currentUser)}}">
               <a class="pointer" onClick="javascript:Parse.User.logOut(); document.location.href = '/';">
                 <iron-icon icon="power-settings-new"></iron-icon>
-                <span>Log out
+                <span>Logout
                   <span>
 
               </a>
