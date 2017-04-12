@@ -1,5 +1,7 @@
 # APPoint 
 
+Web-application to handle appointments at schools and/or university. I used Google’s Polymer Framework v1.0 that was released just a week prior for productive use. I had been following the development over the years and decided it was a good challenge and chance to get some deeper insight. After convincing a friend of the idea we built the application and finished the course with the grade A-. The web-application is sadly no longer in use due to Facebook shutting down the original Parse.com API, however a video of the functionality can still be found on the projects’ website: http://www.substring.io/ 
+
 
 ### Install dependencies
 
